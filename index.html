@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#202124"><meta name="apple-mobile-web-app-title" content="DG Card"><link rel="apple-touch-icon" href="icon-v2.png"><link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>folded playing card - Google Search</title><!-- v2 cutout card -->
+<link rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&family=Anton&display=swap'>
+<style>
+:root{--bg:#fff;--fg:#202124;--mut:#5f6368;--line:#dadce0;--tile:#f1f3f4;--ac:#1a73e8;box-sizing:border-box;color-scheme:light dark}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#202124;--fg:#e8eaed;--mut:#9aa0a6;--line:#3c4043;--tile:#303134;--ac:#8ab4f8}}
+:root[data-theme="dark"]{--bg:#202124;--fg:#e8eaed;--mut:#9aa0a6;--line:#3c4043;--tile:#303134;--ac:#8ab4f8}
+html,body{height:100%;max-width:100%;overflow-x:hidden;margin:0;background:var(--bg);color:var(--fg);font-family:Arial,"Helvetica Neue",sans-serif;overscroll-behavior:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+#app{height:100%;overflow:auto;-webkit-overflow-scrolling:touch}
+html.ds,html.ds body{height:auto;min-height:100%;overflow:visible}html.ds #app{height:auto;overflow:visible;min-height:100vh}
+header{position:sticky;top:0;z-index:5;background:var(--bg);padding-top:env(safe-area-inset-top,0px)}
+.top{display:flex;align-items:center;gap:10px;padding:10px 12px 6px}
+.logo{font-size:22px;font-weight:700;letter-spacing:-1px;font-family:"Product Sans",Arial,sans-serif}
+.search{flex:1;display:flex;align-items:center;height:40px;border-radius:20px;border:1px solid var(--line);padding:0 14px;box-shadow:0 1px 4px rgba(0,0,0,.15);font-size:15px;gap:8px}
+.search span{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.av{width:30px;height:30px;border-radius:50%;background:#7b5ea7;color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px}
+.tabs,.chips{display:flex;gap:20px;overflow-x:auto;padding:0 12px;scrollbar-width:none;white-space:nowrap;font-size:14px;color:var(--mut)}
+.tabs{border-bottom:1px solid var(--line);margin-top:4px}.tabs span{padding:10px 0}
+.tabs .on{color:var(--ac);border-bottom:3px solid var(--ac)}
+.chips{gap:8px;padding:10px 12px}.chips span{padding:7px 14px;border-radius:8px;background:var(--tile);color:var(--fg)}
+#grid{display:flex;gap:12px;padding:4px 12px 40px}.col{flex:1;display:flex;flex-direction:column;gap:14px;min-width:0}
+.im{position:relative;border-radius:12px;overflow:hidden;background-size:cover;background-position:center}
+.cp{padding:6px 2px 0}.cp b{display:block;font-weight:400;font-size:13px;line-height:1.25}.cp i{font-style:normal;font-size:11.5px;color:var(--mut)}
+.fc,#card{border-radius:4px 7px 4px 4px;box-sizing:border-box;background-color:var(--c,#b3202a);
+background-image:radial-gradient(circle at 0 0,rgba(255,255,255,.92) 0 24%,transparent 25%),radial-gradient(circle at 0 0,transparent 0 33%,rgba(255,255,255,.5) 34% 36%,transparent 37% 46%,rgba(255,255,255,.4) 47% 49%,transparent 50%),repeating-linear-gradient(45deg,rgba(255,255,255,.3) 0 2px,transparent 2px 10px),repeating-linear-gradient(-45deg,rgba(255,255,255,.3) 0 2px,transparent 2px 10px);
+box-shadow:inset calc(var(--bd,9px)*-1) calc(var(--bd,9px)*-1) 0 0 #f7f3ea,1px 1px 0 #cfcac0,2px 2px 0 #f7f3ea,3px 3px 0 #c9c4b8,4px 4px 0 #f7f3ea,6px 8px 12px rgba(0,0,0,.5)}
+.fc.img,#card.img{background-size:200% 200%;background-position:100% 100%;box-shadow:1px 1px 0 #cfcac0,2px 2px 0 #f7f3ea,3px 3px 0 #c9c4b8,4px 4px 0 #f7f3ea,6px 8px 12px rgba(0,0,0,.5)}
+.fc.cut,#card.cut{background-color:transparent;background-size:100% 100%;background-position:center;border-radius:0;box-shadow:none;filter:drop-shadow(3px 5px 7px rgba(0,0,0,.55))}
+.fc.cut::before,#card.cut::before{display:none}
+.fc::before,#card::before{content:"";position:absolute;inset:0;border-radius:3px;pointer-events:none;
+background:linear-gradient(to right,rgba(255,255,255,.4),rgba(255,255,255,0) 7px),linear-gradient(to bottom,rgba(255,255,255,.4),rgba(255,255,255,0) 7px),linear-gradient(135deg,rgba(255,255,255,.18),transparent 50%,rgba(0,0,0,.28))}
+.fc{position:absolute;left:50%;top:50%}
+#card{position:fixed;left:0;top:0;z-index:20;touch-action:none;cursor:grab;display:none;will-change:transform}
+#gear{position:fixed;left:6px;bottom:calc(env(safe-area-inset-bottom,0px) + 6px);width:44px;height:44px;border:0;background:none;color:var(--fg);font-size:22px;opacity:.1;z-index:30}
+#panel{position:fixed;left:0;right:0;top:0;height:100vh;height:100dvh;background:var(--bg);color:var(--fg);padding:0 20px calc(env(safe-area-inset-bottom,0px) + 160px);overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:pan-y;z-index:40;box-sizing:border-box}
+#panel[hidden]{display:none}
+#panel .ph{position:sticky;top:0;z-index:2;background:var(--bg);display:flex;align-items:center;justify-content:space-between;gap:12px;padding:calc(env(safe-area-inset-top,0px) + 14px) 0 12px;margin:0 0 6px}
+#panel .ph h2{margin:0}#panel .ph .btn{margin:0;background:#1a73e8;color:#fff;min-width:84px}
+
+#insb{display:flex;align-items:center;justify-content:space-between;width:100%;box-sizing:border-box;margin:4px 0 6px;padding:14px 16px;border-radius:12px;border:0;background:var(--tile);color:var(--fg);font-size:17px;font-weight:600;text-align:left}
+#ins{position:fixed;left:0;right:0;top:0;height:100vh;height:100dvh;background:var(--bg);color:var(--fg);padding:0 20px calc(env(safe-area-inset-bottom,0px) + 120px);overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:pan-y;z-index:45;box-sizing:border-box;font-size:16px;line-height:1.45}
+#ins[hidden]{display:none}
+#ins .ph{position:sticky;top:0;z-index:2;background:var(--bg);display:flex;align-items:center;justify-content:space-between;gap:12px;padding:calc(env(safe-area-inset-top,0px) + 14px) 0 12px}
+#ins .ph h2{margin:0;font-size:20px}#ins .ph .btn{margin:0;background:#1a73e8;color:#fff;min-width:84px}
+#ins h3{font-size:19px;margin:26px 0 4px;color:#8ab4f8}#ins .sub{color:var(--mut);font-size:14px;margin:0 0 14px}
+#ins .st{display:flex;gap:14px;margin:0 0 18px}#ins .n{flex:none;width:30px;height:30px;border-radius:50%;background:#1a73e8;color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px}
+#ins .st b{color:#fff}#ins .st>div:not(.n){flex:1;min-width:0}
+#ins .pic{margin:10px 0 0;background:#292a2d;border:1px solid #3c4043;border-radius:14px;padding:12px;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}
+#ins .pic svg{max-width:100%;height:auto}
+#ins .tip{background:#2b2d31;border-left:3px solid #8ab4f8;border-radius:8px;padding:10px 12px;color:#c4c7c5;font-size:14px;margin:0 0 18px}
+#ins .kbd{display:inline-block;background:#3c4043;border-radius:6px;padding:1px 8px;font-size:14px}
+#ins hr{border:0;border-top:1px solid #3c4043;margin:24px 0 0}
+#panel input[type=range]{touch-action:pan-y}
+#panel h2{margin:0 0 14px;font-size:20px}#panel p{color:var(--mut);font-size:14px;margin:6px 0 14px}
+#panel label{display:block;margin:16px 0 6px;font-weight:700}#panel input[type=range]{width:100%}
+.sw{display:flex;gap:10px;flex-wrap:wrap}.sw button{width:44px;height:44px;border-radius:8px;border:2px solid var(--line)}
+.btn.tg.on{background:#188038;color:#fff}
+.btn{display:inline-block;padding:12px 16px;border-radius:12px;background:var(--tile);color:var(--fg);border:0;font-size:16px;margin:6px 8px 0 0}
+[hidden]{display:none!important}
+body:not(.srch) header.g,body:not(.srch) #nr{display:none}
+body.srch #hb,body.srch #hf{display:none}
+body:not(.srch) #gear{top:calc(env(safe-area-inset-top,0px) + 80px)}
+#hb{padding-top:env(safe-area-inset-top,0px)}
+.bt{display:flex;justify-content:space-between;align-items:flex-start;height:74px;padding:0 12px 0 15px}
+.btabs{display:flex;gap:6px;height:63px}
+.btabs span{box-sizing:border-box;height:63px;padding:10px 8px 0;display:flex;align-items:center;font-size:14px;font-weight:500;letter-spacing:.4px;color:#9aa0a6;border-bottom:3px solid transparent}
+.btabs .on{color:#8ab4f8;border-bottom-color:#8ab4f8}
+.bi{display:flex;align-items:center;gap:24px;height:74px}
+.av2{width:32px;height:32px;border-radius:50%;background:#fff;color:#111;font-weight:600;font-size:12px;letter-spacing:-1px;display:flex;align-items:center;justify-content:center}
+.blg{position:relative;width:max-content;margin:41px auto 0}
+.gw{display:block;font-size:52px;font-weight:500;letter-spacing:-2.4px;line-height:1;color:#fff}
+.gi2{position:absolute;right:-4px;bottom:-12px;font-size:11px;line-height:13px;color:#5b8def}
+.sb.sb0{height:47px;margin:36px 16px 0;background:#4b4e55}
+body:not(.ti) .gi2{display:none}body.ti #tr{display:none}
+#tr{margin:30px 0 0}.trh{display:flex;align-items:center;justify-content:space-between;padding:0 16px 0 24px;margin-bottom:6px}#tr h3{margin:0;font-size:21px;font-weight:400;color:#e8eaed}
+#trl{margin:0 16px}#trl .tri{display:flex;align-items:center;gap:26px;padding:15px 0 15px 18px;font-size:18px;color:#e8eaed;border-bottom:1px solid #3c4043;min-height:23px}#trl .tri svg{flex:none}
+body.ti .aim{display:none}body:not(.ti):not(.srch) #hf{display:none}
+body:not(.ti) .blg{margin-top:30px}body:not(.ti) .sb.sb0{margin-top:24px}
+#trl .tri span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#hf{position:fixed;left:0;right:0;bottom:0;z-index:5;background:#17181b;border-top:1px solid #3c4043;padding:24px 0 calc(env(safe-area-inset-bottom,0px) + 14px);text-align:center;color:#c4c7cb;font-size:16px}
+#hf p{display:flex;justify-content:center;gap:22px;margin:0 0 18px;white-space:nowrap}#hf p:last-child{margin:0}
+#grid{padding-bottom:6px!important}
+body:not(.res) #ft{display:none}
+#more{padding:14px 16px 26px}#more button{width:100%;height:54px;border:0;border-radius:27px;background:#2b2e3a;color:#e8eaed;font:inherit;font-size:20px;display:flex;align-items:center;justify-content:center;gap:10px}
+.fb{background:#17181b;padding:22px 16px 120px;text-align:center;color:#e8eaed}
+.ga{display:flex;align-items:center;gap:14px;padding:16px;border-radius:20px;border:1px solid #33353a;background:#1f2023;text-align:left;font-size:19px;line-height:1.3}
+.ga span{flex:1}.ga b{font-weight:500;background:#2a66f2;color:#fff;border-radius:22px;padding:14px 22px;font-size:19px}
+.np{font-size:20px;color:#bdc1c6;margin:34px 0 28px}
+#lc p{margin:0}.l1{font-size:21px;font-weight:600}.l1 i{display:inline-block;width:14px;height:14px;border-radius:50%;background:#8e9196;margin-right:8px}
+.l2{font-size:21px;color:#8ab4f8;margin-top:6px!important}.l3{font-size:21px;color:#8ab4f8;margin-top:26px!important}
+.lk{display:flex;justify-content:center;gap:26px;font-size:19px;color:#bdc1c6;margin:34px 0 0;white-space:nowrap}.lk+.lk{margin-top:24px}
+.si{display:block;flex:none;width:20px}
+body:not(.res) .si,body:not(.res) #bq,body:not(.res) .mic,body.res #bu,body.res .rl{display:none}
+#bu{flex:1;text-align:center;white-space:nowrap}
+#bs{position:fixed;left:0;right:0;bottom:calc(0px - var(--lo,0px));z-index:7;background:#202124;pointer-events:none;height:calc((env(safe-area-inset-bottom,0px) + 2px)*(1 - var(--p,0)) + 12px*var(--p,0) + 48px - 12px*var(--p,0));opacity:calc(1 - var(--p,0)*3)}
+html:not(.sa) #bs{display:none}
+html.sa #hf{bottom:calc(env(safe-area-inset-bottom,0px) + 50px - var(--lo,0px));padding-bottom:14px}
+#bb .p>svg:not(.si){flex:none;min-width:0;opacity:calc(1 - var(--p,0));width:calc(24px*(1 - var(--p,0)))}
+#lib{display:flex;flex-wrap:wrap;gap:10px}.lc{width:74px;height:102px;border-radius:10px;border:3px solid #3c4043;background:#000;padding:0;overflow:hidden}.lc.on{border-color:#1a73e8}.lc img{width:100%;height:100%;object-fit:contain;display:block}.btn:disabled{opacity:.35}
+html,body{touch-action:manipulation}
+#cd{position:fixed;left:0;right:0;top:calc(env(safe-area-inset-top,0px) + 5px);display:flex;justify-content:center;gap:6px;z-index:9;pointer-events:none}#cd.b{top:auto;bottom:calc((env(safe-area-inset-bottom,0px) + 2px)*(1 - var(--p,0)) + 12px*var(--p,0) - var(--lo,0px) + 56px - 12px*var(--p,0))}html:not(.sa) #cd.b{bottom:calc(env(safe-area-inset-bottom,0px) + 20px)}#cd i{width:4px;height:4px;border-radius:50%;background:#7d8085;opacity:.7;transition:opacity .2s}
+#ed{position:fixed;left:0;right:0;top:0;height:100dvh;overflow-y:auto;box-sizing:border-box;z-index:60;background:#111;color:#e8eaed;display:flex;flex-direction:column;align-items:center;gap:8px;padding:calc(env(safe-area-inset-top,0px) + 10px) 12px calc(env(safe-area-inset-bottom,0px) + 10px);font-family:Outfit,Arial,sans-serif}
+.edh{font-size:13px;color:#9aa0a6;text-align:center;line-height:1.3;max-width:420px}#edc{touch-action:none;border-radius:6px;flex:none}
+.edr{display:flex;align-items:center;gap:10px;width:min(100%,420px);font-size:14px}.edr span{width:42px}.edr input{flex:1}
+.edb{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}.edb button{padding:10px 14px;border-radius:10px;border:0;background:#303134;color:#e8eaed;font-size:15px}.edb .pri{background:#1a73e8;color:#fff}.edb.fix{position:sticky;bottom:0;width:100%;margin-top:auto;padding:10px 0 4px;background:#111}.edb.fix button{padding:12px 26px;font-size:16px}
+:root{--bg:#202124;--fg:#e8eaed;--mut:#9aa0a6;--line:#3c4043;--tile:#303134}
+html,body,#app{font-family:Outfit,'Google Sans','Product Sans',Arial,sans-serif;background:#202124}
+header:not(.g){display:none}
+header.g{display:contents}
+.gt{position:relative;display:flex;align-items:center;justify-content:center;height:64px;margin-top:env(safe-area-inset-top,0px)}
+.gl{font-size:35px;font-weight:500;letter-spacing:-1.6px;color:#fff}
+.gi{position:absolute;right:16px;display:flex;align-items:center;gap:22px}
+.gi .av{width:32px;height:32px;background:#fff;color:#111;font-weight:500;font-size:12px;letter-spacing:-1px}
+.sb{display:flex;align-items:center;gap:14px;height:43px;margin:0 16px;padding:0 16px;border-radius:22px;background:#3c3d41;font-size:18px}
+.sb span{flex:1;color:#e8eaed;white-space:nowrap}
+.tb{display:flex;gap:25px;overflow-x:auto;padding:0 16px;margin-top:6px;border-bottom:1px solid #4a4c50;font-size:17px;color:#9aa0a6;white-space:nowrap;scrollbar-width:none}
+.tb span{padding:11px 0;margin-bottom:-1px;flex:none}.tb .on{color:#e8eaed;border-bottom:3px solid #e8eaed}
+.ch{display:flex;gap:6px;overflow-x:auto;padding:12px 16px 10px;scrollbar-width:none;position:sticky;top:env(safe-area-inset-top,0px);z-index:6;background:#202124;border-bottom:1px solid #3c4043}
+body.srch::before{content:'';position:fixed;left:0;right:0;top:0;height:env(safe-area-inset-top,0px);background:#202124;z-index:7}
+.ch span{display:flex;align-items:center;gap:8px;white-space:nowrap;height:35px;padding:0 14px 0 3px;border:1px solid #5f6368;border-radius:18px;font-size:17px;color:#e8eaed;flex:none}
+.th{width:31px;height:31px;border-radius:50%;display:block}
+#grid{padding:2px 4px 130px;gap:4px}.col{gap:0}
+.im{border-radius:14px}
+.cp{padding:5px 8px 4px;line-height:20px}.cp b{font-weight:400;font-size:15px;color:#bdc1c6;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.cp i{font-size:15px;color:#e8eaed;display:block}
+#gear{bottom:auto;top:calc(env(safe-area-inset-top,0px) + 4px);left:4px}
+#bb{position:fixed;left:0;right:0;bottom:calc((env(safe-area-inset-bottom,0px) + 2px)*(1 - var(--p,0)) + 12px*var(--p,0) - var(--lo,0px));display:flex;justify-content:center;gap:calc(7px*(1 - var(--p,0)));z-index:8;pointer-events:none}
+#bb>div{height:calc(48px - 12px*var(--p,0));border-radius:24px;background:rgba(24,25,28,.94);border:1px solid #3c3d41;display:flex;align-items:center;color:#e8eaed;backdrop-filter:blur(10px)}
+#bb .r{width:calc(48px*(1 - var(--p,0)));opacity:calc(1 - var(--p,0));overflow:hidden;padding:0;box-sizing:border-box;justify-content:center;flex:none}#bb .p{width:calc(219px - (219px - var(--w2,160px))*var(--p,0));padding:0 14px;gap:0;font-size:calc(18px - 2px*var(--p,0));box-sizing:border-box}#bb .p>svg:first-child{margin-right:calc(10px*(1 - var(--p,0)))}#bb .p>.mic,#bb .p>.rl{margin-left:calc(10px*(1 - var(--p,0)))}#bb .p>.si{margin-right:7px}#bb .p>#bq,#bb .p>#bu{margin:0}#bb .p span{flex:1;white-space:nowrap;overflow:hidden}
+#q,#q0{flex:1;min-width:0;background:none;border:0;outline:0;color:#e8eaed;font:inherit;font-size:18px;-webkit-user-select:text;user-select:text;padding:0}
+body:not(.res) .ch{display:none}
+html:not(.sa) #bb{display:none!important}
+#nr{padding:28px 20px;color:#9aa0a6;font-size:16px;line-height:1.5}
+#panel input[type=text],#panel input[type=number]{-webkit-user-select:text;user-select:text;font-size:16px;padding:10px;border-radius:8px;border:1px solid #3c4043;background:#303134;color:#e8eaed;box-sizing:border-box}
+#panel input[type=text]{width:100%}
+.rl{padding:14px 0 6px}.rh{font-size:22px;font-weight:500;color:#e8eaed;padding:0 8px 14px;line-height:1.1}
+.ri{display:flex;align-items:center;gap:5px;height:64px;box-sizing:border-box;padding:6px;margin-bottom:6px;border-radius:14px;background:#2c2e32}
+.rt{flex:none;width:52px;height:52px;border-radius:10px;display:flex;align-items:center;justify-content:center}
+.rx{font-size:17px;line-height:20px;color:#e8eaed;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.rx b{font-weight:600}.rx span{font-weight:400}
+</style><script>try{if(JSON.parse(localStorage.getItem('fc2')||'{}').docscroll!==false)document.documentElement.classList.add('ds')}catch(e){}try{if(navigator.standalone||matchMedia('(display-mode: standalone)').matches)document.documentElement.classList.add('sa')}catch(e){}</script></head>
+<body>
+<div id="app">
+<div id="hb">
+ <div class="bt"><div class="btabs"><span id="tAll" class="on">ALL</span><span id="tImg">IMAGES</span></div><div class="bi"><svg width='28' height='28' viewBox='0 0 24 24' fill='none' stroke='#bdc1c6' stroke-width='1.7' stroke-linejoin='round'><path d='M6 17v-6a6 6 0 0112 0v6l1.5 2h-15z'/><path d='M10 21h4'/></svg><svg width='28' height='28' viewBox='0 0 24 24' fill='#e8eaed'><circle cx='5' cy='5' r='1.9'/><circle cx='12' cy='5' r='1.9'/><circle cx='19' cy='5' r='1.9'/><circle cx='5' cy='12' r='1.9'/><circle cx='12' cy='12' r='1.9'/><circle cx='19' cy='12' r='1.9'/><circle cx='5' cy='19' r='1.9'/><circle cx='12' cy='19' r='1.9'/><circle cx='19' cy='19' r='1.9'/></svg><div class="av2">DG</div></div></div>
+ <div class="blg"><span class="gw">Google</span><span class="gi2">Images</span></div>
+ <div class="sb sb0"><svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#bdc1c6' stroke-width='2.2' stroke-linecap='round'><circle cx='10' cy='10' r='6.5'/><path d='M15 15l6 6'/></svg><input id="q0" type="text" enterkeyhint="search" autocomplete="off" autocorrect="on" autocapitalize="off" spellcheck="true" aria-label="Search"><svg class='aim' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='#bdc1c6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='10' cy='11' r='6'/><path d='M14.5 15.5L20 21'/><path d='M18 2.5v5M15.5 5h5' stroke-width='1.8'/></svg><svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#bdc1c6' stroke-width='2' stroke-linecap='round'><rect x='9' y='3' width='6' height='12' rx='3' fill='#bdc1c6'/><path d='M5 11a7 7 0 0014 0M12 18v3'/></svg><svg width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='#bdc1c6' stroke-width='2' stroke-linecap='round'><path d='M4 8V6a2 2 0 012-2h2M16 4h2a2 2 0 012 2v2M20 16v2a2 2 0 01-2 2h-2M8 20H6a2 2 0 01-2-2v-2'/><circle cx='12' cy='12' r='3.5'/></svg></div>
+<div id="tr"><div class="trh"><h3>Trending searches</h3><svg width="20" height="20" viewBox="0 0 24 24" fill="#e8eaed"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg></div><div id="trl"></div></div>
+</div>
+<header class='g'>
+<div class='gt'><div class='gl'>Google</div><div class='gi'><svg width='26' height='26' viewBox='0 0 24 24' fill='none' stroke='#bdc1c6' stroke-width='1.8' stroke-linejoin='round'><path d='M6 17v-6a6 6 0 0112 0v6l1.5 2h-15z'/><path d='M10 21h4'/></svg><div class='av'>DG</div></div></div>
+<div class='sb'><svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#bdc1c6' stroke-width='2.2' stroke-linecap='round'><circle cx='10' cy='10' r='6.5'/><path d='M15 15l6 6'/></svg><input id='q' type='text' enterkeyhint='search' autocomplete='off' autocorrect='on' autocapitalize='off' spellcheck='true' aria-label='Search'><svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='#bdc1c6' stroke-width='2' stroke-linecap='round'><rect x='9' y='3' width='6' height='12' rx='3' fill='#bdc1c6'/><path d='M5 11a7 7 0 0014 0M12 18v3'/></svg><svg width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='#bdc1c6' stroke-width='2' stroke-linecap='round'><path d='M4 8V6a2 2 0 012-2h2M16 4h2a2 2 0 012 2v2M20 16v2a2 2 0 01-2 2h-2M8 20H6a2 2 0 01-2-2v-2'/><circle cx='12' cy='12' r='3.5'/></svg></div>
+<div class='tb'><span>AI Mode</span><span>All</span><span class='on'>Images</span><span>Shopping</span><span>Videos</span><span>News</span></div>
+<div class='ch'><span><i class='th' style='background:#333 url(p/46.jpg) center/cover'></i>Black</span><span><i class='th' style='background:#333 url(p/14.jpg) center/cover'></i>Card box</span><span><i class='th' style='background:#333 url(p/09.jpg) center/cover'></i>Poker</span><span><i class='th' style='background:#333 url(p/23.jpg) center/cover'></i>Bicycle</span><span><i class='th' style='background:#333 url(p/29.jpg) center/cover'></i>Origami</span></div>
+</header>
+<div id='nr' hidden></div><div id="grid"><div class="col" id="c0"></div><div class="col" id="c1"></div></div>
+<div id="ft">
+ <div id="more"><button type="button">More search results <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e8eaed" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button></div>
+ <div class="fb">
+  <div class="ga"><svg viewBox='0 0 48 48' width='38' height='38'><path fill='#EA4335' d='M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.6 17.7 9.5 24 9.5z'/><path fill='#4285F4' d='M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.3 5.5-4.8 7.2l7.5 5.8c4.4-4.1 7.1-10.1 7.1-17.5z'/><path fill='#FBBC05' d='M10.5 28.7c-.5-1.5-.8-3-.8-4.7s.3-3.2.8-4.7l-7.9-6.1C.9 16.4 0 20.1 0 24s.9 7.6 2.6 10.8l7.9-6.1z'/><path fill='#34A853' d='M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.5-5.8c-2.1 1.4-4.8 2.3-8.4 2.3-6.3 0-11.6-4.1-13.5-9.8l-7.9 6.1C6.5 42.6 14.6 48 24 48z'/></svg><span>Ask and explore anything with the Google app</span><b>Open</b></div>
+  <p class="np">Results are not personalized</p>
+  <p class="lk"><span>Dark theme: on</span><span>Help</span><span>Send feedback</span></p>
+  <p class="lk"><span>Privacy</span><span>Terms</span></p>
+ </div>
+</div>
+</div>
+<div id='bs'></div><div id='bb'><div class='r'><svg width='26' height='26' viewBox='0 0 24 24' fill='none' stroke='#e8eaed' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M15 5l-7 7 7 7'/></svg></div><div class='p'><svg width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='#e8eaed' stroke-width='2' stroke-linecap='round'><path d='M4 7h16M4 12h10M4 17h16'/></svg><svg class='si' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='#e8eaed' stroke-width='2.4' stroke-linecap='round'><circle cx='10' cy='10' r='6.5'/><path d='M15 15l6 6'/></svg><span id='bq'></span><span id='bu'>google.com</span><svg class='mic' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='#e8eaed' stroke-width='2' stroke-linecap='round'><rect x='9' y='3' width='6' height='12' rx='3'/><path d='M5 11a7 7 0 0014 0M12 18v3'/></svg><svg class='rl' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='#e8eaed' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M20 12a8 8 0 11-2.4-5.7'/><path d='M20 4v5h-5'/></svg></div><div class='r'><svg width='26' height='26' viewBox='0 0 24 24' fill='none' stroke='#e8eaed' stroke-width='2' stroke-linejoin='round'><rect x='8' y='3' width='13' height='13' rx='3'/><path d='M16 19.5a2.5 2.5 0 01-2.5 2H6.5A2.5 2.5 0 014 19v-9A2.5 2.5 0 016.5 8'/></svg></div></div>
+<div id="ed" hidden>
+ <div class="edh">Slide with one finger, pinch to zoom and twist. The art shows only through the red area.</div>
+ <canvas id="edc"></canvas>
+ <div class="edr"><span>Zoom</span><input type="range" id="edz" min="40" max="400" step="0.5"></div>
+ <div class="edr"><span>Corner</span><select id="edco" style="flex:1;font-size:15px;padding:8px;border-radius:8px;background:#303134;color:#e8eaed;border:1px solid #3c4043"><option value="tl">Top-left (as in the photo)</option><option value="tr">Top-right</option><option value="bl">Bottom-left</option><option value="br">Bottom-right</option></select></div>
+ <div class="edr"><span>Tilt</span><input type="range" id="edr" min="-20" max="20" step="0.1"></div>
+ <div class="edb"><button id="edl">&#9664;</button><button id="edu">&#9650;</button><button id="edd">&#9660;</button><button id="edrt">&#9654;</button><button id="edg">See-through</button><button id="edre">Reset</button></div>
+ <div class="edb fix"><button id="edx">Cancel</button><button id="eds" class="pri">Save card</button></div>
+</div>
+<div id="hf"><p><span>Dark theme: on</span><span>Settings</span><span>Privacy</span><span>Terms</span></p><p><span>How Search works</span><span>About</span></p></div>
+<div id="cd" hidden></div>
+<div id="card"></div>
+<button id="gear" aria-label="Settings">⚙︎</button>
+<div id="panel" hidden>
+ <div class="ph"><h2>Settings</h2><button class="btn" id="cls2" type="button">Done</button></div>
+ <button id="insb" type="button"><span>Instructions</span><span style="font-size:22px;color:#9aa0a6">&#8250;</span></button>
+ <p>Use the slider to adjust the size of the folded card if the size seems off.</p>
+ <label>Card size: <span id="pv"></span></label><input type="range" id="pp" min="100" max="260" step="1">
+ <label>Trigger card (tap one to use it)</label>
+ <div id="lib"></div>
+ <p id="libn"></p>
+ <label class="btn" style="margin:0">Add a card back<input type="file" id="ta" accept="image/*" hidden></label><button class="btn" id="tfit">Adjust fit</button><button class="btn" id="tdel">Delete</button>
+ <label>Trigger image number (1 to 52; 1 is the first image at the top)</label><input type='number' id='pos' min='1' max='52' style='width:80px'>
+ <label>Trigger image caption</label><input type='text' id='cap'>
+ <label style='margin-top:10px'>Trigger image source</label><input type='text' id='src'>
+ <label>Delay after tapping the trigger image: <span id="dv"></span> sec</label><input type="range" id="dl" min="0" max="30" step="1">
+ <label>Secret countdown dots (one disappears each second)</label>
+ <select id="dt" style="font-size:16px;padding:10px;border-radius:8px;background:#303134;color:#e8eaed;border:1px solid #3c4043"><option value="top">Top edge of screen</option><option value="bottom">Just above the bottom bar</option><option value="off">Off</option></select>
+ <label><input type="checkbox" id="vn"> Card vanishes when you lift your finger (it doesn't move around)</label>
+  <label><input type="checkbox" id="ds"> Scroll the whole page (keeps the bottom of the screen filled; untick only if something looks wrong)</label>
+ <label>Lower the fake bottom bar: <span id="blv"></span> px (the lowest it can go without being cut off)</label><input type="range" id="bl" min="0" max="120" step="1">
+  <label>Tools</label><p id="ms"></p>
+ <button class="btn tg" id="en" type="button">Enable motion</button><button class="btn tg" id="tst" type="button">Shake disconnect</button>
+ <div id="tw"><label>Tilt sensitivity: <span id="tv"></span> (1 = gentle, 10 = strong)</label><input type="range" id="tl" min="1" max="10" step="1"></div>
+ <div id="sw2"><label>Shake sensitivity: <span id="sv"></span> (1 = needs a hard shake, 10 = very light)</label><input type="range" id="sl" min="1" max="10" step="1"></div><button class="btn" id="rst">Restart routine</button>
+ </div>
+<div id="ins" hidden>
+ <div class="ph"><h2>Instructions</h2><button class="btn" id="insx" type="button">Back</button></div>
+
+ <h3>Part 1: Using it</h3>
+ <p class="sub">It looks and acts like a normal Google image search.</p>
+
+ <div class="st"><div class="n">1</div><div><b>Open the app.</b> It starts on Google's home page with a blank search bar.</div></div>
+
+ <div class="st"><div class="n">2</div><div><b>Tap "IMAGES"</b> at the top left, next to "ALL". The app opens on ALL with Google's trending searches. Switch to IMAGES before you search, just like on real Google.
+ <div class="tip" style="margin-top:10px">If you forget and search from ALL, it's fine. As soon as you search for a word containing "card" or "cards", the app switches to IMAGES by itself and shows the photo grid.</div></div></div>
+
+ <div class="st"><div class="n">3</div><div><b>Search for anything that contains the word "card" or "cards".</b> Tap the search bar, type it, and tap search. Any of these work:
+ <div class="pic"><svg width='250' height='46' viewBox='0 0 250 46'><rect x='1' y='3' width='248' height='40' rx='20' fill='#303134' stroke='#5f6368'/><circle cx='24' cy='23' r='7' fill='none' stroke='#9aa0a6' stroke-width='2'/><path d='M29 28l6 6' stroke='#9aa0a6' stroke-width='2'/><text x='48' y='29' fill='#e8eaed' font-size='15' font-family='Arial'>red playing cards</text></svg></div>
+ <div style="margin-top:8px;color:#c4c7c5;font-size:14px">card &middot; cards &middot; red playing cards &middot; what's my card? &middot; deck of cards</div>
+ <div class="tip" style="margin-top:10px">A search without the word "card" shows no photos. It says "Your search did not match any images", as Google does for a search with no results. Just search again with the word "card" in it.</div></div></div>
+
+ <div class="st"><div class="n">4</div><div><b>Find your trigger card.</b> By default it is set to the 1st image. You can change its spot in Settings (Trigger image number).
+ <div class="pic"><svg width='170' height='150' viewBox='0 0 170 150'><rect x='0' y='0' width='170' height='150' rx='12' fill='#202124'/>
+<rect x='8' y='8' width='154' height='0' /><rect x='8' y='8' width='46' height='52' rx='5' fill='#3c4043'/><rect x='112' y='8' width='46' height='52' rx='5' fill='#3c4043'/><rect x='8' y='66' width='46' height='52' rx='5' fill='#3c4043'/><rect x='60' y='66' width='46' height='52' rx='5' fill='#3c4043'/><rect x='112' y='66' width='46' height='52' rx='5' fill='#3c4043'/>
+<rect x='60' y='6' width='50' height='56' rx='7' fill='none' stroke='#8ab4f8' stroke-width='3'/><image href='card.png' x='67' y='12' width='36' height='44' preserveAspectRatio='xMidYMid meet'/>
+<text x='85' y='146' fill='#8ab4f8' font-size='10' text-anchor='middle' font-family='Arial'>tap this one</text></svg></div></div></div>
+
+ <div class="st"><div class="n">5</div><div><b>Tap that picture.</b> After the delay you chose in Settings (the small dots count down one per second if you turned them on), the card lifts off the screen and grows to full size.</div></div>
+
+ <div class="st"><div class="n">6</div><div><b>Move it around.</b> Drag it with your finger or flick it so it bounces around your screen. It automatically settles at a natural angle so you can slide it off the screen with your thumb or finger. If you choose "Card vanishes when you lift your finger" in Settings, it disappears the moment you let go.</div></div>
+
+ <div class="st"><div class="n">7</div><div><b>Phone Motions.</b> Turn on <span class="kbd">Enable motion</span> and <span class="kbd">Shake disconnect</span> in Settings, then shake the phone and the card falls away.</div></div>
+
+ <h3 style="margin-top:8px">Practice and reset</h3>
+ <div class="st"><div class="n">&#8635;</div><div><b>Double tap anywhere</b> to put the folded card back on the page, ready to practice again, without starting the countdown.</div></div>
+ <div class="st"><div class="n">&#8635;</div><div><b>Tap the Google logo</b> at the top to start over from the blank home page.</div></div>
+
+ <div class="tip">Open Settings any time with the small gear in the top left corner of the home page. Use "Card size" if the card on screen does not match the real one.</div>
+
+ <hr>
+ <h3>Part 2: Add it to your iPhone Home Screen</h3>
+ <p class="sub">Do this once. The app then opens full screen, with no Safari bars, like a real app. Use Safari, not another browser.</p>
+
+ <div class="st"><div class="n">1</div><div><b>Open the app's web address in Safari.</b> The address is the one you were given (it ends in .netlify.app).</div></div>
+
+ <div class="st"><div class="n">2</div><div><b>Tap the Share button.</b> It is a square with an arrow pointing up, in Safari's bottom bar. If you do not see it, tap the three dots first.
+ <div class="pic"><svg width='28' height='28' viewBox='0 0 24 24' fill='none' stroke='#8ab4f8' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 15V3M8 7l4-4 4 4'/><path d='M7 10H6a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2h-1'/></svg><span style="color:#9aa0a6">or</span><svg width='26' height='26' viewBox='0 0 24 24' fill='#e8eaed'><circle cx='5' cy='12' r='2'/><circle cx='12' cy='12' r='2'/><circle cx='19' cy='12' r='2'/></svg></div></div></div>
+
+ <div class="st"><div class="n">3</div><div><b>Scroll down the list and tap "Add to Home Screen".</b>
+ <div class="pic" style="justify-content:flex-start"><div style="display:flex;align-items:center;justify-content:space-between;width:100%;background:#303134;border-radius:12px;padding:12px 14px;box-sizing:border-box"><span>Add to Home Screen</span><svg width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='#e8eaed' stroke-width='1.8' stroke-linecap='round'><rect x='3' y='3' width='18' height='18' rx='4'/><path d='M12 8v8M8 12h8'/></svg></div></div></div></div>
+
+ <div class="st"><div class="n">4</div><div><b>Check the name,</b> it should say <b>DG Card</b>. If you see an "Open as Web App" switch, leave it turned on.</div></div>
+
+ <div class="st"><div class="n">5</div><div><b>Tap "Add"</b> in the top right corner.
+ <div class="pic"><span style="background:#1a73e8;color:#fff;border-radius:18px;padding:8px 22px;font-weight:600">Add</span></div></div></div>
+
+ <div class="st"><div class="n">6</div><div><b>Open it from your Home Screen.</b> Find the new <b>DG Card</b> icon and tap it. From now on always start the app from this icon.</div></div>
+
+ <div class="tip">Tip: if the bottom of the screen looks cut off or the bar sits too high, open Settings and use "Lower the fake bottom bar" until it sits at the very bottom, and make sure "Scroll the whole page" is ticked.</div>
+ <div class="tip">Updated app? Delete the Home Screen icon and add it again so the phone loads the newest version.</div>
+</div>
+<script>
+const $=s=>document.querySelector(s);
+const CARD="card.png",ASP=474/640;let CARDURL=CARD;
+const S={useCut:true,ppi:160,swap:false,deck:"#b3202a",img:null,pos:0,pics:[],cap:"Red Playing Card",src:"Folded Card",motion:false,shake:false,delay:5};
+try{const o=JSON.parse(localStorage.getItem("fc2")||"{}");if(o.cap===undefined)delete o.pos;Object.assign(S,o)}catch(e){}
+S.useCut=true;S.img=null;
+if(!Array.isArray(S.cards)){S.cards=[];S.sel=-1;if(S.art){S.cards.push({art:S.art,fit:S.fit||null,corner:S.corner||'tl'});S.sel=0}}
+if(typeof S.sel!=="number"||S.sel>=S.cards.length)S.sel=-1;
+const applySel=()=>{const k=S.cards[S.sel];S.art=k?k.art:null;S.fit=k?k.fit:null;S.corner=k?k.corner:'tl'};applySel();
+const save=()=>{try{const o=Object.assign({},S);delete o.art;delete o.fit;delete o.corner;delete o.img;localStorage.setItem("fc2",JSON.stringify(o))}catch(e){}};
+const card=$("#card");let W=innerWidth,H=innerHeight,thumb=null,thumbSc=1,thumbRot=0;
+const c={x:0,y:0,vx:0,vy:0,a:0,w:0,s:1,mode:"hidden"};
+const g={x:0,y:0},lin={x:0,y:0};let sgn=-1,beta=90,lastShake=0,mc=0,permRes="not asked";
+const cimg=()=>S.useCut?CARDURL:S.img;
+const dims=()=>{const b=1.75*S.ppi,a=S.useCut?b*ASP:1.25*S.ppi;return S.swap?[b,a]:[a,b]};
+const BG=["#e9e4da","#2b2b2e","#dfe8e1","#c9a77c","#f4f4f4","#1f4d36","#d8dde6","#efe3d0"],COLS=["#b3202a","#1f3f9b","#15171c","#1d6b3a","#b3202a","#1f3f9b","#6b2a8a","#c9a227"];
+function mk(w,h,col,r,img,bd){const e=document.createElement("div");e.className="fc"+(img?" img":"")+(img===CARDURL?" cut":"");
+ e.style.cssText="--c:"+col+";--bd:"+bd+"px;width:"+w+"px;height:"+h+"px;transform:translate(-50%,-50%) rotate("+r+"deg)"+(img?";background-image:url("+img+")":"");return e}
+function style(){const[w,h]=dims();card.style.width=w+"px";card.style.height=h+"px";card.style.setProperty("--c",S.deck);
+ const ci=cimg();card.style.backgroundImage=ci?"url("+ci+")":"";card.classList.toggle("img",!!ci);card.classList.toggle("cut",ci===CARDURL)}
+function draw(){const[w,h]=dims();card.style.transform="translate("+(c.x-w/2)+"px,"+(c.y-h/2)+"px) rotate("+c.a+"rad) scale("+c.s+")"}
+async function perm(){if(!S.motion&&!S.shake)return;const p=[];try{if(window.DeviceMotionEvent&&DeviceMotionEvent.requestPermission)p.push(DeviceMotionEvent.requestPermission());if(window.DeviceOrientationEvent&&DeviceOrientationEvent.requestPermission)p.push(DeviceOrientationEvent.requestPermission())}catch(e){}
+ const r=await Promise.allSettled(p);permRes=r.length?r.map(x=>x.status==="fulfilled"?x.value:"error").join("/"):"no prompt needed";status()}
+function status(){const el=$("#ms");if(el)el.textContent=(!S.motion&&!S.shake)?"Motion: off (touch only)":"Motion: "+(mc>0?"working":"no data yet")+" (permission: "+permRes+")"}
+function lift(np){if(c.mode!=="hidden"||!thumb)return;if(!np)perm();const r=thumb.getBoundingClientRect();
+ c.x=r.left+r.width/2;c.y=r.top+r.height/2;c.a=thumbRot*Math.PI/180;c.s=thumbSc;{const[w,h]=dims();c.tx=Math.min(Math.max(c.x,w/2+10),W-w/2-10);c.ty=Math.min(Math.max(c.y,h/2+10),H-h/2-10)}c.mode="grow";TA=-.17+(Math.random()-.5)*.1;
+ thumb.style.visibility="hidden";lockS(true);card.style.display="block";draw()}
+function release(){if(c.mode!=="docked"||S.vanish)return;c.mode="loose";c.vy=-260;c.vx=(Math.random()-.5)*260;c.w=(Math.random()-.5)*5}
+addEventListener("deviceorientation",e=>{if(!S.motion||e.beta==null)return;beta=e.beta*Math.PI/180;if(mc===0){const ga=e.gamma*Math.PI/180;g.x=Math.cos(beta)*Math.sin(ga);g.y=Math.sin(beta)}});
+addEventListener("devicemotion",e=>{if(!S.motion&&!S.shake)return;const a=e.accelerationIncludingGravity;if(!a||a.x==null)return;mc++;
+ if(S.motion){if(Math.abs(a.y)>6&&Math.abs(Math.sin(beta))>.6)sgn=Math.sign(a.y)*Math.sign(Math.sin(beta));
+ g.x+=((-a.x*sgn/9.81)-g.x)*.35;g.y+=((a.y*sgn/9.81)-g.y)*.35;
+ const l=e.acceleration;if(l&&l.x!=null){lin.x=-l.x*sgn;lin.y=l.y*sgn}}
+ if(S.shake){const m=Math.hypot(a.x,a.y,a.z),n=Date.now();if(Math.abs(m-9.81)>22-1.5*(+S.shake_s||7)&&n-lastShake>800){lastShake=n;release()}}});
+let last=0,TA=-.17;
+function tick(t){const dt=Math.min(.033,(t-last)/1000||.016);last=t;
+ if(c.mode==="grow"){const k=Math.min(1,dt*7);c.s+=(1-c.s)*k;c.a*=1-k;c.x+=(c.tx-c.x)*k;c.y+=(c.ty-c.y)*k;draw();if(Math.abs(1-c.s)<.01&&Math.abs(c.a)<.01&&Math.abs(c.tx-c.x)<.5&&Math.abs(c.ty-c.y)<.5){c.s=1;c.a=0;c.x=c.tx;c.y=c.ty;c.mode="docked";draw()}}
+ if(c.mode==="loose"){const tf=.12*(+S.tilt||5),G=2600*tf,K=1800*tf;c.vx+=(g.x*G+lin.x*K)*dt;c.vy+=(g.y*G+lin.y*K)*dt;c.vx*=.996;c.vy*=.996;
+  c.x+=c.vx*dt;c.y+=c.vy*dt;{const sp=Math.hypot(c.vx,c.vy),k=Math.max(0,Math.min(1,1-sp/450)),T=TA+6.2832*Math.round((c.a-TA)/6.2832);c.w+=(T-c.a)*45*k*dt;c.w*=Math.exp(-13*k*dt)*Math.pow(.985,60*dt*(1-k));c.a+=c.w*dt}
+  const[w,h]=dims(),cs=Math.abs(Math.cos(c.a)),sn=Math.abs(Math.sin(c.a)),hx=(w*cs+h*sn)/2,hy=(w*sn+h*cs)/2;
+  if(c.x<hx){c.x=hx;if(c.vx<0){c.vx*=-.4;c.w+=c.vy*.003}c.vy*=.99}
+  if(c.x>W-hx){c.x=W-hx;if(c.vx>0){c.vx*=-.4;c.w-=c.vy*.003}c.vy*=.99}
+  if(c.y<hy){c.y=hy;if(c.vy<0){c.vy*=-.4;c.w-=c.vx*.003}c.vx*=.99}
+  if(c.y>H-hy){c.y=H-hy;if(c.vy>0){c.vy*=-.35;c.w+=c.vx*.003}c.vx*=.97;c.w*=.9;if(Math.abs(c.vy)<40)c.vy=0}
+  draw()}
+ requestAnimationFrame(tick)}
+requestAnimationFrame(tick);
+addEventListener("resize",()=>{W=innerWidth;H=innerHeight});
+let off=null,hist=[];
+card.addEventListener("pointerdown",e=>{if(S.vanish&&(c.mode==="docked"||c.mode==="grow")){card.setPointerCapture(e.pointerId);c.mode="hold";off={x:e.clientX-c.x,y:e.clientY-c.y};return}if(c.mode!=="loose"&&c.mode!=="docked")return;card.setPointerCapture(e.pointerId);
+ c.mode="drag";off={x:e.clientX-c.x,y:e.clientY-c.y};hist=[{x:e.clientX,y:e.clientY,t:performance.now()}];card.style.cursor="grabbing"});
+card.addEventListener("pointermove",e=>{if(c.mode!=="drag"&&c.mode!=="hold")return;c.x=e.clientX-off.x;c.y=e.clientY-off.y;
+ hist.push({x:e.clientX,y:e.clientY,t:performance.now()});if(hist.length>5)hist.shift();draw()});
+function endDrag(){if(c.mode==="hold"){c.mode="gone";card.style.display="none";lockS(false);return}if(c.mode!=="drag")return;card.style.cursor="grab";
+ if(c.x<0||c.x>W||c.y<0||c.y>H){c.mode="gone";card.style.display="none";lockS(false);return}
+ const a=hist[0],b=hist[hist.length-1],d=Math.max(.001,(b.t-a.t)/1000);c.vx=(b.x-a.x)/d;c.vy=(b.y-a.y)/d;
+ if(performance.now()-b.t>80){c.vx=c.vy=0}c.w=c.vx*.002;c.mode="loose"}
+card.addEventListener("pointerup",endDrag);card.addEventListener("pointercancel",endDrag);
+/* settings */
+const P=$("#panel");
+function shrink(f,max){return new Promise(res=>{const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{
+ const k=Math.min(1,max/Math.max(im.width,im.height)),cv=document.createElement("canvas");cv.width=im.width*k;cv.height=im.height*k;
+ cv.getContext("2d").drawImage(im,0,0,cv.width,cv.height);res(cv.toDataURL("image/jpeg",.8))};im.src=r.result};r.readAsDataURL(f)})}
+const SC=()=>document.documentElement.classList.contains('ds')?document.scrollingElement:$('#app');
+const lockS=on=>{if(document.documentElement.classList.contains('ds'))document.documentElement.style.overflow=on?'hidden':'';else $('#app').style.overflow=on?'hidden':''};
+function diag(){const m=(h)=>{const t=document.createElement('div');t.style.cssText='position:fixed;visibility:hidden;width:1px;height:'+h;document.body.appendChild(t);const v=Math.round(t.getBoundingClientRect().height);t.remove();return v},e=(side)=>{const t=document.createElement('div');t.style.cssText='position:fixed;visibility:hidden;padding-'+side+':env(safe-area-inset-'+side+',0px)';document.body.appendChild(t);const v=parseFloat(getComputedStyle(t)['padding'+side[0].toUpperCase()+side.slice(1)])||0;t.remove();return Math.round(v)};const vv=window.visualViewport;$('#dg').textContent='win '+innerWidth+'x'+innerHeight+' | screen '+screen.width+'x'+screen.height+' | visual '+(vv?Math.round(vv.height):'-')+' | vh '+m('100vh')+' lvh '+m('100lvh')+' dvh '+m('100dvh')+' | safe top '+e('top')+' bottom '+e('bottom')+' | sa '+(isSA()?'yes':'no')+' | app '+Math.round($('#app').getBoundingClientRect().height)}
+$("#gear").onclick=()=>{P.hidden=false};const closeP=()=>{P.hidden=true;if(document.body.classList.contains('res')&&c.mode==='hidden')build3()};$("#cls2").onclick=closeP;$("#insb").onclick=()=>{$("#ins").hidden=false;$("#ins").scrollTop=0};$("#insx").onclick=()=>{$("#ins").hidden=true};
+$('#tl').value=S.tilt||5;$('#tv').textContent=S.tilt||5;$('#tl').oninput=e=>{S.tilt=+e.target.value;$('#tv').textContent=S.tilt;save()};
+$('#sl').value=S.shake_s||7;$('#sv').textContent=S.shake_s||7;$('#sl').oninput=e=>{S.shake_s=+e.target.value;$('#sv').textContent=S.shake_s;save()};
+const tgs=()=>{$('#en').classList.toggle('on',!!S.motion);$('#tst').classList.toggle('on',!!S.shake);$('#tw').hidden=!S.motion;$('#sw2').hidden=!S.shake};tgs();
+$("#pp").value=S.ppi;$("#pv").textContent=S.ppi;S.swap=false;
+$("#pp").oninput=e=>{S.ppi=+e.target.value;$("#pv").textContent=S.ppi;style();save()};
+
+
+$('#pos').value=S.pos+1;$('#cap').value=S.cap;$('#src').value=S.src;
+$('#pos').onchange=e=>{S.pos=Math.min(51,Math.max(0,(+e.target.value||1)-1));save()};
+$('#cap').oninput=e=>{S.cap=e.target.value;save()};$('#src').oninput=e=>{S.src=e.target.value;save()};
+$("#tst").onclick=()=>{S.shake=!S.shake;save();tgs();if(S.shake)perm();status()};
+$("#rst").onclick=()=>location.reload();
+$("#en").onclick=()=>{S.motion=!S.motion;if(!S.motion){g.x=g.y=0;lin.x=lin.y=0}save();tgs();if(S.motion)perm();status()};setInterval(status,1000);
+function rel(col){const qs=new Set($('#q').value.toLowerCase().match(/[a-z]+/g)||[]);
+ const d=document.createElement('div');d.className='rl';const h=document.createElement('div');h.className='rh';h.textContent='Related searches';d.appendChild(h);
+  [['Art playing card sculptures','url(p/29.jpg) center/cover'],['Folded playing card with black background',''],['Cool things to make out of playing cards','url(p/28.jpg) center/cover'],['Origami playing card sculptures','url(p/26.jpg) center/cover']].forEach(r=>{
+  const a=document.createElement('div'),th=document.createElement('div'),tx=document.createElement('div');a.className='ri';th.className='rt';tx.className='rx';
+  if(r[1])th.style.background=r[1];else th.innerHTML="<svg width='26' height='26' viewBox='0 0 24 24' fill='none' stroke='#bdc1c6' stroke-width='2.2' stroke-linecap='round'><circle cx='10' cy='10' r='6.5'/><path d='M15 15l6 6'/></svg>";
+  r[0].split(' ').forEach(w=>{const s=document.createElement(qs.has(w.toLowerCase())?'span':'b');s.textContent=w+' ';tx.appendChild(s)});
+  a.append(th,tx);d.appendChild(a)});
+ col.insertBefore(d,col.children[5]||null)}
+const PH=[[3, "Folded playing card on table\u2026", "Flickr", 299, 168], [26, "Rook no Further for some\u2026", "Origami.me", 700, 438], [6, "Folded playing card back\u2026", "Alamy", 300, 443], [27, "How to Fold a Heart from a\u2026", "Cut Out + Keep", 638, 480], [28, "Crafting with Playing Card\u2026", "PlayingCardDecks.com", 598, 338], [12, "Curved playing card in hand\u2026", "Amazon.com", 225, 225], [31, "Playing Card Polyhedral\u2026", "Instructables", 565, 542], [29, "Playing card origami ring\u2026", "Pinterest", 462, 432], [33, "Vintage red playing card back\u2026", "eBay", 465, 659], [20, "King of diamonds and card back\u2026", "Alamy", 447, 447], [36, "Red playing card back pattern\u2026", "Etsy", 399, 501], [34, "Playing card suits pattern\u2026", "Shutterstock", 447, 447], [47, "Red playing card backs\u2026", "Pinterest", 399, 501], [2, "Stacked playing card boxes\u2026", "Behance", 365, 547], [11, "Playing card side table\u2026", "Pinterest", 463, 662], [5, "Playing card pocket square\u2026", "Etsy", 300, 300], [30, "Fanning a deck of cards\u2026", "YouTube", 738, 414], [1, "Fanned deck of cards on black\u2026", "Shutterstock", 447, 447], [4, "Hand holding fanned red cards\u2026", "Pexels", 225, 225], [13, "Black playing cards fanned\u2026", "eBay", 547, 365], [17, "Poker hand of cards\u2026", "Pinterest", 461, 450], [22, "Hand of cards on plaid cloth\u2026", "iStock", 533, 375], [9, "Four aces with poker chips\u2026", "Shutterstock", 554, 554], [25, "Playing cards scattered on table\u2026", "Pexels", 678, 452], [32, "Cards in hand dark background\u2026", "Reddit", 335, 597], [37, "Mini playing cards\u2026", "Amazon.com", 198, 254], [40, "Gold foil playing card deck\u2026", "Kickstarter", 225, 225], [23, "Bicycle big box playing cards\u2026", "eBay", 447, 447], [38, "Standard playing cards deck\u2026", "Walmart", 416, 416], [14, "Playing card deck box\u2026", "Walmart", 225, 225], [42, "Playing card box back\u2026", "Walmart", 447, 447], [41, "Red and blue playing card decks\u2026", "Amazon.com", 400, 400], [45, "Black playing card box\u2026", "Etsy", 447, 447], [46, "Black playing cards\u2026", "Shutterstock", 515, 388], [48, "Playing card decks collection\u2026", "Reddit", 447, 447], [35, "Modernist playing card decks\u2026", "Etsy", 495, 620], [39, "Classic playing cards deck\u2026", "Pinterest", 498, 615], [43, "Black playing card deck\u2026", "Kickstarter", 225, 225], [44, "Ace of spades custom deck\u2026", "Kickstarter", 225, 225], [49, "Framed playing card art\u2026", "Etsy", 447, 447], [50, "Playing card backs\u2026", "Pinterest", 350, 350], [51, "Designing my own playing card art\u2026", "YouTube", 597, 335], [7, "Playing card design 8 of hearts\u2026", "Dribbble", 599, 419], [8, "Playing cards desk setup\u2026", "Behance", 299, 168], [15, "Card table with chess board\u2026", "Wayfair", 447, 447], [16, "Flexible playing cards\u2026", "Amazon.com", 554, 554], [18, "Playing cards printable sheet\u2026", "Etsy", 616, 498], [19, "Playing cards game night\u2026", "Target", 447, 447], [21, "Ace of spades on card box\u2026", "Unsplash", 447, 447], [24, "Red and blue card backs\u2026", "Wikipedia", 534, 374], [0, "Red playing card cube\u2026", "Instructables", 480, 638]];
+function build3(){const cols=[$('#c0'),$('#c1')];cols.forEach(x=>x.innerHTML='');thumb=null;
+ const cw=(innerWidth-12)/2,[w0,h0]=dims();
+ const fit=th=>Math.min(1,cw*.82/w0,th*.82/h0);
+ const rat=a=>cw*Math.min(1.6,Math.max(.5,a[4]/a[3]));
+ const sim=list=>{const l=list.slice();l.splice(Math.min(Math.max(0,S.pos),l.length),0,null);const h=[0,0],n=[0,0];l.forEach(it=>{const th=it?rat(it):1.49*cw,ci=h[0]<=h[1]?0:1;h[ci]+=th+49;n[ci]++;if(ci===1&&n[1]===5)h[1]+=330});return Math.abs(h[0]-h[1])};
+ let best=PH.slice(),bd=sim(best),seed=7;const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
+ for(let t=0;t<500&&bd>40;t++){const hd=PH.slice(0,PH.length-12),tl=PH.slice(-12);for(let i=tl.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));const x=tl[i];tl[i]=tl[j];tl[j]=x}const cand=hd.concat(tl),d=sim(cand);if(d<bd){bd=d;best=cand}}
+ const items=best.slice();items.splice(Math.min(Math.max(0,S.pos),items.length),0,null);
+ const hh=[0,0],cnt=[0,0];
+ items.forEach(it=>{const t=document.createElement('div'),im=document.createElement('div'),cp=document.createElement('div');let th,tx;
+  im.className='im';cp.className='cp';
+  if(!it){th=1.49*cw;im.style.height=th+'px';im.style.background='#000';const sc=fit(th),rt=-6;thumbSc=sc;thumbRot=rt;thumb=mk(w0*sc,h0*sc,S.deck,rt,cimg(),9*sc);im.appendChild(thumb);t.onclick=trigger;tx=[S.cap,S.src]}
+  else{th=cw*Math.min(1.6,Math.max(.5,it[4]/it[3]));im.style.height=th+'px';im.style.background='#222';
+   const g=document.createElement('img');g.src='p/'+String(it[0]).padStart(2,'0')+'.jpg';g.alt='';g.draggable=false;g.style.cssText='width:100%;height:100%;object-fit:cover;display:block;pointer-events:none';im.appendChild(g);tx=[it[1],it[2]]}
+  const b=document.createElement('b'),n=document.createElement('i');b.textContent=tx[0];n.textContent=tx[1];cp.append(b,n);
+  t.appendChild(im);t.appendChild(cp);const ci=hh[0]<=hh[1]?0:1;hh[ci]+=th+49;cols[ci].appendChild(t);cnt[ci]++;if(ci===1&&cnt[1]===5)hh[1]+=330});
+ rel(cols[1])}
+let moreN=0;
+function addMore(){moreN++;const cols=[$('#c0'),$('#c1')],cw=(innerWidth-12)/2;let seed=101+moreN*37;const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
+ const l=PH.slice();for(let i=l.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));const x=l[i];l[i]=l[j];l[j]=x}
+ const hh=cols.map(x=>x.offsetHeight);
+ l.forEach(it=>{const t=document.createElement('div'),im=document.createElement('div'),cp=document.createElement('div'),th=cw*Math.min(1.6,Math.max(.5,it[4]/it[3]));
+  im.className='im';cp.className='cp';im.style.height=th+'px';im.style.background='#222';
+  const g=document.createElement('img');g.src='p/'+String(it[0]).padStart(2,'0')+'.jpg';g.alt='';g.draggable=false;g.style.cssText='width:100%;height:100%;object-fit:cover;display:block;pointer-events:none';im.appendChild(g);
+  const b=document.createElement('b'),n=document.createElement('i');b.textContent=it[1];n.textContent=it[2];cp.append(b,n);t.append(im,cp);
+  const ci=hh[0]<=hh[1]?0:1;hh[ci]+=th+49;cols[ci].appendChild(t)})}
+$('#more button').addEventListener('click',addMore);
+const q=$('#q'),RX=/\bcards?\b/i;
+function go(){q.value=fixText(q.value);const v=q.value.trim();q.blur();SC().scrollTop=0;if(!v)return;document.body.classList.add('srch');$('#q0').blur();$('#bq').textContent=v;
+ if(RX.test(v)){setTab(true);$('#nr').hidden=true;document.body.classList.add('res');if(!$('#c0').children.length)build3()}
+ else{document.body.classList.remove('res');$('#c0').innerHTML='';$('#c1').innerHTML='';thumb=null;$('#nr').textContent='Your search - '+v+' - did not match any images.';$('#nr').hidden=false}}
+q.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();go()}});
+const DICT=['playing','card','cards','folded','fold','deck','poker','bicycle','origami','image','images'];
+function lev(a,b){const d=[];for(let i=0;i<=a.length;i++){d[i]=[i];for(let j=1;j<=b.length;j++)d[i][j]=i?0:j}
+ for(let i=1;i<=a.length;i++)for(let j=1;j<=b.length;j++)d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));return d[a.length][b.length]}
+function fixWord(w){const l=w.toLowerCase();if(l.length<4||DICT.includes(l))return w;let best=null,bd=9;
+ for(const d of DICT){const m=l.length>=6?2:1,x=lev(l,d);if(x<=m&&x<bd&&(l.length>=6||l[0]===d[0])){best=d;bd=x}}
+ if(!best)return w;return w[0]===w[0].toUpperCase()?best[0].toUpperCase()+best.slice(1):best}
+function fixText(s){return s.replace(/[A-Za-z]+/g,fixWord)}
+q.addEventListener('input',()=>{const v=q.value;if(/\s$/.test(v)){const f=fixText(v);if(f!==v)q.value=f}});
+const TPL={paper:'paper.png',mask:'mask.png',light:'light.png',bb:[116,74,474,640],w:474,h:640};
+const ld=u=>new Promise(r=>{const i=new Image();i.onload=()=>r(i);i.onerror=()=>r(null);i.src=u});
+function defFit(ar){const[x0,y0,x1,y1]=TPL.bb,bw=x1-x0,bh=y1-y0,aw=ar.width,ah=ar.height,sc=Math.max(bw/(aw/2),bh/(ah/2));return{cx:x0+aw*sc/2,cy:y0+ah*sc/2,w:aw*sc,r:0}}
+function orient(ar,q){const aw=ar.width,ah=ar.height,q0=q||'tl';q=q0;const fx=q==='tr'||q==='br',fy=q==='bl'||q==='br';
+ const t=document.createElement('canvas');t.width=aw;t.height=ah;const tx=t.getContext('2d');tx.translate(fx?aw:0,fy?ah:0);tx.scale(fx?-1:1,fy?-1:1);tx.drawImage(ar,0,0);return t}
+function artXf(x,k,t,f,a){x.save();x.globalAlpha=a;x.setTransform(k,0,0,k,0,0);const sc=f.w/t.width;x.translate(f.cx,f.cy);x.rotate(f.r*Math.PI/180);x.scale(sc,sc);x.drawImage(t,-t.width/2,-t.height/2);x.restore()}
+function paint(x,k,t,f,pa,mm,li){x.save();x.setTransform(1,0,0,1,0,0);x.clearRect(0,0,TPL.w*k,TPL.h*k);x.restore();
+ artXf(x,k,t,f,1);x.save();x.setTransform(k,0,0,k,0,0);
+ x.globalCompositeOperation='destination-in';x.drawImage(mm,0,0,TPL.w,TPL.h);
+ x.globalCompositeOperation='multiply';x.drawImage(li,0,0,TPL.w,TPL.h);
+ x.globalCompositeOperation='source-over';x.drawImage(pa,0,0,TPL.w,TPL.h);x.restore()}
+async function renderCard(art,fit,corner){const[pa,mm,li,ar]=await Promise.all([ld(TPL.paper),ld(TPL.mask),ld(TPL.light),ld(art)]);if(!pa||!mm||!li||!ar)return CARD;
+ const cv=document.createElement('canvas');cv.width=TPL.w;cv.height=TPL.h;
+ paint(cv.getContext('2d'),1,orient(ar,corner),fit||defFit(ar),pa,mm,li);
+ try{return cv.toDataURL('image/png')}catch(e){return CARD}}
+async function buildCard(){CARDURL=S.art?await renderCard(S.art,S.fit,S.corner):CARD}
+/* alignment editor */
+let ED=null;
+async function openEd(src,fit0,isNew,corner){
+ const[pa,mm,li,ar]=await Promise.all([ld(TPL.paper),ld(TPL.mask),ld(TPL.light),ld(src)]);if(!pa||!mm||!li||!ar)return;
+ const k=2,off=document.createElement('canvas');off.width=TPL.w*k;off.height=TPL.h*k;
+ const def=defFit(ar);ED={pa,mm,li,ar,src,isNew,corner:corner||'tl',t:orient(ar,corner),def,fit:Object.assign({},fit0||def),off,k,ghost:false,ptr:new Map(),s0:null};$('#edco').value=ED.corner;
+ const cv=$('#edc');cv.width=off.width;cv.height=off.height;
+ const w=Math.min(innerWidth-24,Math.max(230,(innerHeight-300)*TPL.w/TPL.h),520);cv.style.width=w+'px';cv.style.height=(w*TPL.h/TPL.w)+'px';
+ $('#ed').hidden=false;edSync();edRender()}
+function edSync(){$('#edz').value=ED.fit.w/ED.def.w*100;$('#edr').value=ED.fit.r}
+function edRender(){const E=ED,cv=$('#edc'),x=cv.getContext('2d');paint(E.off.getContext('2d'),E.k,E.t,E.fit,E.pa,E.mm,E.li);
+ x.setTransform(1,0,0,1,0,0);x.clearRect(0,0,cv.width,cv.height);x.fillStyle='#1b1b1d';x.fillRect(0,0,cv.width,cv.height);
+ artXf(x,E.k,E.t,E.fit,.3);x.drawImage(E.off,0,0);if(E.ghost)artXf(x,E.k,E.t,E.fit,.45)}
+function edSnap(){const p=[...ED.ptr.values()].map(a=>({x:a.x,y:a.y}));ED.s0={fit:Object.assign({},ED.fit),p}}
+(function(){const cv=$('#edc');
+ cv.addEventListener('pointerdown',e=>{if(!ED)return;cv.setPointerCapture(e.pointerId);ED.ptr.set(e.pointerId,{x:e.clientX,y:e.clientY});edSnap()});
+ cv.addEventListener('pointermove',e=>{if(!ED||!ED.ptr.has(e.pointerId))return;ED.ptr.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  const p=[...ED.ptr.values()],s0=ED.s0,ds=cv.clientWidth/TPL.w;
+  if(p.length===1&&s0.p.length===1){ED.fit.cx=s0.fit.cx+(p[0].x-s0.p[0].x)/ds;ED.fit.cy=s0.fit.cy+(p[0].y-s0.p[0].y)/ds}
+  else if(p.length>=2&&s0.p.length>=2){const d0=Math.hypot(s0.p[0].x-s0.p[1].x,s0.p[0].y-s0.p[1].y)||1,d1=Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y),
+   a0=Math.atan2(s0.p[1].y-s0.p[0].y,s0.p[1].x-s0.p[0].x),a1=Math.atan2(p[1].y-p[0].y,p[1].x-p[0].x),
+   m0={x:(s0.p[0].x+s0.p[1].x)/2,y:(s0.p[0].y+s0.p[1].y)/2},m1={x:(p[0].x+p[1].x)/2,y:(p[0].y+p[1].y)/2};
+   ED.fit.w=s0.fit.w*d1/d0;ED.fit.r=s0.fit.r+(a1-a0)*180/Math.PI;ED.fit.cx=s0.fit.cx+(m1.x-m0.x)/ds;ED.fit.cy=s0.fit.cy+(m1.y-m0.y)/ds}
+  edSync();edRender()});
+ const up=e=>{if(!ED)return;ED.ptr.delete(e.pointerId);edSnap()};cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);
+ cv.addEventListener('wheel',e=>{if(!ED)return;e.preventDefault();ED.fit.w*=e.deltaY<0?1.02:.98;edSync();edRender()},{passive:false});
+ $('#edz').oninput=e=>{ED.fit.w=ED.def.w*e.target.value/100;edRender()};
+ $('#edr').oninput=e=>{ED.fit.r=+e.target.value;edRender()};
+ const nudge=(dx,dy)=>()=>{ED.fit.cx+=dx;ED.fit.cy+=dy;edRender()};
+ $('#edl').onclick=nudge(-1,0);$('#edrt').onclick=nudge(1,0);$('#edu').onclick=nudge(0,-1);$('#edd').onclick=nudge(0,1);
+ $('#edg').onclick=()=>{ED.ghost=!ED.ghost;edRender()};
+ $('#edre').onclick=()=>{ED.fit=Object.assign({},ED.def);edSync();edRender()};
+ $('#edco').onchange=e=>{ED.corner=e.target.value;ED.t=orient(ED.ar,ED.corner);ED.fit=Object.assign({},ED.def);edSync();edRender()};
+ $('#edx').onclick=()=>{$('#ed').hidden=true;ED=null};
+ $('#eds').onclick=async()=>{const nf=Object.assign({},ED.fit),cn=ED.corner;
+  if(ED.isNew){S.cards.push({art:ED.src,fit:nf,corner:cn});S.sel=S.cards.length-1}else{const k=S.cards[S.sel];if(k){k.fit=nf;k.corner=cn}}
+  applySel();save();$('#ed').hidden=true;ED=null;await refreshCard();refreshLib()};
+})();
+async function refreshCard(){await buildCard();style();if(document.body.classList.contains('res')&&c.mode==='hidden')build3()}
+$('#ta').onchange=async e=>{const f=e.target.files[0];if(!f)return;if(S.cards.length>=6){alert('You already have 6 saved cards. Delete one first.');e.target.value='';return}
+ const art=await shrink(f,900);e.target.value='';openEd(art,null,true,'tl')};
+$('#tfit').onclick=()=>{const k=S.cards[S.sel];if(k)openEd(k.art,k.fit,false,k.corner)};
+$('#tdel').onclick=async()=>{if(S.sel<0||!confirm('Delete this saved card?'))return;S.cards.splice(S.sel,1);S.sel=-1;applySel();save();await refreshCard();refreshLib()};
+async function refreshLib(){const L=$('#lib');L.innerHTML='';
+ const items=[{u:CARD,i:-1}].concat(await Promise.all(S.cards.map(async(k,i)=>({u:await renderCard(k.art,k.fit,k.corner),i}))));
+ items.forEach(it=>{const b=document.createElement('button');b.className='lc'+(it.i===S.sel?' on':'');const im=document.createElement('img');im.src=it.u;b.appendChild(im);
+  b.onclick=async()=>{S.sel=it.i;applySel();save();await refreshCard();refreshLib()};L.appendChild(b)});
+ $('#libn').textContent=(S.sel<0?'Using the original red Bicycle card.':'Using saved card '+(S.sel+1)+' of '+S.cards.length+'.')+' ('+S.cards.length+' of 6 saved)';
+ $('#tfit').disabled=S.sel<0;$('#tdel').disabled=S.sel<0}
+let pend=false,cdIv=null;
+function resetCard(){if(cdIv){clearInterval(cdIv);cdIv=null}pend=false;$('#cd').hidden=true;card.style.display="none";c.mode="hidden";c.vx=c.vy=c.w=0;c.s=1;c.a=0;lockS(false);if(thumb)thumb.style.visibility="visible"}
+let noTrig=0;
+
+const TR_FB=['weather tomorrow','nfl scores','stock market today','movie showtimes near me','gas prices near me','nba schedule','flights to las vegas'];
+function drawTr(a){const l=$('#trl');l.innerHTML='';a.slice(0,7).forEach(t=>{const r=document.createElement('div');r.className='tri';r.innerHTML="<svg width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='#9aa0a6' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M3 17l6-6 4 4 8-8'/><path d='M15 7h6v6'/></svg><span></span>";r.lastChild.textContent=t;l.appendChild(r)});fitTr()}
+function fitTr(){const rows=[...document.querySelectorAll('#trl .tri')];rows.forEach(r=>r.style.visibility='');const st=$('#bs'),lim=(document.documentElement.classList.contains('sa')&&st?st.getBoundingClientRect().top:innerHeight)-6;rows.forEach(r=>{if(r.getBoundingClientRect().bottom>lim)r.style.visibility='hidden'})}
+async function loadTr(){let c=null;try{c=JSON.parse(localStorage.getItem('fc2tr')||'null')}catch(e){}
+ drawTr(c&&c.a&&c.a.length?c.a:TR_FB);if(c&&Date.now()-c.t<45*60*1000)return;
+ const geo=((navigator.language||'en-US').split('-')[1]||'US').toUpperCase().slice(0,2),u='https://trends.google.com/trending/rss?geo='+geo;
+ const urls=[u,'https://api.allorigins.win/raw?url='+encodeURIComponent(u),'https://corsproxy.io/?'+encodeURIComponent(u)];
+ for(const x of urls){try{const ac=new AbortController(),to=setTimeout(()=>ac.abort(),6000);const r=await fetch(x,{signal:ac.signal});clearTimeout(to);if(!r.ok)continue;const d=new DOMParser().parseFromString(await r.text(),'text/xml');
+  const a=[...d.querySelectorAll('item > title')].map(n=>n.textContent.trim()).filter(Boolean);if(a.length>=3){drawTr(a);try{localStorage.setItem('fc2tr',JSON.stringify({t:Date.now(),a:a.slice(0,10)}))}catch(e){}return}}catch(e){}}}
+function setTab(img){document.body.classList.toggle('ti',img);fitTr();$('#tAll').classList.toggle('on',!img);$('#tImg').classList.toggle('on',img)}
+$('#tAll').onclick=()=>setTab(false);$('#tImg').onclick=()=>setTab(true);
+loadTr();addEventListener('resize',fitTr);setTimeout(fitTr,400);setTimeout(fitTr,1500);
+setInterval(()=>{const cd=$('#cd');if(cd.hidden||!cd.classList.contains('b')||!document.documentElement.classList.contains('sa'))return;const r=$('#bb .p').getBoundingClientRect();if(r.height)cd.style.bottom=Math.round(innerHeight-r.top+8)+'px'},60);
+function trigger(){if(c.mode!=="hidden"||pend||Date.now()<noTrig)return;perm();const d=Math.max(0,+S.delay||0);if(!d){lift(true);return}
+ pend=true;const cd=$('#cd');cd.innerHTML='';const dots=[];
+ if((S.dots||'bottom')!=='off'){cd.className=(S.dots||'bottom')==='bottom'?'b':'';for(let i=0;i<d;i++){const e=document.createElement('i');cd.appendChild(e);dots.push(e)}cd.hidden=false}
+ const t0=performance.now();let n=0;
+ cdIv=setInterval(()=>{const el=(performance.now()-t0)/1000;while(n<Math.floor(el)&&n<d){if(dots[n])dots[n].style.opacity=0;n++}
+  if(el>=d){clearInterval(cdIv);cdIv=null;cd.hidden=true;pend=false;lift(true)}},100)}
+$('#dl').value=S.delay||0;$('#dv').textContent=S.delay||0;$('#dl').oninput=e=>{S.delay=+e.target.value;$('#dv').textContent=S.delay;save()};
+$('#dt').value=S.dots||'bottom';$('#dt').onchange=e=>{S.dots=e.target.value;save()};
+$('#vn').checked=!!S.vanish;$('#vn').onchange=e=>{S.vanish=e.target.checked;save()};
+$('#q0').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();q.value=$('#q0').value;go()}});
+$('#q0').addEventListener('input',()=>{const q0=$('#q0'),v=q0.value;if(/\s$/.test(v)){const f=fixText(v);if(f!==v)q0.value=f}});
+let ly=0,pt=0,pc=0,raf=0;const mcx=document.createElement('canvas').getContext('2d');
+function w2(){mcx.font="16px Outfit,'Google Sans',Arial,sans-serif";return Math.min(innerWidth-32,Math.ceil(mcx.measureText($('#bq').textContent||'').width+64))}
+function pstep(){raf=0;pc+=(pt-pc)*.35;if(Math.abs(pt-pc)<.004)pc=pt;const r=document.documentElement.style;r.setProperty('--w2',w2()+'px');r.setProperty('--p',pc.toFixed(3));if(pc!==pt)raf=requestAnimationFrame(pstep)}
+const onSc=()=>{const a=SC(),y=a.scrollTop,dy=y-ly;ly=y;
+ pt=Math.max(0,Math.min(1,pt+dy/90));if(y<=2)pt=0;if(y+a.clientHeight>=a.scrollHeight-8)pt=1;
+ if(!raf)raf=requestAnimationFrame(pstep)};$('#app').addEventListener('scroll',()=>{if(!document.documentElement.classList.contains('ds'))onSc()},{passive:true});addEventListener('scroll',()=>{if(document.documentElement.classList.contains('ds'))onSc()},{passive:true});
+function isSA(){return document.documentElement.classList.contains('sa')}
+function envB(){const t=document.createElement('div');t.style.cssText='position:fixed;visibility:hidden;padding-bottom:env(safe-area-inset-bottom,0px)';document.body.appendChild(t);const e=parseFloat(getComputedStyle(t).paddingBottom)||0;t.remove();return Math.round(e)}
+function autoLo(){const d=Math.round((screen.height||0)-document.documentElement.clientHeight);if(!(document.documentElement.classList.contains('sa')&&d>=30&&d<=110))return 0;const t=document.createElement('div');t.style.cssText='position:fixed;visibility:hidden;padding-bottom:env(safe-area-inset-bottom,0px)';document.body.appendChild(t);const e=parseFloat(getComputedStyle(t).paddingBottom)||0;t.remove();return Math.max(0,Math.round(e-2))}
+function setLo(v){document.documentElement.style.setProperty('--lo',v+'px');$('#blv').textContent=v}
+{const mx=Math.max(0,envB()+2);$('#bl').max=mx;const v=Math.min(mx,S.barLow!=null?+S.barLow:autoLo());$('#bl').value=v;setLo(v);$('#ds').checked=S.docscroll!==false;$('#ds').onchange=e=>{S.docscroll=e.target.checked;save();location.reload()};
+$('#bl').oninput=e=>{S.barLow=+e.target.value;setLo(S.barLow);save()}}
+(function(){let d=null,last=null,cnt=0,tm=null;
+ document.addEventListener('pointerdown',e=>{if(e.target.closest('#q,#q0,#panel,#ed')){d=null;return}d={x:e.clientX,y:e.clientY,t:performance.now()}},true);
+ document.addEventListener('pointerup',e=>{if(!d)return;const n=performance.now(),ok=n-d.t<300&&Math.hypot(e.clientX-d.x,e.clientY-d.y)<15;d=null;
+  if(!ok){last=null;cnt=0;return}
+  if(last&&n-last.t<450&&Math.hypot(e.clientX-last.x,e.clientY-last.y)<40)cnt++;else cnt=1;
+  last={x:e.clientX,y:e.clientY,t:n};clearTimeout(tm);
+  if(cnt>=2){cnt=0;last=null;noTrig=Date.now()+700;resetCard()}},true)})();
+document.querySelectorAll('.gl,.gw').forEach(e=>{e.style.cursor='pointer';e.addEventListener('click',()=>location.reload())});
+style();refreshCard().then(refreshLib);
+</script>
+</body></html>
