@@ -502,7 +502,7 @@ let noTrig=0;
 /* ---- blow mode: sticker flutter ---- */
 const FL={on:false,t0:0,tm:null,seq:[],rest:[],cur:-1};
 const FD=2000;
-function flN(){return Math.max(1,Math.min(3,+S.blow_n||3))}
+function flN(){return Math.max(1,Math.min(3,+S.blow_n||1))}
 function flRest(){return Math.max(1,Math.min(15,+S.blow_d||4))}
 function flClear(){if(thumb){thumb.style.translate='';thumb.style.rotate='';thumb.style.scale='';thumb.style.filter=''}}
 function flDots(on,n){const cd=$('#cd');if(!on||(S.dots||'bottom')==='off'){cd.hidden=true;return}cd.innerHTML='';cd.className=(S.dots||'bottom')==='bottom'?'b':'';for(let i=0;i<n;i++)cd.appendChild(document.createElement('i'));cd.hidden=false}
