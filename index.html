@@ -178,6 +178,7 @@ html.lt .ga{background:#fff;border-color:#dadce0}html.lt .ga b{background:#0b57d
 html.lt .np,html.lt .lk{color:#5f6368}
 html.lt .l2,html.lt .l3{color:#0b57d0}
 .thm{cursor:pointer}
+#bwm{height:8px;border-radius:4px;background:#3c4043;overflow:hidden;margin:8px 0}#bwm i{display:block;height:100%;width:0;background:#8ab4f8}#bwm.hit i{background:#34a853}
 </style><script>try{if(JSON.parse(localStorage.getItem('fc2')||'{}').docscroll!==false)document.documentElement.classList.add('ds')}catch(e){}try{if(JSON.parse(localStorage.getItem('fc2')||'{}').light)document.documentElement.classList.add('lt')}catch(e){}try{if(navigator.standalone||matchMedia('(display-mode: standalone)').matches)document.documentElement.classList.add('sa')}catch(e){}</script></head>
 <body>
 <div id="app">
@@ -237,9 +238,9 @@ html.lt .l2,html.lt .l3{color:#0b57d0}
   <label><input type="checkbox" id="ds"> Scroll the whole page (keeps the bottom of the screen filled; untick only if something looks wrong)</label>
  <label>Lower the fake bottom bar: <span id="blv"></span> px (the lowest it can go without being cut off)</label><input type="range" id="bl" min="0" max="120" step="1">
   <label>Tools</label><p id="ms"></p>
- <button class="btn tg" id="en" type="button">Enable motion</button><button class="btn tg" id="tst" type="button">Shake disconnect</button>
+ <button class="btn tg" id="en" type="button">Enable motion</button><button class="btn tg" id="tst" type="button">Shake disconnect</button><button class="btn tg" id="bw" type="button">Blow release</button>
  <div id="tw"><label>Tilt sensitivity: <span id="tv"></span> (1 = gentle, 10 = strong)</label><input type="range" id="tl" min="1" max="10" step="1"></div>
- <div id="sw2"><label>Shake sensitivity: <span id="sv"></span> (1 = needs a hard shake, 10 = very light)</label><input type="range" id="sl" min="1" max="10" step="1"></div><button class="btn" id="rst">Restart routine</button>
+ <div id="sw2"><label>Shake sensitivity: <span id="sv"></span> (1 = needs a hard shake, 10 = very light)</label><input type="range" id="sl" min="1" max="10" step="1"></div><div id="bww" hidden><label>Blow sensitivity: <span id="bwv"></span> (1 = needs a hard blow, 10 = very light)</label><input type="range" id="bws" min="1" max="10" step="1"><p id="bwt" style="margin:8px 0 4px"></p><div id="bwm"><i></i></div><p style="margin:4px 0 0">Blow into the bottom of the phone. The bar turns green when a blow is detected.</p></div><button class="btn" id="rst">Restart routine</button>
  </div>
 <div id="ins" hidden>
  <div class="ph"><h2>Instructions</h2><button class="btn" id="insx" type="button">Back</button></div>
@@ -268,6 +269,8 @@ html.lt .l2,html.lt .l3{color:#0b57d0}
  <div class="st"><div class="n">6</div><div><b>Move it around.</b> Drag it with your finger or flick it so it bounces around your screen. It automatically settles at a natural angle so you can slide it off the screen with your thumb or finger. If you choose "Card vanishes when you lift your finger" in Settings, it disappears the moment you let go.</div></div>
 
  <div class="st"><div class="n">7</div><div><b>Phone Motions.</b> Turn on <span class="kbd">Enable motion</span> and <span class="kbd">Shake disconnect</span> in Settings, then shake the phone and the card falls away.</div></div>
+
+ <div class="st"><div class="n">8</div><div><b>Blow release (optional).</b> Turn on <span class="kbd">Blow release</span> in Settings and tap Allow when the phone asks to use the microphone. On the photo grid, blow toward the bottom of the phone. The trigger image jitters like it is caught in the wind. Blow a second time and it jitters, then after 3 seconds the card comes out of its frame and grows to full size. From there it works as in steps 6 and 7. An orange dot shows at the top of the screen while the microphone is on.</div></div>
 
  <h3 style="margin-top:8px">Practice and reset</h3>
  <div class="st"><div class="n">&#8635;</div><div><b>Double tap anywhere</b> to put the folded card back on the page, ready to practice again, without starting the countdown.</div></div>
@@ -386,7 +389,7 @@ function rel(col){const qs=new Set($('#q').value.toLowerCase().match(/[a-z]+/g)|
   a.append(th,tx);d.appendChild(a)});
  col.insertBefore(d,col.children[5]||null)}
 const PH=[[3, "Folded playing card on table\u2026", "Flickr", 299, 168], [26, "Rook no Further for some\u2026", "Origami.me", 700, 438], [6, "Folded playing card back\u2026", "Alamy", 300, 443], [27, "How to Fold a Heart from a\u2026", "Cut Out + Keep", 638, 480], [28, "Crafting with Playing Card\u2026", "PlayingCardDecks.com", 598, 338], [12, "Curved playing card in hand\u2026", "Amazon.com", 225, 225], [31, "Playing Card Polyhedral\u2026", "Instructables", 565, 542], [29, "Playing card origami ring\u2026", "Pinterest", 462, 432], [33, "Vintage red playing card back\u2026", "eBay", 465, 659], [20, "King of diamonds and card back\u2026", "Alamy", 447, 447], [36, "Red playing card back pattern\u2026", "Etsy", 399, 501], [34, "Playing card suits pattern\u2026", "Shutterstock", 447, 447], [47, "Red playing card backs\u2026", "Pinterest", 399, 501], [2, "Stacked playing card boxes\u2026", "Behance", 365, 547], [11, "Playing card side table\u2026", "Pinterest", 463, 662], [5, "Playing card pocket square\u2026", "Etsy", 300, 300], [30, "Fanning a deck of cards\u2026", "YouTube", 738, 414], [1, "Fanned deck of cards on black\u2026", "Shutterstock", 447, 447], [4, "Hand holding fanned red cards\u2026", "Pexels", 225, 225], [13, "Black playing cards fanned\u2026", "eBay", 547, 365], [17, "Poker hand of cards\u2026", "Pinterest", 461, 450], [22, "Hand of cards on plaid cloth\u2026", "iStock", 533, 375], [9, "Four aces with poker chips\u2026", "Shutterstock", 554, 554], [25, "Playing cards scattered on table\u2026", "Pexels", 678, 452], [32, "Cards in hand dark background\u2026", "Reddit", 335, 597], [37, "Mini playing cards\u2026", "Amazon.com", 198, 254], [40, "Gold foil playing card deck\u2026", "Kickstarter", 225, 225], [23, "Bicycle big box playing cards\u2026", "eBay", 447, 447], [38, "Standard playing cards deck\u2026", "Walmart", 416, 416], [14, "Playing card deck box\u2026", "Walmart", 225, 225], [42, "Playing card box back\u2026", "Walmart", 447, 447], [41, "Red and blue playing card decks\u2026", "Amazon.com", 400, 400], [45, "Black playing card box\u2026", "Etsy", 447, 447], [46, "Black playing cards\u2026", "Shutterstock", 515, 388], [48, "Playing card decks collection\u2026", "Reddit", 447, 447], [35, "Modernist playing card decks\u2026", "Etsy", 495, 620], [39, "Classic playing cards deck\u2026", "Pinterest", 498, 615], [43, "Black playing card deck\u2026", "Kickstarter", 225, 225], [44, "Ace of spades custom deck\u2026", "Kickstarter", 225, 225], [49, "Framed playing card art\u2026", "Etsy", 447, 447], [50, "Playing card backs\u2026", "Pinterest", 350, 350], [51, "Designing my own playing card art\u2026", "YouTube", 597, 335], [7, "Playing card design 8 of hearts\u2026", "Dribbble", 599, 419], [8, "Playing cards desk setup\u2026", "Behance", 299, 168], [15, "Card table with chess board\u2026", "Wayfair", 447, 447], [16, "Flexible playing cards\u2026", "Amazon.com", 554, 554], [18, "Playing cards printable sheet\u2026", "Etsy", 616, 498], [19, "Playing cards game night\u2026", "Target", 447, 447], [21, "Ace of spades on card box\u2026", "Unsplash", 447, 447], [24, "Red and blue card backs\u2026", "Wikipedia", 534, 374], [0, "Red playing card cube\u2026", "Instructables", 480, 638]];
-function build3(){const cols=[$('#c0'),$('#c1')];cols.forEach(x=>x.innerHTML='');thumb=null;
+function build3(){bwReset();const cols=[$('#c0'),$('#c1')];cols.forEach(x=>x.innerHTML='');thumb=null;
  const cw=(innerWidth-12)/2,[w0,h0]=dims();
  const fit=th=>Math.min(1,cw*.82/w0,th*.82/h0);
  const rat=a=>cw*Math.min(1.6,Math.max(.5,a[4]/a[3]));
@@ -492,8 +495,53 @@ async function refreshLib(){const L=$('#lib');L.innerHTML='';
  $('#libn').textContent=(S.sel<0?'Using the original red Bicycle card.':'Using saved card '+(S.sel+1)+' of '+S.cards.length+'.')+' ('+S.cards.length+' of 6 saved)';
  $('#tfit').disabled=S.sel<0;$('#tdel').disabled=S.sel<0}
 let pend=false,cdIv=null;
-function resetCard(){if(cdIv){clearInterval(cdIv);cdIv=null}pend=false;$('#cd').hidden=true;card.style.display="none";c.mode="hidden";c.vx=c.vy=c.w=0;c.s=1;c.a=0;lockS(false);if(thumb)thumb.style.visibility="visible"}
+function resetCard(){bwReset();if(cdIv){clearInterval(cdIv);cdIv=null}pend=false;$('#cd').hidden=true;card.style.display="none";c.mode="hidden";c.vx=c.vy=c.w=0;c.s=1;c.a=0;lockS(false);if(thumb)thumb.style.visibility="visible"}
 let noTrig=0;
+/* ---- blow release ---- */
+let bwStream=null,bwAC=null,bwAn=null,bwT=null,bwF=null,bwIv=0,bwLvl=0,bwAct=false,bwBusy=false,bwDenied=false;
+const B={n:0,act0:0,lastAct:0,inb:false,jit:0,fire:0};
+const bwThr=()=>.2*Math.pow(.75,+S.blow_s||5);
+function bwArmed(){return !!S.blow&&document.body.classList.contains('res')&&!!thumb&&c.mode==='hidden'&&!pend}
+function bwClear(){if(thumb){thumb.style.translate='';thumb.style.rotate=''}}
+function bwReset(){B.n=0;B.act0=0;B.inb=false;B.jit=0;B.fire=0;bwClear()}
+function blowTick(t,rms,low){
+ bwLvl=rms;const act=rms>bwThr()&&low>.45;bwAct=act;
+ if(!bwArmed()){if(B.n||B.fire||B.jit)bwReset();B.inb=false;B.act0=0;return}
+ if(act){B.lastAct=t;if(!B.act0)B.act0=t;if(!B.inb&&t-B.act0>=120){B.inb=true;B.n++;if(B.n===2)B.fire=t+3000}}
+ else if(t-B.lastAct>=200){B.inb=false;B.act0=0}
+ if(B.inb&&B.n===1)B.jit=t+700;
+ if(B.fire&&t>=B.fire){bwReset();lift(true)}
+}
+setInterval(()=>{if(!thumb)return;const t=performance.now();const strong=B.fire&&t<B.fire;const k=strong?1:(t<B.jit?Math.min(1,(B.jit-t)/400):0);
+ if(k>0){const g=Math.sin(t/41)+Math.sin(t/17)*.6+(Math.random()-.5);thumb.style.translate=(g*2.6*k).toFixed(2)+'px '+((Math.random()-.5)*5.2*k).toFixed(2)+'px';thumb.style.rotate=((Math.sin(t/29)+(Math.random()-.5))*1.8*k).toFixed(2)+'deg'}
+ else if(thumb.style.translate)bwClear()},16);
+function bwStatus(m){const e=$('#bwt');if(e)e.textContent=m}
+async function startMic(){
+ if(bwStream||bwBusy||bwDenied)return;
+ if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){bwStatus('Microphone: not available in this browser');return}
+ bwBusy=true;
+ try{
+  const st=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false}});
+  const AC=window.AudioContext||window.webkitAudioContext;const ac=new AC();try{await ac.resume()}catch(e){}
+  const an=ac.createAnalyser();an.fftSize=1024;an.smoothingTimeConstant=0;ac.createMediaStreamSource(st).connect(an);
+  bwStream=st;bwAC=ac;bwAn=an;bwT=new Float32Array(an.fftSize);bwF=new Float32Array(an.frequencyBinCount);
+  st.getTracks().forEach(t=>{t.onended=()=>stopMic()});
+  bwIv=setInterval(bwLoop,25);bwStatus('Microphone: listening')
+ }catch(e){bwStream=null;if(e&&(e.name==='NotAllowedError'||e.name==='SecurityError')){bwDenied=true;bwStatus('Microphone: blocked. Allow it in your phone settings for this site, then reload.')}else bwStatus('Microphone: could not start')}
+ bwBusy=false}
+function stopMic(){clearInterval(bwIv);try{bwStream&&bwStream.getTracks().forEach(t=>t.stop())}catch(e){}try{bwAC&&bwAC.close()}catch(e){}bwStream=bwAC=bwAn=null;bwReset();bwStatus(S.blow?'Microphone: stopped (tap anywhere to restart)':'')}
+function bwLoop(){
+ if(!bwAn)return;bwAn.getFloatTimeDomainData(bwT);let sq=0;for(let i=0;i<bwT.length;i++)sq+=bwT[i]*bwT[i];const rms=Math.sqrt(sq/bwT.length);
+ bwAn.getFloatFrequencyData(bwF);let lo=0,all=0;for(let i=1;i<48;i++){const e=Math.pow(10,bwF[i]/10);all+=e;if(i<=5)lo+=e}
+ blowTick(performance.now(),rms,all?lo/all:0);
+ if(!P.hidden){const m=$('#bwm');m.firstChild.style.width=Math.min(100,rms/bwThr()*50)+'%';m.classList.toggle('hit',bwAct)}}
+function bwUi(){$('#bw').classList.toggle('on',!!S.blow);$('#bww').hidden=!S.blow;$('#bws').value=S.blow_s||5;$('#bwv').textContent=S.blow_s||5}
+$('#bw').onclick=()=>{S.blow=!S.blow;save();bwUi();if(S.blow){bwDenied=false;startMic()}else{stopMic();bwStatus('')}};
+$('#bws').oninput=e=>{S.blow_s=+e.target.value;$('#bwv').textContent=S.blow_s;save()};
+bwUi();
+document.addEventListener('pointerdown',()=>{if(S.blow&&!bwStream)startMic();if(bwAC&&bwAC.state!=='running')bwAC.resume().catch(()=>{})},true);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&bwAC&&bwAC.state!=='running')bwAC.resume().catch(()=>{})});
+
 
 const TR_FB=['weather tomorrow','nfl scores','stock market today','movie showtimes near me','gas prices near me','nba schedule','flights to las vegas'];
 function drawTr(a){const l=$('#trl');l.innerHTML='';a.slice(0,7).forEach(t=>{const r=document.createElement('div');r.className='tri';r.innerHTML="<svg width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='#9aa0a6' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M3 17l6-6 4 4 8-8'/><path d='M15 7h6v6'/></svg><span></span>";r.lastChild.textContent=t;l.appendChild(r)});fitTr()}
