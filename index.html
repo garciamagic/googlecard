@@ -237,9 +237,9 @@ html.lt .l2,html.lt .l3{color:#0b57d0}
   <label><input type="checkbox" id="ds"> Scroll the whole page (keeps the bottom of the screen filled; untick only if something looks wrong)</label>
  <label>Lower the fake bottom bar: <span id="blv"></span> px (the lowest it can go without being cut off)</label><input type="range" id="bl" min="0" max="120" step="1">
   <label>Tools</label><p id="ms"></p>
- <button class="btn tg" id="en" type="button">Enable motion</button><button class="btn tg" id="tst" type="button">Shake disconnect</button><button class="btn tg" id="bw" type="button">Blow mode</button>
+ <button class="btn tg" id="en" type="button">Enable motion</button><button class="btn tg" id="tst" type="button">Shake disconnect</button>
  <div id="tw"><label>Tilt sensitivity: <span id="tv"></span> (1 = gentle, 10 = strong)</label><input type="range" id="tl" min="1" max="10" step="1"></div>
- <div id="sw2"><label>Shake sensitivity: <span id="sv"></span> (1 = needs a hard shake, 10 = very light)</label><input type="range" id="sl" min="1" max="10" step="1"></div><div id="bww" hidden><label>Flutters before it pops off</label><select id="bn" style="font-size:16px;padding:10px;border-radius:8px;background:#303134;color:#e8eaed;border:1px solid #3c4043"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select><label>Delay between flutters: <span id="bdv"></span> sec (one countdown dot per second)</label><input type="range" id="bd" min="1" max="15" step="1"><p>Each flutter lasts about 2 seconds. The last one comes loose.</p></div><button class="btn" id="rst">Restart routine</button>
+ <div id="sw2"><label>Shake sensitivity: <span id="sv"></span> (1 = needs a hard shake, 10 = very light)</label><input type="range" id="sl" min="1" max="10" step="1"></div><label>Performance Modes</label><button class="btn tg" id="bw" type="button">Blow mode</button><button class="btn tg" id="cn" type="button">Card Name Mode</button><div id="bww" hidden><label>Flutters before it pops off</label><select id="bn" style="font-size:16px;padding:10px;border-radius:8px;background:#303134;color:#e8eaed;border:1px solid #3c4043"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select><label>Delay between flutters: <span id="bdv"></span> sec (one countdown dot per second)</label><input type="range" id="bd" min="1" max="15" step="1"><p>Each flutter lasts about 2 seconds. The last one comes loose.</p></div><div id="cnw" hidden><p>Card Name Mode: tap the search bar and type the card's name (any spelling, like "queen of hartz" or "jak spaids"). The bar only ever shows "what is my card?". Press search and the trigger image caption shows the corrected card name.</p><label><input type="checkbox" id="cns"> Add "Signed" before the card name</label></div><button class="btn" id="rst">Restart routine</button>
  </div>
 <div id="ins" hidden>
  <div class="ph"><h2>Instructions</h2><button class="btn" id="insx" type="button">Back</button></div>
@@ -270,6 +270,8 @@ html.lt .l2,html.lt .l3{color:#0b57d0}
  <div class="st"><div class="n">7</div><div><b>Phone Motions.</b> Turn on <span class="kbd">Enable motion</span> and <span class="kbd">Shake disconnect</span> in Settings, then shake the phone and the card falls away.</div></div>
 
  <div class="st"><div class="n">8</div><div><b>Blow mode (optional).</b> Turn on <span class="kbd">Blow mode</span> in Settings. Tap the trigger image as usual. When the countdown ends, the card flutters and jitters like an old sticker coming unstuck in the wind. Between flutters the countdown dots run again. Settings lets you choose how many flutters there are (the last one comes loose) and how long the pause between them lasts. When it comes loose, it grows to full size and moves around the screen. From there it works as in steps 6 and 7.</div></div>
+
+ <div class="st"><div class="n">9</div><div><b>Card Name Mode (optional).</b> Turn on <span class="kbd">Card Name Mode</span> in Settings. Tap the search bar and type the name of the card, for example "queen of hearts". Spelling does not matter, and the app fixes it. The search bar only ever shows "what is my card?" as you type. The phrase keeps pace with your typing, so it is complete by the time you finish. Pressing search always completes it. Press search. When the photos appear, the caption under the trigger image shows the card you typed. A second switch in Settings adds the word "Signed" before the card name in that caption. Turn the mode off to search normally.</div></div>
 
  <h3 style="margin-top:8px">Practice and reset</h3>
  <div class="st"><div class="n">&#8635;</div><div><b>Double tap anywhere</b> to put the folded card back on the page, ready to practice again, without starting the countdown.</div></div>
@@ -400,7 +402,7 @@ function build3(){flReset();const cols=[$('#c0'),$('#c1')];cols.forEach(x=>x.inn
  const hh=[0,0],cnt=[0,0];
  items.forEach(it=>{const t=document.createElement('div'),im=document.createElement('div'),cp=document.createElement('div');let th,tx;
   im.className='im';cp.className='cp';
-  if(!it){th=1.49*cw;im.style.height=th+'px';im.style.background='#000';const sc=fit(th),rt=-6;thumbSc=sc;thumbRot=rt;thumb=mk(w0*sc,h0*sc,S.deck,rt,cimg(),9*sc);im.appendChild(thumb);t.onclick=trigger;tx=[S.cap,S.src]}
+  if(!it){th=1.49*cw;im.style.height=th+'px';im.style.background='#000';const sc=fit(th),rt=-6;thumbSc=sc;thumbRot=rt;thumb=mk(w0*sc,h0*sc,S.deck,rt,cimg(),9*sc);im.appendChild(thumb);t.onclick=trigger;tx=[(S.cn&&CN.cap)?(S.cns?'Signed ':'')+CN.cap:S.cap,S.src]}
   else{th=cw*Math.min(1.6,Math.max(.5,it[4]/it[3]));im.style.height=th+'px';im.style.background='#222';
    const g=document.createElement('img');g.src='p/'+String(it[0]).padStart(2,'0')+'.jpg';g.alt='';g.draggable=false;g.style.cssText='width:100%;height:100%;object-fit:cover;display:block;pointer-events:none';im.appendChild(g);tx=[it[1],it[2]]}
   const b=document.createElement('b'),n=document.createElement('i');b.textContent=tx[0];n.textContent=tx[1];cp.append(b,n);
@@ -418,7 +420,7 @@ function addMore(){moreN++;const cols=[$('#c0'),$('#c1')],cw=(innerWidth-12)/2;l
 $('#more button').addEventListener('click',addMore);
 const q=$('#q'),RX=/\bcards?\b/i;
 function go(){q.value=fixText(q.value);const v=q.value.trim();q.blur();SC().scrollTop=0;if(!v)return;document.body.classList.add('srch');$('#q0').blur();$('#bq').textContent=v;
- if(RX.test(v)){setTab(true);$('#nr').hidden=true;document.body.classList.add('res');if(!$('#c0').children.length)build3()}
+ if(RX.test(v)){setTab(true);$('#nr').hidden=true;document.body.classList.add('res');if(!$('#c0').children.length||CN.fresh){CN.fresh=false;build3()}}
  else{document.body.classList.remove('res');$('#c0').innerHTML='';$('#c1').innerHTML='';thumb=null;$('#nr').textContent='Your search - '+v+' - did not match any images.';$('#nr').hidden=false}}
 q.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();go()}});
 const DICT=['playing','card','cards','folded','fold','deck','poker','bicycle','origami','image','images'];
@@ -521,6 +523,41 @@ setInterval(()=>{if(!FL.on||!thumb)return;const t=performance.now()-FL.t0;let am
  thumb.style.translate=(g*2.6*amp+(Math.random()-.5)*2*amp).toFixed(2)+'px '+(-up*4*amp).toFixed(2)+'px';
  thumb.style.scale=(1+up*.04*amp).toFixed(3);
  thumb.style.filter='drop-shadow(0 '+(1+up*5*amp).toFixed(1)+'px '+(2+up*4*amp).toFixed(1)+'px rgba(0,0,0,.45))'},16);
+
+/* ---- card name mode ---- */
+const PHRASE='what is my card?';
+const CN={secret:'',cap:'',flag:false,fresh:false,last:'',d:0,tm:null,el:null};
+function lev(a,b){const m=a.length,n=b.length,d=[];for(let i=0;i<=m;i++){d[i]=[i];}for(let j=1;j<=n;j++)d[0][j]=j;for(let i=1;i<=m;i++)for(let j=1;j<=n;j++)d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));return d[m][n]}
+const RK=[['Ace','ace','a','1'],['Two','two','2'],['Three','three','3'],['Four','four','4'],['Five','five','5'],['Six','six','6'],['Seven','seven','7'],['Eight','eight','8'],['Nine','nine','9'],['Ten','ten','10','t'],['Jack','jack','j'],['Queen','queen','q'],['King','king','k']];
+const ST=[['Hearts','hearts','heart','h'],['Diamonds','diamonds','diamond','d'],['Clubs','clubs','club','c'],['Spades','spades','spade','s']];
+function near(list,w){let best=null,bd=99;for(const e of list)for(let i=1;i<e.length;i++){const a=e[i];if(a.length<=2){if(a===w&&bd>0){bd=0;best=e[0]}continue}const d=lev(a,w),lim=Math.max(1,Math.floor(Math.max(a.length,w.length)/3));if(d<=lim&&d<bd){bd=d;best=e[0]}}return best?[best,bd]:null}
+function parseCard(raw){const t=raw.toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();if(!t)return '';let toks=t.split(' ');
+ if(toks.length===1){const m=toks[0].match(/^(10|[2-9ajqkt])([hdcs])$/);if(m){const r=near(RK,m[1]),s=near(ST,m[2]);if(r&&s)return r[0]+' of '+s[0]}
+  const w=toks[0];let best=null;for(let i=1;i<w.length;i++){const L=w.slice(0,i),R=w.slice(i).replace(/^of/,''),r=near(RK,L),s=near(ST,R);if(r&&s){const sc=r[1]+s[1];if(!best||sc<best[0])best=[sc,r[0],s[0]]}}
+  if(best)return best[1]+' of '+best[2]}
+ toks=toks.filter((x,i)=>!(i>0&&i<toks.length-1&&(x==='of'||x==='ov'||x==='off'||x==='o')));
+ if(toks.length>=2){let best=null;for(let i=0;i<toks.length;i++)for(let j=0;j<toks.length;j++){if(i===j)continue;const r=near(RK,toks[i]),s=near(ST,toks[j]);if(r&&s){const sc=r[1]+s[1]+(i>j?.5:0)+Math.abs(Math.abs(i-j)-1)*.1;if(!best||sc<best[0])best=[sc,r[0],s[0]]}}if(best)return best[1]+' of '+best[2]}
+ {const w=toks.join('');let best=null;for(let i=1;i<w.length;i++){const r=near(RK,w.slice(0,i)),s=near(ST,w.slice(i));if(r&&s){const sc=r[1]+s[1];if(!best||sc<best[0])best=[sc,r[0],s[0]]}}if(best)return best[1]+' of '+best[2]}
+ return raw.trim().replace(/\b\w/g,c=>c.toUpperCase())}
+function cnSync(el){CN.el=el;el.value=PHRASE.slice(0,CN.d);CN.last=el.value}
+function cnToks(){return CN.secret.toLowerCase().replace(/[^a-z0-9]+/g,' ').trim().split(' ').filter(Boolean)}
+function cnT(){const t=cnToks();if(!t.length)return 14;const r=near(RK,t[0]);if(!r||(t[0].length<3&&r[1]>0))return 14;const hasOf=t.indexOf('of')>0;let sl=6.5;const last=t[t.length-1];if(t.length>(hasOf?2:1)&&last.length>=1){const m=ST.filter(e=>e[1].indexOf(last)===0||e[2].indexOf(last)===0);if(m.length)sl=m[0][1].length}return r[0].length+(hasOf?4:1)+sl+(hasOf?0:0)}
+function cnDone(){const t=cnToks().filter((x,i,a)=>!(i>0&&i<a.length-1&&x==='of'));if(t.length<2)return false;const r=near(RK,t[0]),s=near(ST,t[t.length-1]);return !!(r&&s&&r[1]===0&&s[1]===0&&t[t.length-1].length>=4)}
+function cnStep(up){const L=PHRASE.length,len=CN.secret.length;let nd=Math.round(L*Math.min(1,len/cnT()));if(up){if(cnDone())nd=L;CN.d=Math.min(L,Math.max(CN.d+1,Math.min(nd,CN.d+3)))}else CN.d=Math.max(0,Math.min(CN.d-1,nd))}
+['#q0','#q'].forEach(sel=>{const el=$(sel);
+ el.addEventListener('beforeinput',e=>{if(!S.cn)return;const it=e.inputType||'';e.preventDefault();CN.flag=true;setTimeout(()=>{CN.flag=false},0);
+  const hasSel=el.selectionStart!==el.selectionEnd;
+  if(it.indexOf('delete')===0){if(hasSel){CN.secret='';CN.d=0}else{CN.secret=CN.secret.slice(0,-1);cnStep(false)}}
+  else if(it==='insertText'||it==='insertFromPaste'||it==='insertFromDrop'){if(hasSel){CN.secret='';CN.d=0}const d=e.data!=null?e.data:(e.dataTransfer?e.dataTransfer.getData('text'):'');CN.secret+=d||'';cnStep(true)}
+  cnSync(el)});
+ el.addEventListener('input',e=>{if(!S.cn)return;if(CN.flag){CN.flag=false;cnSync(el);return}
+  const prev=CN.last||'',v=el.value;if(v.length>prev.length&&v.indexOf(prev)===0){CN.secret+=v.slice(prev.length);cnStep(true)}else if(v.length<prev.length){CN.secret=CN.secret.slice(0,-1);cnStep(false)}else if(v!==prev&&v.length){CN.secret+=v.slice(-1);cnStep(true)}cnSync(el)});
+ el.addEventListener('keydown',e=>{if(e.key==='Enter'&&S.cn&&CN.secret.trim()){clearTimeout(CN.tm);CN.cap=parseCard(CN.secret);CN.fresh=true;CN.secret='';CN.d=0;el.value=PHRASE;CN.last=PHRASE}},true)});
+function cnUi(){$('#cn').classList.toggle('on',!!S.cn);$('#cns').checked=!!S.cns;$('#cnw').hidden=!S.cn;['#q0','#q'].forEach(sel=>{const el=$(sel);el.setAttribute('autocorrect',S.cn?'off':'on');el.setAttribute('spellcheck',S.cn?'false':'true')})}
+$('#cn').onclick=()=>{S.cn=!S.cn;CN.secret='';CN.d=0;clearTimeout(CN.tm);CN.cap=S.cn?CN.cap:'';save();cnUi()};
+$('#cns').onchange=e=>{S.cns=e.target.checked;save()};
+cnUi();
+
 function bwUi(){$('#bw').classList.toggle('on',!!S.blow);$('#bww').hidden=!S.blow;$('#bn').value=flN();$('#bd').value=flRest();$('#bdv').textContent=flRest()}
 $('#bn').onchange=e=>{S.blow_n=+e.target.value;save()};$('#bd').oninput=e=>{S.blow_d=+e.target.value;$('#bdv').textContent=S.blow_d;save()};
 $('#bw').onclick=()=>{S.blow=!S.blow;save();bwUi()};
