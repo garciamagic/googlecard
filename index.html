@@ -399,7 +399,7 @@ const $=s=>document.querySelector(s);
 const CARD="card.png",ASP=474/640;let CARDURL=CARD;
 const S={useCut:true,ppi:160,swap:false,deck:"#b3202a",img:null,pos:0,pics:[],cap:"Folded Playing Card",src:"Pinterest",motion:false,shake:false,delay:5};
 try{const o=JSON.parse(localStorage.getItem("fc2")||"{}");if(o.cap===undefined)delete o.pos;Object.assign(S,o)}catch(e){}
-S.useCut=true;S.img=null;
+S.useCut=true;S.img=null;if(S.cap==="Red Playing Card")S.cap="Folded Playing Card";if(S.src==="Folded Card")S.src="Pinterest";
 if(!Array.isArray(S.cards)){S.cards=[];S.sel=-1;if(S.art){S.cards.push({art:S.art,fit:S.fit||null,corner:S.corner||'tl'});S.sel=0}}
 if(typeof S.sel!=="number"||S.sel>=S.cards.length)S.sel=-1;
 const applySel=()=>{const k=S.cards[S.sel];S.art=k?k.art:null;S.fit=k?k.fit:null;S.corner=k?k.corner:'tl'};applySel();
