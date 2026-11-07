@@ -602,7 +602,7 @@ function isSA(){return document.documentElement.classList.contains('sa')}
 function envB(){const t=document.createElement('div');t.style.cssText='position:fixed;visibility:hidden;padding-bottom:env(safe-area-inset-bottom,0px)';document.body.appendChild(t);const e=parseFloat(getComputedStyle(t).paddingBottom)||0;t.remove();return Math.round(e)}
 function autoLo(){const d=Math.round((screen.height||0)-document.documentElement.clientHeight);if(!(document.documentElement.classList.contains('sa')&&d>=30&&d<=110))return 0;const t=document.createElement('div');t.style.cssText='position:fixed;visibility:hidden;padding-bottom:env(safe-area-inset-bottom,0px)';document.body.appendChild(t);const e=parseFloat(getComputedStyle(t).paddingBottom)||0;t.remove();return Math.max(0,Math.round(e-2))}
 function setLo(v){document.documentElement.style.setProperty('--lo',v+'px');$('#blv').textContent=v}
-{const mx=Math.max(0,envB()+2);$('#bl').max=mx;const v=Math.min(mx,S.barLow!=null?+S.barLow:autoLo());$('#bl').value=v;setLo(v);$('#ds').checked=S.docscroll!==false;$('#ds').onchange=e=>{S.docscroll=e.target.checked;save();location.reload()};
+{const mx=Math.max(0,envB()+2);$('#bl').max=mx;const v=Math.min(mx,S.barLow!=null?+S.barLow:0);$('#bl').value=v;setLo(v);$('#ds').checked=S.docscroll!==false;$('#ds').onchange=e=>{S.docscroll=e.target.checked;save();location.reload()};
 $('#bl').oninput=e=>{S.barLow=+e.target.value;setLo(S.barLow);save()}}
 (function(){let d=null,last=null,cnt=0,tm=null;
  document.addEventListener('pointerdown',e=>{if(e.target.closest('#q,#q0,#panel,#ed')){d=null;return}d={x:e.clientX,y:e.clientY,t:performance.now()}},true);
