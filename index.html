@@ -178,6 +178,36 @@ html.lt .ga{background:#fff;border-color:#dadce0}html.lt .ga b{background:#0b57d
 html.lt .np,html.lt .lk{color:#5f6368}
 html.lt .l2,html.lt .l3{color:#0b57d0}
 .thm{cursor:pointer}
+
+#insb small{display:block;font-weight:400;font-size:14px;color:#9aa0a6;margin-top:2px}#insb b{font-size:17px}
+#insb{margin:4px 0 22px}
+#panel .sec{background:#292a2d;border-radius:16px;padding:6px 16px 18px;margin:0 0 18px}
+#panel .sec>h3{margin:14px 0 2px;font-size:19px;color:#fff}
+#panel .sec p.d{margin:0 0 10px;font-size:14px;color:#9aa0a6;line-height:1.4}
+#panel .sec p.hint{margin:6px 0 0;font-size:13px;color:#9aa0a6;line-height:1.4}
+#panel .sec label{margin:18px 0 6px;font-size:15px;font-weight:600}
+#panel .sec label.row{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:18px 0 0}
+#panel .sec label.row small{display:block;font-weight:400;font-size:13px;color:#9aa0a6;margin-top:3px;line-height:1.4}
+#panel .sec label.row input[type=checkbox]{flex:none;-webkit-appearance:none;appearance:none;width:51px;height:31px;border-radius:16px;background:#5f6368;position:relative;margin:0;transition:background .2s}
+#panel .sec label.row input[type=checkbox]::after{content:'';position:absolute;top:2px;left:2px;width:27px;height:27px;border-radius:50%;background:#fff;transition:transform .2s}
+#panel .sec label.row input[type=checkbox]:checked{background:#34a853}
+#panel .sec label.row input[type=checkbox]:checked::after{transform:translateX(20px)}
+#panel .sec .opt{display:flex;align-items:center;justify-content:space-between;width:100%;box-sizing:border-box;margin:12px 0 0;background:#3a3b3f;color:#fff;font-weight:600;text-align:left}
+#panel .sec .opt::after{content:'Off';flex:none;padding:3px 12px;border-radius:999px;background:#5f6368;font-size:13px;font-weight:600}
+#panel .sec .opt.on{background:#3a3b3f}
+#panel .sec .opt.on::after{content:'On';background:#34a853}
+#panel .sec .acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+#panel .sec .acts .btn{margin:0;background:#3a3b3f;color:#fff;font-size:15px}
+#panel .sec .acts .btn.dl{color:#f28b82}
+#panel .sec .acts .btn:disabled{opacity:.4}
+#bww,#cnw,#tw,#sw2{margin-top:2px}
+#panel select{display:block}
+
+#advh{display:flex;align-items:center;justify-content:space-between;width:100%;background:none;border:0;color:inherit;padding:0;text-align:left;font:inherit}
+#advh h3{margin:14px 0 14px;font-size:19px;color:#fff}
+#advh .chev{font-size:26px;color:#9aa0a6;transition:transform .2s;margin-right:2px}
+#advh[aria-expanded=true] .chev{transform:rotate(90deg)}
+#advs:has(#advb[hidden]){padding-bottom:2px}
 </style><script>try{if(JSON.parse(localStorage.getItem('fc2')||'{}').docscroll!==false)document.documentElement.classList.add('ds')}catch(e){}try{if(JSON.parse(localStorage.getItem('fc2')||'{}').light)document.documentElement.classList.add('lt')}catch(e){}try{if(navigator.standalone||matchMedia('(display-mode: standalone)').matches)document.documentElement.classList.add('sa')}catch(e){}</script></head>
 <body>
 <div id="app">
@@ -220,23 +250,89 @@ html.lt .l2,html.lt .l3{color:#0b57d0}
 <button id="gear" aria-label="Settings">⚙︎</button>
 <div id="panel" hidden>
  <div class="ph"><h2>Settings</h2><button class="btn" id="cls2" type="button">Done</button></div>
- <button id="insb" type="button"><span>Instructions</span><span style="font-size:22px;color:#9aa0a6">&#8250;</span></button>
- <label>Trigger card (tap one to use it)</label>
- <div id="lib"></div>
- <p id="libn"></p>
- <label class="btn" style="margin:0">Add a card back<input type="file" id="ta" accept="image/*" hidden></label><button class="btn tg" id="tfh" type="button">Flip horizontally</button><button class="btn tg" id="tfv" type="button">Flip vertically</button><button class="btn" id="tfit">Adjust fit</button><button class="btn" id="tdel">Delete</button>
- <label>Trigger image number (1 to 52; 1 is the first image at the top)</label><input type='number' id='pos' min='1' max='52' style='width:80px'>
- <label>Trigger image caption</label><input type='text' id='cap'>
- <label style='margin-top:10px'>Trigger image source</label><input type='text' id='src'>
- <label>Delay after tapping the trigger image: <span id="dv"></span> sec</label><input type="range" id="dl" min="0" max="30" step="1">
- <label>Secret countdown dots (one disappears each second)</label>
- <select id="dt" style="font-size:16px;padding:10px;border-radius:8px;background:#303134;color:#e8eaed;border:1px solid #3c4043"><option value="top">Top edge of screen</option><option value="bottom">Just above the bottom bar</option><option value="off">Off</option></select>
- <label><input type="checkbox" id="vn"> Card vanishes when you lift your finger (it doesn't move around)</label>
- <label><input type="checkbox" id="sg"> Start the countdown by touching the trigger image and scrolling (tapping it still works too)</label>
-  <label style="margin-top:40px">Tools</label><p id="ms"></p>
- <button class="btn tg" id="en" type="button">Enable motion</button><button class="btn tg" id="tst" type="button">Shake disconnect</button>
- <div id="tw"><label>Tilt sensitivity: <span id="tv"></span> (1 = gentle, 10 = strong)</label><input type="range" id="tl" min="1" max="10" step="1"></div>
- <div id="sw2"><label>Shake sensitivity: <span id="sv"></span> (1 = needs a hard shake, 10 = very light)</label><input type="range" id="sl" min="1" max="10" step="1"></div><label style="margin-top:40px">Performance Modes</label><button class="btn tg" id="bw" type="button">Blow mode</button><button class="btn tg" id="cn" type="button">Card Name Mode</button><div id="bww" hidden><label>Flutters before it pops off</label><select id="bn" style="font-size:16px;padding:10px;border-radius:8px;background:#303134;color:#e8eaed;border:1px solid #3c4043"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select><label>Delay between flutters: <span id="bdv"></span> sec (one countdown dot per second)</label><input type="range" id="bd" min="1" max="15" step="1"><p>Each flutter lasts about 2 seconds. The last one comes loose.</p></div><div id="cnw" hidden><p>Card Name Mode: tap the search bar and type the card's name (any spelling, like "queen of hartz" or "jak spaids"). The bar only ever shows "what is my card?". Press search and the trigger image caption shows the corrected card name.</p><label><input type="checkbox" id="cns"> Add "Signed" before the card name</label></div><label style="margin-top:48px">Advanced Settings</label><p style="margin:2px 0 0;opacity:.7;font-size:14px">Only change these if the layout looks wrong on your phone.</p><p style="margin:14px 0 0">Use the slider to adjust the size of the folded card if the size seems off.</p><label>Card size: <span id="pv"></span></label><input type="range" id="pp" min="100" max="260" step="1"><label><input type="checkbox" id="ds"> Scroll the whole page (keeps the bottom of the screen filled; untick only if something looks wrong)</label><label>Lower the fake bottom bar: <span id="blv"></span> px (the lowest it can go without being cut off)</label><input type="range" id="bl" min="0" max="120" step="1"><div style="text-align:center;margin:44px 0 24px"><button class="btn" id="rst" style="margin:0">Restart routine</button></div>
+ <button id="insb" type="button"><span><b>Instructions</b><small>Step by step, with pictures</small></span><span style="font-size:24px;color:#9aa0a6">&#8250;</span></button>
+
+ <div class="sec">
+  <h3>Your Trigger Card</h3>
+  <p class="d">This is the card that lifts off the screen when you tap it. Select a card below to use it.</p>
+  <div id="lib"></div>
+  <p id="libn" class="hint"></p>
+  <button class="btn tg opt" id="tfh" type="button">Flip left to right</button>
+  <button class="btn tg opt" id="tfv" type="button">Flip upside down</button>
+  <p class="hint">Flipping helps if you are left handed.</p>
+  <div class="acts"><label class="btn">+ Add a card back<input type="file" id="ta" accept="image/*" hidden></label><button class="btn" id="tfit">Adjust fit</button><button class="btn dl" id="tdel">Delete</button></div>
+ </div>
+
+ <div class="sec">
+  <h3>Trigger Card Location</h3>
+  <p class="d">This is the location of your trigger card in your photo grid.</p>
+  <label for="pos">Which picture is it?</label>
+  <input type='number' id='pos' min='1' max='52' style='width:90px'>
+  <p class="hint">1 is the first picture at the top. The highest is 52.</p>
+  <label for="cap">Caption</label>
+  <input type='text' id='cap'>
+  <label for="src">Website name</label>
+  <input type='text' id='src'>
+  <p class="hint">Both show in small text under the picture.</p>
+ </div>
+
+ <div class="sec">
+  <h3>Timing</h3>
+  <p class="d">What happens after you tap the trigger picture.</p>
+  <label for="dl">Wait before the card lifts off: <span id="dv"></span> sec</label>
+  <input type="range" id="dl" min="0" max="30" step="1">
+  <label for="dt">Countdown dots</label>
+  <select id="dt" style="font-size:16px;padding:10px;border-radius:8px;background:#303134;color:#e8eaed;border:1px solid #3c4043;width:100%"><option value="top">Top edge of screen</option><option value="bottom">Just above the bottom bar</option><option value="off">Off</option></select>
+  <p class="hint">Small dots that count down. One disappears each second.</p>
+  <label class="row"><span>Start by touching and scrolling<small>Touch the picture and start scrolling to begin. Tapping it still works too.</small></span><input type="checkbox" id="sg"></label>
+  <label class="row"><span>Card vanishes when you let go<small>The card disappears when you lift your finger, instead of moving around.</small></span><input type="checkbox" id="vn"></label>
+ </div>
+
+ <div class="sec">
+  <h3>Phone Movement</h3>
+  <p class="d">Let the card react when you move or shake your phone.</p>
+  <p id="ms" class="hint"></p>
+  <button class="btn tg opt" id="en" type="button">Card reacts to phone tilt</button>
+  <div id="tw"><label for="tl">Tilt strength: <span id="tv"></span></label><input type="range" id="tl" min="1" max="10" step="1"><p class="hint">1 is gentle. 10 is strong.</p></div>
+  <button class="btn tg opt" id="tst" type="button">Shake to let the card fall</button>
+  <div id="sw2"><label for="sl">Shake strength: <span id="sv"></span></label><input type="range" id="sl" min="1" max="10" step="1"><p class="hint">1 needs a hard shake. 10 needs only a light one.</p></div>
+ </div>
+
+ <div class="sec">
+  <h3>Performance Modes</h3>
+  <p class="d">Optional extras. Leave them off for the basic version.</p>
+  <button class="btn tg opt" id="bw" type="button">Blow mode</button>
+  <p class="hint">The card flutters as if you blew on it, then comes loose.</p>
+  <div id="bww" hidden>
+   <label for="bn">Flutters before it comes loose</label>
+   <select id="bn" style="font-size:16px;padding:10px;border-radius:8px;background:#303134;color:#e8eaed;border:1px solid #3c4043;width:100%"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select>
+   <label for="bd">Pause between flutters: <span id="bdv"></span> sec</label>
+   <input type="range" id="bd" min="1" max="15" step="1">
+   <p class="hint">Each flutter lasts about 2 seconds. Countdown dots run between flutters. The last flutter comes loose.</p>
+  </div>
+  <button class="btn tg opt" id="cn" type="button">Card Name Mode</button>
+  <p class="hint">Type the name of any card. The search bar only shows "what is my card?".</p>
+  <div id="cnw" hidden>
+   <p class="d">Spelling does not matter, for example "queen of hartz". When you press search, the caption under the trigger picture shows the corrected name.</p>
+   <label class="row"><span>Add "Signed" before the name</span><input type="checkbox" id="cns"></label>
+  </div>
+ </div>
+
+ <div class="sec" id="advs">
+  <button type="button" id="advh" aria-expanded="false"><h3>Advanced Settings</h3><span class="chev">&#8250;</span></button>
+  <div id="advb" hidden>
+  <p class="d">Only change these if something looks wrong on your phone.</p>
+  <label for="pp">Card size: <span id="pv"></span></label>
+  <input type="range" id="pp" min="100" max="260" step="1">
+  <p class="hint">Make the card bigger or smaller so it matches the real one.</p>
+  <label class="row"><span>Scroll the whole page<small>Keeps the bottom of the screen filled. Turn off only if something looks wrong.</small></span><input type="checkbox" id="ds"></label>
+  <label for="bl">Lower the bottom bar: <span id="blv"></span> px</label>
+  <input type="range" id="bl" min="0" max="120" step="1">
+  <p class="hint">Moves the fake bottom bar down. Stop before it gets cut off.</p>
+  </div>
+ </div>
+
+ <div style="text-align:center;margin:30px 0 24px"><button class="btn" id="rst" style="margin:0">Restart routine</button></div>
  </div>
 <div id="ins" hidden>
  <div class="ph"><h2>Instructions</h2><button class="btn" id="insx" type="button">Back</button></div>
@@ -254,17 +350,17 @@ html.lt .l2,html.lt .l3{color:#0b57d0}
  <div style="margin-top:8px;color:#c4c7c5;font-size:14px">card &middot; cards &middot; red playing cards &middot; what's my card? &middot; deck of cards</div>
  <div class="tip" style="margin-top:10px">A search without the word "card" shows no photos. It says "Your search did not match any images", as Google does for a search with no results. Just search again with the word "card" in it.</div></div></div>
 
- <div class="st"><div class="n">4</div><div><b>Find your trigger card.</b> By default it is set to the 1st image. You can change its spot in Settings (Trigger image number).
+ <div class="st"><div class="n">4</div><div><b>Find your trigger card.</b> By default it is set to the 1st image. You can change its spot in Settings (under "Trigger Card Location", the box called "Which picture is it?").
  <div class="pic"><svg width='170' height='150' viewBox='0 0 170 150'><rect x='0' y='0' width='170' height='150' rx='12' fill='#202124'/>
 <rect x='8' y='8' width='154' height='0' /><rect x='8' y='8' width='46' height='52' rx='5' fill='#3c4043'/><rect x='112' y='8' width='46' height='52' rx='5' fill='#3c4043'/><rect x='8' y='66' width='46' height='52' rx='5' fill='#3c4043'/><rect x='60' y='66' width='46' height='52' rx='5' fill='#3c4043'/><rect x='112' y='66' width='46' height='52' rx='5' fill='#3c4043'/>
 <rect x='60' y='6' width='50' height='56' rx='7' fill='none' stroke='#8ab4f8' stroke-width='3'/><image href='card.png' x='67' y='12' width='36' height='44' preserveAspectRatio='xMidYMid meet'/>
 <text x='85' y='146' fill='#8ab4f8' font-size='10' text-anchor='middle' font-family='Arial'>tap this one</text></svg></div></div></div>
 
- <div class="st"><div class="n">5</div><div><b>Tap that picture.</b> After a short delay (5 seconds unless you change it in Settings), the card lifts off the screen and grows to full size. Small dots at the top edge of the screen count down one per second. In Settings you can move them just above the bottom bar or turn them off.<div class="tip" style="margin-top:10px">Prefer not to tap? Tick "Start the countdown by touching the trigger image and scrolling" in Settings. Then touching the picture and starting to scroll begins the countdown. Tapping still works too.</div></div></div>
+ <div class="st"><div class="n">5</div><div><b>Tap that picture.</b> After a short delay (5 seconds unless you change it in Settings), the card lifts off the screen and grows to full size. Small dots at the top edge of the screen count down one per second. In Settings you can move them just above the bottom bar or turn them off.<div class="tip" style="margin-top:10px">Prefer not to tap? Turn on "Start by touching and scrolling" in Settings. Then touching the picture and starting to scroll begins the countdown. Tapping still works too.</div></div></div>
 
- <div class="st"><div class="n">6</div><div><b>Move it around.</b> Drag it with your finger or flick it so it bounces around your screen. It automatically settles at a natural angle so you can slide it off the screen with your thumb or finger.<div class="tip" style="margin-top:10px">Prefer not to slide the card off? Tick "Card vanishes when you lift your finger" in Settings. Then the card disappears the moment you let go.</div></div></div>
+ <div class="st"><div class="n">6</div><div><b>Move it around.</b> Drag it with your finger or flick it so it bounces around your screen. It automatically settles at a natural angle so you can slide it off the screen with your thumb or finger.<div class="tip" style="margin-top:10px">Prefer not to slide the card off? Turn on "Card vanishes when you let go" in Settings. Then the card disappears the moment you let go.</div></div></div>
 
- <div class="st"><div class="n">7</div><div><b>Phone Motions (optional).</b> Turn on <span class="kbd">Enable motion</span> in Settings to allow the card to react to your phone's movement. Turn on <span class="kbd">Shake disconnect</span> and the card will pop out of its frame when you shake your phone.</div></div>
+ <div class="st"><div class="n">7</div><div><b>Phone Motions (optional).</b> Turn on <span class="kbd">Card reacts to phone tilt</span> in Settings to allow the card to react to your phone's movement. Turn on <span class="kbd">Shake to let the card fall</span> and the card will pop out of its frame when you shake your phone.</div></div>
 
  <div class="st"><div class="n">8</div><div><b>Blow mode (optional).</b> In Settings, under Performance Modes, turn on <span class="kbd">Blow mode</span> to give the illusion that you are causing the card to react to you blowing on your screen. Tap the trigger image as usual. When the countdown ends, the card flutters and jitters like an old sticker coming unstuck in the wind. Settings lets you choose up to 3 flutters (the last one always comes loose) and how long the pause between them lasts. Between flutters the countdown dots run again to help with your timing. When it comes loose, it grows to full size and moves around the screen. From there it works as in steps 6 and 7.</div></div>
 
@@ -274,7 +370,7 @@ html.lt .l2,html.lt .l3{color:#0b57d0}
  <div class="st"><div class="n">&#8635;</div><div><b>Double tap anywhere</b> to put the folded card back on the page, ready to practice again, without starting the countdown.</div></div>
  <div class="st"><div class="n">&#8635;</div><div><b>Tap the Google logo</b> at the top to start over from the blank home page.</div></div>
 
- <div class="tip">Open Settings any time with the small gear in the top left corner of the home page. If the card on screen does not match the real one in size, use "Card size" under Advanced Settings at the bottom.</div>
+ <div class="tip">Open Settings any time with the small gear in the top left corner of the home page. If the card on screen does not match the real one in size, tap "Advanced Settings" at the bottom of Settings and use "Card size".</div>
 
  <hr>
  <h3>Part 2: Add it to your iPhone Home Screen</h3>
@@ -295,7 +391,7 @@ html.lt .l2,html.lt .l3{color:#0b57d0}
 
  <div class="st"><div class="n">6</div><div><b>Open it from your Home Screen.</b> Find the new <b>DG Card</b> icon and tap it. From now on always start the app from this icon.</div></div>
 
- <div class="tip">Tip: if the bottom of the screen looks cut off or the bar sits too high, open Settings and scroll to Advanced Settings at the bottom. Use "Lower the fake bottom bar" until it sits at the very bottom, and make sure "Scroll the whole page" is ticked.</div>
+ <div class="tip">Tip: if the bottom of the screen looks cut off or the bar sits too high, open Settings and scroll to the bottom and tap "Advanced Settings". Use "Lower the bottom bar" until it sits at the very bottom, and make sure "Scroll the whole page" is turned on.</div>
  <div class="tip">Updated app? Delete the Home Screen icon and add it again so the phone loads the newest version.</div>
 </div>
 <script>
@@ -365,7 +461,8 @@ function shrink(f,max){return new Promise(res=>{const r=new FileReader();r.onloa
 const SC=()=>document.documentElement.classList.contains('ds')?document.scrollingElement:$('#app');
 const lockS=on=>{if(document.documentElement.classList.contains('ds'))document.documentElement.style.overflow=on?'hidden':'';else $('#app').style.overflow=on?'hidden':''};
 function diag(){const m=(h)=>{const t=document.createElement('div');t.style.cssText='position:fixed;visibility:hidden;width:1px;height:'+h;document.body.appendChild(t);const v=Math.round(t.getBoundingClientRect().height);t.remove();return v},e=(side)=>{const t=document.createElement('div');t.style.cssText='position:fixed;visibility:hidden;padding-'+side+':env(safe-area-inset-'+side+',0px)';document.body.appendChild(t);const v=parseFloat(getComputedStyle(t)['padding'+side[0].toUpperCase()+side.slice(1)])||0;t.remove();return Math.round(v)};const vv=window.visualViewport;$('#dg').textContent='win '+innerWidth+'x'+innerHeight+' | screen '+screen.width+'x'+screen.height+' | visual '+(vv?Math.round(vv.height):'-')+' | vh '+m('100vh')+' lvh '+m('100lvh')+' dvh '+m('100dvh')+' | safe top '+e('top')+' bottom '+e('bottom')+' | sa '+(isSA()?'yes':'no')+' | app '+Math.round($('#app').getBoundingClientRect().height)}
-$("#gear").onclick=()=>{P.hidden=false};const closeP=()=>{P.hidden=true;if(document.body.classList.contains('res')&&c.mode==='hidden')build3()};$("#cls2").onclick=closeP;$("#insb").onclick=()=>{$("#ins").hidden=false;$("#ins").scrollTop=0};$("#insx").onclick=()=>{$("#ins").hidden=true};
+$("#gear").onclick=()=>{P.hidden=false};const closeP=()=>{P.hidden=true;if(document.body.classList.contains('res')&&c.mode==='hidden')build3()};$("#cls2").onclick=closeP;$('#advh').onclick=()=>{const o=$('#advb').hidden;$('#advb').hidden=!o;$('#advh').setAttribute('aria-expanded',o?'true':'false');if(o)setTimeout(()=>$('#advh').scrollIntoView({block:'start',behavior:'smooth'}),50)};
+$("#insb").onclick=()=>{$("#ins").hidden=false;$("#ins").scrollTop=0};$("#insx").onclick=()=>{$("#ins").hidden=true};
 $('#tl').value=S.tilt||5;$('#tv').textContent=S.tilt||5;$('#tl').oninput=e=>{S.tilt=+e.target.value;$('#tv').textContent=S.tilt;save()};
 $('#sl').value=S.shake_s||7;$('#sv').textContent=S.shake_s||7;$('#sl').oninput=e=>{S.shake_s=+e.target.value;$('#sv').textContent=S.shake_s;save()};
 const tgs=()=>{$('#en').classList.toggle('on',!!S.motion);$('#tst').classList.toggle('on',!!S.shake);$('#tw').hidden=!S.motion;$('#sw2').hidden=!S.shake};tgs();
