@@ -397,7 +397,7 @@ html.lt .l2,html.lt .l3{color:#0b57d0}
 <script>
 const $=s=>document.querySelector(s);
 const CARD="card.png",ASP=474/640;let CARDURL=CARD;
-const S={useCut:true,ppi:160,swap:false,deck:"#b3202a",img:null,pos:0,pics:[],cap:"Red Playing Card",src:"Folded Card",motion:false,shake:false,delay:5};
+const S={useCut:true,ppi:160,swap:false,deck:"#b3202a",img:null,pos:0,pics:[],cap:"Folded Playing Card",src:"Pinterest",motion:false,shake:false,delay:5};
 try{const o=JSON.parse(localStorage.getItem("fc2")||"{}");if(o.cap===undefined)delete o.pos;Object.assign(S,o)}catch(e){}
 S.useCut=true;S.img=null;
 if(!Array.isArray(S.cards)){S.cards=[];S.sel=-1;if(S.art){S.cards.push({art:S.art,fit:S.fit||null,corner:S.corner||'tl'});S.sel=0}}
