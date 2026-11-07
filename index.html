@@ -235,6 +235,7 @@ html.lt .l2,html.lt .l3{color:#0b57d0}
  <select id="dt" style="font-size:16px;padding:10px;border-radius:8px;background:#303134;color:#e8eaed;border:1px solid #3c4043"><option value="top">Top edge of screen</option><option value="bottom">Just above the bottom bar</option><option value="off">Off</option></select>
  <label><input type="checkbox" id="vn"> Card vanishes when you lift your finger (it doesn't move around)</label>
   <label><input type="checkbox" id="ds"> Scroll the whole page (keeps the bottom of the screen filled; untick only if something looks wrong)</label>
+ <label><input type="checkbox" id="sg"> Start the countdown by touching the trigger image and scrolling (tapping it still works too)</label>
  <label>Lower the fake bottom bar: <span id="blv"></span> px (the lowest it can go without being cut off)</label><input type="range" id="bl" min="0" max="120" step="1">
   <label>Tools</label><p id="ms"></p>
  <button class="btn tg" id="en" type="button">Enable motion</button><button class="btn tg" id="tst" type="button">Shake disconnect</button>
@@ -402,7 +403,7 @@ function build3(){flReset();const cols=[$('#c0'),$('#c1')];cols.forEach(x=>x.inn
  const hh=[0,0],cnt=[0,0];
  items.forEach(it=>{const t=document.createElement('div'),im=document.createElement('div'),cp=document.createElement('div');let th,tx;
   im.className='im';cp.className='cp';
-  if(!it){th=1.49*cw;im.style.height=th+'px';im.style.background='#000';const sc=fit(th),rt=-6;thumbSc=sc;thumbRot=rt;thumb=mk(w0*sc,h0*sc,S.deck,rt,cimg(),9*sc);im.appendChild(thumb);t.onclick=trigger;tx=[(S.cn&&CN.cap)?(S.cns?'Signed ':'')+CN.cap:S.cap,S.src]}
+  if(!it){th=1.49*cw;im.style.height=th+'px';im.style.background='#000';const sc=fit(th),rt=-6;thumbSc=sc;thumbRot=rt;thumb=mk(w0*sc,h0*sc,S.deck,rt,cimg(),9*sc);im.appendChild(thumb);t.onclick=trigger;{let sx=0,sy=0,on=false;t.addEventListener('touchstart',e=>{const q=e.touches[0];sx=q.clientX;sy=q.clientY;on=!!S.scrollgo},{passive:true});t.addEventListener('touchmove',e=>{if(!on)return;const q=e.touches[0];if(Math.hypot(q.clientX-sx,q.clientY-sy)>14){on=false;trigger()}},{passive:true})};tx=[(S.cn&&CN.cap)?(S.cns?'Signed ':'')+CN.cap:S.cap,S.src]}
   else{th=cw*Math.min(1.6,Math.max(.5,it[4]/it[3]));im.style.height=th+'px';im.style.background='#222';
    const g=document.createElement('img');g.src='p/'+String(it[0]).padStart(2,'0')+'.jpg';g.alt='';g.draggable=false;g.style.cssText='width:100%;height:100%;object-fit:cover;display:block;pointer-events:none';im.appendChild(g);tx=[it[1],it[2]]}
   const b=document.createElement('b'),n=document.createElement('i');b.textContent=tx[0];n.textContent=tx[1];cp.append(b,n);
@@ -505,7 +506,7 @@ const FD=2000;
 function flN(){return Math.max(1,Math.min(3,+S.blow_n||1))}
 function flRest(){return Math.max(1,Math.min(15,+S.blow_d||4))}
 function flClear(){if(thumb){thumb.style.translate='';thumb.style.rotate='';thumb.style.scale='';thumb.style.filter=''}}
-function flDots(on,n){const cd=$('#cd');if(!on||(S.dots||'bottom')==='off'){cd.hidden=true;return}cd.innerHTML='';cd.className=(S.dots||'bottom')==='bottom'?'b':'';for(let i=0;i<n;i++)cd.appendChild(document.createElement('i'));cd.hidden=false}
+function flDots(on,n){const cd=$('#cd');if(!on||(S.dots||'top')==='off'){cd.hidden=true;return}cd.innerHTML='';cd.className=(S.dots||'top')==='bottom'?'b':'';for(let i=0;i<n;i++)cd.appendChild(document.createElement('i'));cd.hidden=false}
 function flReset(){FL.on=false;if(FL.tm){clearTimeout(FL.tm);FL.tm=null}FL.cur=-1;flClear();if(FL.seq.length){flDots(false);FL.seq=[];FL.rest=[]}}
 function flStart(){flReset();const N=flN(),R=flRest()*1000;FL.seq=[];FL.rest=[];let t=0;
  for(let i=0;i<N;i++){const last=i===N-1,len=last?1800:FD;FL.seq.push([t,t+len,last?1.7:.8+.25*(N>2?i/(N-2):0),last]);t+=len;if(!last){FL.rest.push([t,t+R]);t+=R}}
@@ -516,7 +517,7 @@ setInterval(()=>{if(!FL.on||!thumb)return;const t=performance.now()-FL.t0;let am
  FL.seq.forEach(([a,b,m,last])=>{if(t>=a&&t<b){const u=(t-a)/(b-a);amp=m*(last?Math.pow(u,.6):Math.sin(Math.PI*u))}});
  let ri=-1;FL.rest.forEach(([a,b],i)=>{if(t>=a&&t<b)ri=i});
  if(ri!==FL.cur){FL.cur=ri;if(ri>=0)flDots(true,flRest());else flDots(false)}
- if(ri>=0&&(S.dots||'bottom')!=='off'){const el=(t-FL.rest[ri][0])/1000;[...$('#cd').children].forEach((d,i)=>{d.style.opacity=i<Math.floor(el)?0:''})}
+ if(ri>=0&&(S.dots||'top')!=='off'){const el=(t-FL.rest[ri][0])/1000;[...$('#cd').children].forEach((d,i)=>{d.style.opacity=i<Math.floor(el)?0:''})}
  if(amp<=0.001){flClear();return}
  const g=(Math.sin(t/70)+Math.sin(t/31)*.7+Math.sin(t/13)*.4+(Math.random()-.5)*.8)/2.1,up=Math.max(0,g);
  thumb.style.rotate=(g*5*amp+amp*1.5).toFixed(2)+'deg';
@@ -583,13 +584,13 @@ loadTr();addEventListener('resize',fitTr);setTimeout(fitTr,400);setTimeout(fitTr
 setInterval(()=>{const cd=$('#cd');if(cd.hidden||!cd.classList.contains('b')||!document.documentElement.classList.contains('sa'))return;const r=$('#bb .p').getBoundingClientRect();if(r.height)cd.style.bottom=Math.round(innerHeight-r.top+8)+'px'},60);
 function trigger(){if(c.mode!=="hidden"||pend||Date.now()<noTrig)return;perm();const d=Math.max(0,+S.delay||0);if(!d){if(S.blow){pend=true;flStart()}else lift(true);return}
  pend=true;const cd=$('#cd');cd.innerHTML='';const dots=[];
- if((S.dots||'bottom')!=='off'){cd.className=(S.dots||'bottom')==='bottom'?'b':'';for(let i=0;i<d;i++){const e=document.createElement('i');cd.appendChild(e);dots.push(e)}cd.hidden=false}
+ if((S.dots||'top')!=='off'){cd.className=(S.dots||'top')==='bottom'?'b':'';for(let i=0;i<d;i++){const e=document.createElement('i');cd.appendChild(e);dots.push(e)}cd.hidden=false}
  const t0=performance.now();let n=0;
  cdIv=setInterval(()=>{const el=(performance.now()-t0)/1000;while(n<Math.floor(el)&&n<d){if(dots[n])dots[n].style.opacity=0;n++}
   if(el>=d){clearInterval(cdIv);cdIv=null;cd.hidden=true;if(S.blow){pend=true;flStart()}else{pend=false;lift(true)}}},100)}
 $('#dl').value=S.delay||0;$('#dv').textContent=S.delay||0;$('#dl').oninput=e=>{S.delay=+e.target.value;$('#dv').textContent=S.delay;save()};
-$('#dt').value=S.dots||'bottom';$('#dt').onchange=e=>{S.dots=e.target.value;save()};
-$('#vn').checked=!!S.vanish;$('#vn').onchange=e=>{S.vanish=e.target.checked;save()};
+$('#dt').value=S.dots||'top';$('#dt').onchange=e=>{S.dots=e.target.value;save()};
+$('#sg').checked=!!S.scrollgo;$('#sg').onchange=e=>{S.scrollgo=e.target.checked;save()};$('#vn').checked=!!S.vanish;$('#vn').onchange=e=>{S.vanish=e.target.checked;save()};
 $('#q0').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();q.value=$('#q0').value;go()}});
 $('#q0').addEventListener('input',()=>{const q0=$('#q0'),v=q0.value;if(/\s$/.test(v)){const f=fixText(v);if(f!==v)q0.value=f}});
 let ly=0,pt=0,pc=0,raf=0;const mcx=document.createElement('canvas').getContext('2d');
