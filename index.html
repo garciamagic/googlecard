@@ -178,7 +178,6 @@ html.lt .ga{background:#fff;border-color:#dadce0}html.lt .ga b{background:#0b57d
 html.lt .np,html.lt .lk{color:#5f6368}
 html.lt .l2,html.lt .l3{color:#0b57d0}
 .thm{cursor:pointer}
-#bwm{height:8px;border-radius:4px;background:#3c4043;overflow:hidden;margin:8px 0}#bwm i{display:block;height:100%;width:0;background:#8ab4f8}#bwm.hit i{background:#34a853}
 </style><script>try{if(JSON.parse(localStorage.getItem('fc2')||'{}').docscroll!==false)document.documentElement.classList.add('ds')}catch(e){}try{if(JSON.parse(localStorage.getItem('fc2')||'{}').light)document.documentElement.classList.add('lt')}catch(e){}try{if(navigator.standalone||matchMedia('(display-mode: standalone)').matches)document.documentElement.classList.add('sa')}catch(e){}</script></head>
 <body>
 <div id="app">
@@ -238,9 +237,9 @@ html.lt .l2,html.lt .l3{color:#0b57d0}
   <label><input type="checkbox" id="ds"> Scroll the whole page (keeps the bottom of the screen filled; untick only if something looks wrong)</label>
  <label>Lower the fake bottom bar: <span id="blv"></span> px (the lowest it can go without being cut off)</label><input type="range" id="bl" min="0" max="120" step="1">
   <label>Tools</label><p id="ms"></p>
- <button class="btn tg" id="en" type="button">Enable motion</button><button class="btn tg" id="tst" type="button">Shake disconnect</button><button class="btn tg" id="bw" type="button">Blow release</button>
+ <button class="btn tg" id="en" type="button">Enable motion</button><button class="btn tg" id="tst" type="button">Shake disconnect</button><button class="btn tg" id="bw" type="button">Blow mode</button>
  <div id="tw"><label>Tilt sensitivity: <span id="tv"></span> (1 = gentle, 10 = strong)</label><input type="range" id="tl" min="1" max="10" step="1"></div>
- <div id="sw2"><label>Shake sensitivity: <span id="sv"></span> (1 = needs a hard shake, 10 = very light)</label><input type="range" id="sl" min="1" max="10" step="1"></div><div id="bww" hidden><label>Blow sensitivity: <span id="bwv"></span> (1 = needs a hard blow, 10 = very light)</label><input type="range" id="bws" min="1" max="10" step="1"><p id="bwt" style="margin:8px 0 4px"></p><div id="bwm"><i></i></div><p id="bwd" style="margin:6px 0 0;font-size:12px;color:#9aa0a6;word-break:break-all"></p><p style="margin:4px 0 0">Blow into the bottom of the phone. The bar turns green when a blow is detected.</p></div><button class="btn" id="rst">Restart routine</button>
+ <div id="sw2"><label>Shake sensitivity: <span id="sv"></span> (1 = needs a hard shake, 10 = very light)</label><input type="range" id="sl" min="1" max="10" step="1"></div><div id="bww" hidden><label>Flutters before it pops off</label><select id="bn" style="font-size:16px;padding:10px;border-radius:8px;background:#303134;color:#e8eaed;border:1px solid #3c4043"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select><label>Delay between flutters: <span id="bdv"></span> sec (one countdown dot per second)</label><input type="range" id="bd" min="1" max="15" step="1"><p>Each flutter lasts about 2 seconds. The last one comes loose.</p></div><button class="btn" id="rst">Restart routine</button>
  </div>
 <div id="ins" hidden>
  <div class="ph"><h2>Instructions</h2><button class="btn" id="insx" type="button">Back</button></div>
@@ -270,7 +269,7 @@ html.lt .l2,html.lt .l3{color:#0b57d0}
 
  <div class="st"><div class="n">7</div><div><b>Phone Motions.</b> Turn on <span class="kbd">Enable motion</span> and <span class="kbd">Shake disconnect</span> in Settings, then shake the phone and the card falls away.</div></div>
 
- <div class="st"><div class="n">8</div><div><b>Blow release (optional).</b> Turn on <span class="kbd">Blow release</span> in Settings and tap Allow when the phone asks to use the microphone. On the photo grid, blow toward the bottom of the phone. The trigger image jitters like it is caught in the wind. Blow a second time and it jitters, then after 3 seconds the card comes out of its frame and grows to full size. From there it works as in steps 6 and 7. An orange dot shows at the top of the screen while the microphone is on.</div></div>
+ <div class="st"><div class="n">8</div><div><b>Blow mode (optional).</b> Turn on <span class="kbd">Blow mode</span> in Settings. Tap the trigger image as usual. When the countdown ends, the card flutters and jitters like an old sticker coming unstuck in the wind. Between flutters the countdown dots run again. Settings lets you choose how many flutters there are (the last one comes loose) and how long the pause between them lasts. When it comes loose, it grows to full size and moves around the screen. From there it works as in steps 6 and 7.</div></div>
 
  <h3 style="margin-top:8px">Practice and reset</h3>
  <div class="st"><div class="n">&#8635;</div><div><b>Double tap anywhere</b> to put the folded card back on the page, ready to practice again, without starting the countdown.</div></div>
@@ -336,7 +335,8 @@ addEventListener("devicemotion",e=>{if(!S.motion&&!S.shake)return;const a=e.acce
  if(S.shake){const m=Math.hypot(a.x,a.y,a.z),n=Date.now();if(Math.abs(m-9.81)>22-1.5*(+S.shake_s||7)&&n-lastShake>800){lastShake=n;release()}}});
 let last=0,TA=-.17;
 function tick(t){const dt=Math.min(.033,(t-last)/1000||.016);last=t;
- if(c.mode==="grow"){const k=Math.min(1,dt*7);c.s+=(1-c.s)*k;c.a*=1-k;c.x+=(c.tx-c.x)*k;c.y+=(c.ty-c.y)*k;draw();if(Math.abs(1-c.s)<.01&&Math.abs(c.a)<.01&&Math.abs(c.tx-c.x)<.5&&Math.abs(c.ty-c.y)<.5){c.s=1;c.a=0;c.x=c.tx;c.y=c.ty;c.mode="docked";draw()}}
+ if(c.mode==="grow"&&c.pop){const k=Math.min(1,dt*(c.gs||20));c.s+=(1-c.s)*k;c.a*=1-k;c.x+=c.vx*dt;c.y+=c.vy*dt;draw();if(Math.abs(1-c.s)<.02&&Math.abs(c.a)<.03){c.s=1;c.a=0;c.pop=false;c.gs=0;c.mode="loose";draw()}}
+ if(c.mode==="grow"&&!c.pop){const k=Math.min(1,dt*(c.gs||7));c.s+=(1-c.s)*k;c.a*=1-k;c.x+=(c.tx-c.x)*k;c.y+=(c.ty-c.y)*k;draw();if(Math.abs(1-c.s)<.01&&Math.abs(c.a)<.01&&Math.abs(c.tx-c.x)<.5&&Math.abs(c.ty-c.y)<.5){c.s=1;c.a=0;c.x=c.tx;c.y=c.ty;c.mode="docked";draw()}}
  if(c.mode==="loose"){const tf=.12*(+S.tilt||5),G=2600*tf,K=1800*tf;c.vx+=(g.x*G+lin.x*K)*dt;c.vy+=(g.y*G+lin.y*K)*dt;c.vx*=.996;c.vy*=.996;
   c.x+=c.vx*dt;c.y+=c.vy*dt;{const sp=Math.hypot(c.vx,c.vy),k=Math.max(0,Math.min(1,1-sp/450)),T=TA+6.2832*Math.round((c.a-TA)/6.2832);c.w+=(T-c.a)*45*k*dt;c.w*=Math.exp(-13*k*dt)*Math.pow(.985,60*dt*(1-k));c.a+=c.w*dt}
   const[w,h]=dims(),cs=Math.abs(Math.cos(c.a)),sn=Math.abs(Math.sin(c.a)),hx=(w*cs+h*sn)/2,hy=(w*sn+h*cs)/2;
@@ -349,7 +349,7 @@ function tick(t){const dt=Math.min(.033,(t-last)/1000||.016);last=t;
 requestAnimationFrame(tick);
 addEventListener("resize",()=>{W=innerWidth;H=innerHeight});
 let off=null,hist=[];
-card.addEventListener("pointerdown",e=>{if(S.vanish&&(c.mode==="docked"||c.mode==="grow")){card.setPointerCapture(e.pointerId);c.mode="hold";off={x:e.clientX-c.x,y:e.clientY-c.y};return}if(c.mode!=="loose"&&c.mode!=="docked")return;card.setPointerCapture(e.pointerId);
+card.addEventListener("pointerdown",e=>{if(S.vanish&&(c.mode==="docked"||c.mode==="grow"||c.mode==="loose")){card.setPointerCapture(e.pointerId);c.mode="hold";off={x:e.clientX-c.x,y:e.clientY-c.y};return}if(c.mode!=="loose"&&c.mode!=="docked")return;card.setPointerCapture(e.pointerId);
  c.mode="drag";off={x:e.clientX-c.x,y:e.clientY-c.y};hist=[{x:e.clientX,y:e.clientY,t:performance.now()}];card.style.cursor="grabbing"});
 card.addEventListener("pointermove",e=>{if(c.mode!=="drag"&&c.mode!=="hold")return;c.x=e.clientX-off.x;c.y=e.clientY-off.y;
  hist.push({x:e.clientX,y:e.clientY,t:performance.now()});if(hist.length>5)hist.shift();draw()});
@@ -389,7 +389,7 @@ function rel(col){const qs=new Set($('#q').value.toLowerCase().match(/[a-z]+/g)|
   a.append(th,tx);d.appendChild(a)});
  col.insertBefore(d,col.children[5]||null)}
 const PH=[[3, "Folded playing card on table\u2026", "Flickr", 299, 168], [26, "Rook no Further for some\u2026", "Origami.me", 700, 438], [6, "Folded playing card back\u2026", "Alamy", 300, 443], [27, "How to Fold a Heart from a\u2026", "Cut Out + Keep", 638, 480], [28, "Crafting with Playing Card\u2026", "PlayingCardDecks.com", 598, 338], [12, "Curved playing card in hand\u2026", "Amazon.com", 225, 225], [31, "Playing Card Polyhedral\u2026", "Instructables", 565, 542], [29, "Playing card origami ring\u2026", "Pinterest", 462, 432], [33, "Vintage red playing card back\u2026", "eBay", 465, 659], [20, "King of diamonds and card back\u2026", "Alamy", 447, 447], [36, "Red playing card back pattern\u2026", "Etsy", 399, 501], [34, "Playing card suits pattern\u2026", "Shutterstock", 447, 447], [47, "Red playing card backs\u2026", "Pinterest", 399, 501], [2, "Stacked playing card boxes\u2026", "Behance", 365, 547], [11, "Playing card side table\u2026", "Pinterest", 463, 662], [5, "Playing card pocket square\u2026", "Etsy", 300, 300], [30, "Fanning a deck of cards\u2026", "YouTube", 738, 414], [1, "Fanned deck of cards on black\u2026", "Shutterstock", 447, 447], [4, "Hand holding fanned red cards\u2026", "Pexels", 225, 225], [13, "Black playing cards fanned\u2026", "eBay", 547, 365], [17, "Poker hand of cards\u2026", "Pinterest", 461, 450], [22, "Hand of cards on plaid cloth\u2026", "iStock", 533, 375], [9, "Four aces with poker chips\u2026", "Shutterstock", 554, 554], [25, "Playing cards scattered on table\u2026", "Pexels", 678, 452], [32, "Cards in hand dark background\u2026", "Reddit", 335, 597], [37, "Mini playing cards\u2026", "Amazon.com", 198, 254], [40, "Gold foil playing card deck\u2026", "Kickstarter", 225, 225], [23, "Bicycle big box playing cards\u2026", "eBay", 447, 447], [38, "Standard playing cards deck\u2026", "Walmart", 416, 416], [14, "Playing card deck box\u2026", "Walmart", 225, 225], [42, "Playing card box back\u2026", "Walmart", 447, 447], [41, "Red and blue playing card decks\u2026", "Amazon.com", 400, 400], [45, "Black playing card box\u2026", "Etsy", 447, 447], [46, "Black playing cards\u2026", "Shutterstock", 515, 388], [48, "Playing card decks collection\u2026", "Reddit", 447, 447], [35, "Modernist playing card decks\u2026", "Etsy", 495, 620], [39, "Classic playing cards deck\u2026", "Pinterest", 498, 615], [43, "Black playing card deck\u2026", "Kickstarter", 225, 225], [44, "Ace of spades custom deck\u2026", "Kickstarter", 225, 225], [49, "Framed playing card art\u2026", "Etsy", 447, 447], [50, "Playing card backs\u2026", "Pinterest", 350, 350], [51, "Designing my own playing card art\u2026", "YouTube", 597, 335], [7, "Playing card design 8 of hearts\u2026", "Dribbble", 599, 419], [8, "Playing cards desk setup\u2026", "Behance", 299, 168], [15, "Card table with chess board\u2026", "Wayfair", 447, 447], [16, "Flexible playing cards\u2026", "Amazon.com", 554, 554], [18, "Playing cards printable sheet\u2026", "Etsy", 616, 498], [19, "Playing cards game night\u2026", "Target", 447, 447], [21, "Ace of spades on card box\u2026", "Unsplash", 447, 447], [24, "Red and blue card backs\u2026", "Wikipedia", 534, 374], [0, "Red playing card cube\u2026", "Instructables", 480, 638]];
-function build3(){bwReset();const cols=[$('#c0'),$('#c1')];cols.forEach(x=>x.innerHTML='');thumb=null;
+function build3(){flReset();const cols=[$('#c0'),$('#c1')];cols.forEach(x=>x.innerHTML='');thumb=null;
  const cw=(innerWidth-12)/2,[w0,h0]=dims();
  const fit=th=>Math.min(1,cw*.82/w0,th*.82/h0);
  const rat=a=>cw*Math.min(1.6,Math.max(.5,a[4]/a[3]));
@@ -495,55 +495,36 @@ async function refreshLib(){const L=$('#lib');L.innerHTML='';
  $('#libn').textContent=(S.sel<0?'Using the original red Bicycle card.':'Using saved card '+(S.sel+1)+' of '+S.cards.length+'.')+' ('+S.cards.length+' of 6 saved)';
  $('#tfit').disabled=S.sel<0;$('#tdel').disabled=S.sel<0}
 let pend=false,cdIv=null;
-function resetCard(){bwReset();if(cdIv){clearInterval(cdIv);cdIv=null}pend=false;$('#cd').hidden=true;card.style.display="none";c.mode="hidden";c.vx=c.vy=c.w=0;c.s=1;c.a=0;lockS(false);if(thumb)thumb.style.visibility="visible"}
+function resetCard(){flReset();c.gs=0;c.pop=false;if(cdIv){clearInterval(cdIv);cdIv=null}pend=false;$('#cd').hidden=true;card.style.display="none";c.mode="hidden";c.vx=c.vy=c.w=0;c.s=1;c.a=0;lockS(false);if(thumb)thumb.style.visibility="visible"}
 let noTrig=0;
-/* ---- blow release ---- */
-let bwLow=0,bwPeak=0,bwStream=null,bwAC=null,bwAn=null,bwT=null,bwF=null,bwIv=0,bwLvl=0,bwAct=false,bwBusy=false,bwDenied=false;
-const B={n:0,act0:0,lastAct:0,inb:false,jit:0,fire:0};
-const bwThr=()=>.2*Math.pow(.75,+S.blow_s||5);
-function bwArmed(){return !!S.blow&&document.body.classList.contains('res')&&!!thumb&&c.mode==='hidden'&&!pend}
-function bwClear(){if(thumb){thumb.style.translate='';thumb.style.rotate=''}}
-function bwReset(){B.n=0;B.act0=0;B.inb=false;B.jit=0;B.fire=0;bwClear()}
-function blowTick(t,rms,low){
- bwLvl=rms;bwLow=low;const act=rms>bwThr()&&low>.15;bwAct=act;
- if(!bwArmed()){if(B.n||B.fire||B.jit)bwReset();B.inb=false;B.act0=0;return}
- if(act){B.lastAct=t;if(!B.act0)B.act0=t;if(!B.inb&&t-B.act0>=120){B.inb=true;B.n++;if(B.n===2)B.fire=t+3000}}
- else if(t-B.lastAct>=200){B.inb=false;B.act0=0}
- if(B.inb&&B.n===1)B.jit=t+700;
- if(B.fire&&t>=B.fire){bwReset();lift(true)}
-}
-setInterval(()=>{if(!thumb)return;const t=performance.now();const strong=B.fire&&t<B.fire;const k=strong?1:(t<B.jit?Math.min(1,(B.jit-t)/400):0);
- if(k>0){const g=Math.sin(t/41)+Math.sin(t/17)*.6+(Math.random()-.5);thumb.style.translate=(g*2.6*k).toFixed(2)+'px '+((Math.random()-.5)*5.2*k).toFixed(2)+'px';thumb.style.rotate=((Math.sin(t/29)+(Math.random()-.5))*1.8*k).toFixed(2)+'deg'}
- else if(thumb.style.translate)bwClear()},16);
-function bwStatus(m){const e=$('#bwt');if(e)e.textContent=m}
-async function startMic(){
- if(bwStream||bwBusy||bwDenied)return;
- if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){bwStatus('Microphone: not available in this browser');return}
- bwBusy=true;
- try{
-  const st=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false}});
-  const AC=window.AudioContext||window.webkitAudioContext;const ac=new AC();try{await ac.resume()}catch(e){}
-  const an=ac.createAnalyser();an.fftSize=1024;an.smoothingTimeConstant=0;ac.createMediaStreamSource(st).connect(an);
-  bwStream=st;bwAC=ac;bwAn=an;bwT=new Float32Array(an.fftSize);bwF=new Float32Array(an.frequencyBinCount);
-  st.getTracks().forEach(t=>{t.onended=()=>stopMic()});
-  bwIv=setInterval(bwLoop,25);bwStatus('Microphone: listening');setTimeout(()=>{if(bwAC&&bwAC.state!=='running')bwStatus('Microphone connected but paused. Tap anywhere on the screen once.')},1500)
- }catch(e){bwStream=null;if(e&&(e.name==='NotAllowedError'||e.name==='SecurityError')){bwDenied=true;bwStatus('Microphone: blocked. Allow it in your phone settings for this site, then reload.')}else bwStatus('Microphone: could not start')}
- bwBusy=false}
-function stopMic(){clearInterval(bwIv);try{bwStream&&bwStream.getTracks().forEach(t=>t.stop())}catch(e){}try{bwAC&&bwAC.close()}catch(e){}bwStream=bwAC=bwAn=null;bwReset();bwStatus(S.blow?'Microphone: stopped (tap anywhere to restart)':'')}
-function bwLoop(){
- if(!bwAn)return;bwAn.getFloatTimeDomainData(bwT);let sq=0;for(let i=0;i<bwT.length;i++)sq+=bwT[i]*bwT[i];const rms=Math.sqrt(sq/bwT.length);
- bwAn.getFloatFrequencyData(bwF);let lo=0,all=0;for(let i=1;i<48;i++){const e=Math.pow(10,bwF[i]/10);all+=e;if(i<=5)lo+=e}
- blowTick(performance.now(),rms,all?lo/all:0);
- if(rms>bwPeak)bwPeak=rms;
- if(!P.hidden){const m=$('#bwm');m.firstChild.style.width=Math.min(100,rms/bwThr()*50)+'%';m.classList.toggle('hit',bwAct);
-  if(bwAC&&bwAC.state!=='running')bwAC.resume().catch(()=>{});
-  const d=$('#bwd');if(d)d.textContent='Mic '+(bwAC?bwAC.state:'off')+' | level '+rms.toFixed(3)+' | peak '+bwPeak.toFixed(3)+' | need '+bwThr().toFixed(3)+' | low '+bwLow.toFixed(2)+' | blows '+B.n}}
-function bwUi(){$('#bw').classList.toggle('on',!!S.blow);$('#bww').hidden=!S.blow;$('#bws').value=S.blow_s||5;$('#bwv').textContent=S.blow_s||5}
-$('#bw').onclick=()=>{S.blow=!S.blow;save();bwUi();if(S.blow){bwDenied=false;startMic()}else{stopMic();bwStatus('')}};
-$('#bws').oninput=e=>{S.blow_s=+e.target.value;$('#bwv').textContent=S.blow_s;save()};
+/* ---- blow mode: sticker flutter ---- */
+const FL={on:false,t0:0,tm:null,seq:[],rest:[],cur:-1};
+const FD=2000;
+function flN(){return Math.max(1,Math.min(3,+S.blow_n||3))}
+function flRest(){return Math.max(1,Math.min(15,+S.blow_d||4))}
+function flClear(){if(thumb){thumb.style.translate='';thumb.style.rotate='';thumb.style.scale='';thumb.style.filter=''}}
+function flDots(on,n){const cd=$('#cd');if(!on||(S.dots||'bottom')==='off'){cd.hidden=true;return}cd.innerHTML='';cd.className=(S.dots||'bottom')==='bottom'?'b':'';for(let i=0;i<n;i++)cd.appendChild(document.createElement('i'));cd.hidden=false}
+function flReset(){FL.on=false;if(FL.tm){clearTimeout(FL.tm);FL.tm=null}FL.cur=-1;flClear();if(FL.seq.length){flDots(false);FL.seq=[];FL.rest=[]}}
+function flStart(){flReset();const N=flN(),R=flRest()*1000;FL.seq=[];FL.rest=[];let t=0;
+ for(let i=0;i<N;i++){const last=i===N-1,len=last?1800:FD;FL.seq.push([t,t+len,last?1.7:.8+.25*(N>2?i/(N-2):0),last]);t+=len;if(!last){FL.rest.push([t,t+R]);t+=R}}
+ FL.on=true;FL.t0=performance.now();FL.tm=setTimeout(flRelease,t)}
+function flRelease(){FL.tm=null;FL.on=false;flClear();flDots(false);FL.seq=[];FL.rest=[];FL.cur=-1;pend=false;lift(true);
+ if(c.mode==='grow'){c.pop=true;c.gs=20;const sx=Math.random()<.5?-1:1;c.vx=sx*(350+Math.random()*450);c.vy=-(450+Math.random()*350);c.w=0}}
+setInterval(()=>{if(!FL.on||!thumb)return;const t=performance.now()-FL.t0;let amp=0;
+ FL.seq.forEach(([a,b,m,last])=>{if(t>=a&&t<b){const u=(t-a)/(b-a);amp=m*(last?Math.pow(u,.6):Math.sin(Math.PI*u))}});
+ let ri=-1;FL.rest.forEach(([a,b],i)=>{if(t>=a&&t<b)ri=i});
+ if(ri!==FL.cur){FL.cur=ri;if(ri>=0)flDots(true,flRest());else flDots(false)}
+ if(ri>=0&&(S.dots||'bottom')!=='off'){const el=(t-FL.rest[ri][0])/1000;[...$('#cd').children].forEach((d,i)=>{d.style.opacity=i<Math.floor(el)?0:''})}
+ if(amp<=0.001){flClear();return}
+ const g=(Math.sin(t/70)+Math.sin(t/31)*.7+Math.sin(t/13)*.4+(Math.random()-.5)*.8)/2.1,up=Math.max(0,g);
+ thumb.style.rotate=(g*5*amp+amp*1.5).toFixed(2)+'deg';
+ thumb.style.translate=(g*2.6*amp+(Math.random()-.5)*2*amp).toFixed(2)+'px '+(-up*4*amp).toFixed(2)+'px';
+ thumb.style.scale=(1+up*.04*amp).toFixed(3);
+ thumb.style.filter='drop-shadow(0 '+(1+up*5*amp).toFixed(1)+'px '+(2+up*4*amp).toFixed(1)+'px rgba(0,0,0,.45))'},16);
+function bwUi(){$('#bw').classList.toggle('on',!!S.blow);$('#bww').hidden=!S.blow;$('#bn').value=flN();$('#bd').value=flRest();$('#bdv').textContent=flRest()}
+$('#bn').onchange=e=>{S.blow_n=+e.target.value;save()};$('#bd').oninput=e=>{S.blow_d=+e.target.value;$('#bdv').textContent=S.blow_d;save()};
+$('#bw').onclick=()=>{S.blow=!S.blow;save();bwUi()};
 bwUi();
-document.addEventListener('pointerdown',()=>{if(S.blow&&!bwStream)startMic();if(bwAC&&bwAC.state!=='running')bwAC.resume().catch(()=>{})},true);
-document.addEventListener('visibilitychange',()=>{if(!document.hidden&&bwAC&&bwAC.state!=='running')bwAC.resume().catch(()=>{})});
 
 
 const TR_FB=['weather tomorrow','nfl scores','stock market today','movie showtimes near me','gas prices near me','nba schedule','flights to las vegas'];
@@ -557,20 +538,18 @@ async function loadTr(){let c=null;try{c=JSON.parse(localStorage.getItem('fc2tr'
   const a=[...d.querySelectorAll('item > title')].map(n=>n.textContent.trim()).filter(Boolean);if(a.length>=3){drawTr(a);try{localStorage.setItem('fc2tr',JSON.stringify({t:Date.now(),a:a.slice(0,10)}))}catch(e){}return}}catch(e){}}}
 function setTab(img){document.body.classList.toggle('ti',img);fitTr();$('#tAll').classList.toggle('on',!img);$('#tImg').classList.toggle('on',img)}
 const TXT='input[type=text],input[type=number]';
-document.addEventListener('focusout',e=>{const t=e.target;if(t&&t.matches&&t.matches(TXT)){const v=t.value;t.value='';t.value=v;t.readOnly=true}},true);
-['pointerdown','touchstart'].forEach(ev=>document.addEventListener(ev,e=>{const t=e.target;if(t&&t.matches&&t.matches(TXT))t.readOnly=false},{capture:true,passive:true}));
-document.querySelectorAll(TXT).forEach(t=>{if(document.activeElement!==t)t.readOnly=true});
+document.addEventListener('focusout',e=>{const t=e.target;if(t&&t.matches&&t.matches(TXT)){const v=t.value;t.value='';t.value=v}},true);
 function applyTheme(){const l=!!S.light;document.documentElement.classList.toggle('lt',l);document.querySelectorAll('.thm').forEach(e=>e.textContent='Dark theme: '+(l?'off':'on'));const m=document.querySelector('meta[name=theme-color]');if(m)m.content=l?'#ffffff':'#202124';fitTr()}
 document.querySelectorAll('.thm').forEach(e=>e.addEventListener('click',()=>{S.light=!S.light;save();applyTheme()}));applyTheme();
 $('#tAll').onclick=()=>setTab(false);$('#tImg').onclick=()=>setTab(true);
 loadTr();addEventListener('resize',fitTr);setTimeout(fitTr,400);setTimeout(fitTr,1500);
 setInterval(()=>{const cd=$('#cd');if(cd.hidden||!cd.classList.contains('b')||!document.documentElement.classList.contains('sa'))return;const r=$('#bb .p').getBoundingClientRect();if(r.height)cd.style.bottom=Math.round(innerHeight-r.top+8)+'px'},60);
-function trigger(){if(c.mode!=="hidden"||pend||Date.now()<noTrig)return;perm();const d=Math.max(0,+S.delay||0);if(!d){lift(true);return}
+function trigger(){if(c.mode!=="hidden"||pend||Date.now()<noTrig)return;perm();const d=Math.max(0,+S.delay||0);if(!d){if(S.blow){pend=true;flStart()}else lift(true);return}
  pend=true;const cd=$('#cd');cd.innerHTML='';const dots=[];
  if((S.dots||'bottom')!=='off'){cd.className=(S.dots||'bottom')==='bottom'?'b':'';for(let i=0;i<d;i++){const e=document.createElement('i');cd.appendChild(e);dots.push(e)}cd.hidden=false}
  const t0=performance.now();let n=0;
  cdIv=setInterval(()=>{const el=(performance.now()-t0)/1000;while(n<Math.floor(el)&&n<d){if(dots[n])dots[n].style.opacity=0;n++}
-  if(el>=d){clearInterval(cdIv);cdIv=null;cd.hidden=true;pend=false;lift(true)}},100)}
+  if(el>=d){clearInterval(cdIv);cdIv=null;cd.hidden=true;if(S.blow){pend=true;flStart()}else{pend=false;lift(true)}}},100)}
 $('#dl').value=S.delay||0;$('#dv').textContent=S.delay||0;$('#dl').oninput=e=>{S.delay=+e.target.value;$('#dv').textContent=S.delay;save()};
 $('#dt').value=S.dots||'bottom';$('#dt').onchange=e=>{S.dots=e.target.value;save()};
 $('#vn').checked=!!S.vanish;$('#vn').onchange=e=>{S.vanish=e.target.checked;save()};
