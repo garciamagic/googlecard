@@ -240,7 +240,7 @@ html.lt .l2,html.lt .l3{color:#0b57d0}
   <label>Tools</label><p id="ms"></p>
  <button class="btn tg" id="en" type="button">Enable motion</button><button class="btn tg" id="tst" type="button">Shake disconnect</button><button class="btn tg" id="bw" type="button">Blow release</button>
  <div id="tw"><label>Tilt sensitivity: <span id="tv"></span> (1 = gentle, 10 = strong)</label><input type="range" id="tl" min="1" max="10" step="1"></div>
- <div id="sw2"><label>Shake sensitivity: <span id="sv"></span> (1 = needs a hard shake, 10 = very light)</label><input type="range" id="sl" min="1" max="10" step="1"></div><div id="bww" hidden><label>Blow sensitivity: <span id="bwv"></span> (1 = needs a hard blow, 10 = very light)</label><input type="range" id="bws" min="1" max="10" step="1"><p id="bwt" style="margin:8px 0 4px"></p><div id="bwm"><i></i></div><p style="margin:4px 0 0">Blow into the bottom of the phone. The bar turns green when a blow is detected.</p></div><button class="btn" id="rst">Restart routine</button>
+ <div id="sw2"><label>Shake sensitivity: <span id="sv"></span> (1 = needs a hard shake, 10 = very light)</label><input type="range" id="sl" min="1" max="10" step="1"></div><div id="bww" hidden><label>Blow sensitivity: <span id="bwv"></span> (1 = needs a hard blow, 10 = very light)</label><input type="range" id="bws" min="1" max="10" step="1"><p id="bwt" style="margin:8px 0 4px"></p><div id="bwm"><i></i></div><p id="bwd" style="margin:6px 0 0;font-size:12px;color:#9aa0a6;word-break:break-all"></p><p style="margin:4px 0 0">Blow into the bottom of the phone. The bar turns green when a blow is detected.</p></div><button class="btn" id="rst">Restart routine</button>
  </div>
 <div id="ins" hidden>
  <div class="ph"><h2>Instructions</h2><button class="btn" id="insx" type="button">Back</button></div>
@@ -498,14 +498,14 @@ let pend=false,cdIv=null;
 function resetCard(){bwReset();if(cdIv){clearInterval(cdIv);cdIv=null}pend=false;$('#cd').hidden=true;card.style.display="none";c.mode="hidden";c.vx=c.vy=c.w=0;c.s=1;c.a=0;lockS(false);if(thumb)thumb.style.visibility="visible"}
 let noTrig=0;
 /* ---- blow release ---- */
-let bwStream=null,bwAC=null,bwAn=null,bwT=null,bwF=null,bwIv=0,bwLvl=0,bwAct=false,bwBusy=false,bwDenied=false;
+let bwLow=0,bwPeak=0,bwStream=null,bwAC=null,bwAn=null,bwT=null,bwF=null,bwIv=0,bwLvl=0,bwAct=false,bwBusy=false,bwDenied=false;
 const B={n:0,act0:0,lastAct:0,inb:false,jit:0,fire:0};
 const bwThr=()=>.2*Math.pow(.75,+S.blow_s||5);
 function bwArmed(){return !!S.blow&&document.body.classList.contains('res')&&!!thumb&&c.mode==='hidden'&&!pend}
 function bwClear(){if(thumb){thumb.style.translate='';thumb.style.rotate=''}}
 function bwReset(){B.n=0;B.act0=0;B.inb=false;B.jit=0;B.fire=0;bwClear()}
 function blowTick(t,rms,low){
- bwLvl=rms;const act=rms>bwThr()&&low>.45;bwAct=act;
+ bwLvl=rms;bwLow=low;const act=rms>bwThr()&&low>.15;bwAct=act;
  if(!bwArmed()){if(B.n||B.fire||B.jit)bwReset();B.inb=false;B.act0=0;return}
  if(act){B.lastAct=t;if(!B.act0)B.act0=t;if(!B.inb&&t-B.act0>=120){B.inb=true;B.n++;if(B.n===2)B.fire=t+3000}}
  else if(t-B.lastAct>=200){B.inb=false;B.act0=0}
@@ -526,7 +526,7 @@ async function startMic(){
   const an=ac.createAnalyser();an.fftSize=1024;an.smoothingTimeConstant=0;ac.createMediaStreamSource(st).connect(an);
   bwStream=st;bwAC=ac;bwAn=an;bwT=new Float32Array(an.fftSize);bwF=new Float32Array(an.frequencyBinCount);
   st.getTracks().forEach(t=>{t.onended=()=>stopMic()});
-  bwIv=setInterval(bwLoop,25);bwStatus('Microphone: listening')
+  bwIv=setInterval(bwLoop,25);bwStatus('Microphone: listening');setTimeout(()=>{if(bwAC&&bwAC.state!=='running')bwStatus('Microphone connected but paused. Tap anywhere on the screen once.')},1500)
  }catch(e){bwStream=null;if(e&&(e.name==='NotAllowedError'||e.name==='SecurityError')){bwDenied=true;bwStatus('Microphone: blocked. Allow it in your phone settings for this site, then reload.')}else bwStatus('Microphone: could not start')}
  bwBusy=false}
 function stopMic(){clearInterval(bwIv);try{bwStream&&bwStream.getTracks().forEach(t=>t.stop())}catch(e){}try{bwAC&&bwAC.close()}catch(e){}bwStream=bwAC=bwAn=null;bwReset();bwStatus(S.blow?'Microphone: stopped (tap anywhere to restart)':'')}
@@ -534,7 +534,10 @@ function bwLoop(){
  if(!bwAn)return;bwAn.getFloatTimeDomainData(bwT);let sq=0;for(let i=0;i<bwT.length;i++)sq+=bwT[i]*bwT[i];const rms=Math.sqrt(sq/bwT.length);
  bwAn.getFloatFrequencyData(bwF);let lo=0,all=0;for(let i=1;i<48;i++){const e=Math.pow(10,bwF[i]/10);all+=e;if(i<=5)lo+=e}
  blowTick(performance.now(),rms,all?lo/all:0);
- if(!P.hidden){const m=$('#bwm');m.firstChild.style.width=Math.min(100,rms/bwThr()*50)+'%';m.classList.toggle('hit',bwAct)}}
+ if(rms>bwPeak)bwPeak=rms;
+ if(!P.hidden){const m=$('#bwm');m.firstChild.style.width=Math.min(100,rms/bwThr()*50)+'%';m.classList.toggle('hit',bwAct);
+  if(bwAC&&bwAC.state!=='running')bwAC.resume().catch(()=>{});
+  const d=$('#bwd');if(d)d.textContent='Mic '+(bwAC?bwAC.state:'off')+' | level '+rms.toFixed(3)+' | peak '+bwPeak.toFixed(3)+' | need '+bwThr().toFixed(3)+' | low '+bwLow.toFixed(2)+' | blows '+B.n}}
 function bwUi(){$('#bw').classList.toggle('on',!!S.blow);$('#bww').hidden=!S.blow;$('#bws').value=S.blow_s||5;$('#bwv').textContent=S.blow_s||5}
 $('#bw').onclick=()=>{S.blow=!S.blow;save();bwUi();if(S.blow){bwDenied=false;startMic()}else{stopMic();bwStatus('')}};
 $('#bws').oninput=e=>{S.blow_s=+e.target.value;$('#bwv').textContent=S.blow_s;save()};
