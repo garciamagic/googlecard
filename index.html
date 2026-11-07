@@ -221,12 +221,10 @@ html.lt .l2,html.lt .l3{color:#0b57d0}
 <div id="panel" hidden>
  <div class="ph"><h2>Settings</h2><button class="btn" id="cls2" type="button">Done</button></div>
  <button id="insb" type="button"><span>Instructions</span><span style="font-size:22px;color:#9aa0a6">&#8250;</span></button>
- <p>Use the slider to adjust the size of the folded card if the size seems off.</p>
- <label>Card size: <span id="pv"></span></label><input type="range" id="pp" min="100" max="260" step="1">
  <label>Trigger card (tap one to use it)</label>
  <div id="lib"></div>
  <p id="libn"></p>
- <label class="btn" style="margin:0">Add a card back<input type="file" id="ta" accept="image/*" hidden></label><button class="btn" id="tfit">Adjust fit</button><button class="btn" id="tdel">Delete</button>
+ <label class="btn" style="margin:0">Add a card back<input type="file" id="ta" accept="image/*" hidden></label><button class="btn tg" id="tfh" type="button">Flip horizontally</button><button class="btn tg" id="tfv" type="button">Flip vertically</button><button class="btn" id="tfit">Adjust fit</button><button class="btn" id="tdel">Delete</button>
  <label>Trigger image number (1 to 52; 1 is the first image at the top)</label><input type='number' id='pos' min='1' max='52' style='width:80px'>
  <label>Trigger image caption</label><input type='text' id='cap'>
  <label style='margin-top:10px'>Trigger image source</label><input type='text' id='src'>
@@ -234,13 +232,11 @@ html.lt .l2,html.lt .l3{color:#0b57d0}
  <label>Secret countdown dots (one disappears each second)</label>
  <select id="dt" style="font-size:16px;padding:10px;border-radius:8px;background:#303134;color:#e8eaed;border:1px solid #3c4043"><option value="top">Top edge of screen</option><option value="bottom">Just above the bottom bar</option><option value="off">Off</option></select>
  <label><input type="checkbox" id="vn"> Card vanishes when you lift your finger (it doesn't move around)</label>
-  <label><input type="checkbox" id="ds"> Scroll the whole page (keeps the bottom of the screen filled; untick only if something looks wrong)</label>
  <label><input type="checkbox" id="sg"> Start the countdown by touching the trigger image and scrolling (tapping it still works too)</label>
- <label>Lower the fake bottom bar: <span id="blv"></span> px (the lowest it can go without being cut off)</label><input type="range" id="bl" min="0" max="120" step="1">
   <label>Tools</label><p id="ms"></p>
  <button class="btn tg" id="en" type="button">Enable motion</button><button class="btn tg" id="tst" type="button">Shake disconnect</button>
  <div id="tw"><label>Tilt sensitivity: <span id="tv"></span> (1 = gentle, 10 = strong)</label><input type="range" id="tl" min="1" max="10" step="1"></div>
- <div id="sw2"><label>Shake sensitivity: <span id="sv"></span> (1 = needs a hard shake, 10 = very light)</label><input type="range" id="sl" min="1" max="10" step="1"></div><label>Performance Modes</label><button class="btn tg" id="bw" type="button">Blow mode</button><button class="btn tg" id="cn" type="button">Card Name Mode</button><div id="bww" hidden><label>Flutters before it pops off</label><select id="bn" style="font-size:16px;padding:10px;border-radius:8px;background:#303134;color:#e8eaed;border:1px solid #3c4043"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select><label>Delay between flutters: <span id="bdv"></span> sec (one countdown dot per second)</label><input type="range" id="bd" min="1" max="15" step="1"><p>Each flutter lasts about 2 seconds. The last one comes loose.</p></div><div id="cnw" hidden><p>Card Name Mode: tap the search bar and type the card's name (any spelling, like "queen of hartz" or "jak spaids"). The bar only ever shows "what is my card?". Press search and the trigger image caption shows the corrected card name.</p><label><input type="checkbox" id="cns"> Add "Signed" before the card name</label></div><div style="text-align:center;margin:44px 0 24px"><button class="btn" id="rst" style="margin:0">Restart routine</button></div>
+ <div id="sw2"><label>Shake sensitivity: <span id="sv"></span> (1 = needs a hard shake, 10 = very light)</label><input type="range" id="sl" min="1" max="10" step="1"></div><label>Performance Modes</label><button class="btn tg" id="bw" type="button">Blow mode</button><button class="btn tg" id="cn" type="button">Card Name Mode</button><div id="bww" hidden><label>Flutters before it pops off</label><select id="bn" style="font-size:16px;padding:10px;border-radius:8px;background:#303134;color:#e8eaed;border:1px solid #3c4043"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select><label>Delay between flutters: <span id="bdv"></span> sec (one countdown dot per second)</label><input type="range" id="bd" min="1" max="15" step="1"><p>Each flutter lasts about 2 seconds. The last one comes loose.</p></div><div id="cnw" hidden><p>Card Name Mode: tap the search bar and type the card's name (any spelling, like "queen of hartz" or "jak spaids"). The bar only ever shows "what is my card?". Press search and the trigger image caption shows the corrected card name.</p><label><input type="checkbox" id="cns"> Add "Signed" before the card name</label></div><label style="margin-top:28px">Advanced Settings</label><p style="margin:2px 0 0;opacity:.7;font-size:14px">Only change these if the layout looks wrong on your phone.</p><p style="margin:14px 0 0">Use the slider to adjust the size of the folded card if the size seems off.</p><label>Card size: <span id="pv"></span></label><input type="range" id="pp" min="100" max="260" step="1"><label><input type="checkbox" id="ds"> Scroll the whole page (keeps the bottom of the screen filled; untick only if something looks wrong)</label><label>Lower the fake bottom bar: <span id="blv"></span> px (the lowest it can go without being cut off)</label><input type="range" id="bl" min="0" max="120" step="1"><div style="text-align:center;margin:44px 0 24px"><button class="btn" id="rst" style="margin:0">Restart routine</button></div>
  </div>
 <div id="ins" hidden>
  <div class="ph"><h2>Instructions</h2><button class="btn" id="insx" type="button">Back</button></div>
@@ -264,27 +260,27 @@ html.lt .l2,html.lt .l3{color:#0b57d0}
 <rect x='60' y='6' width='50' height='56' rx='7' fill='none' stroke='#8ab4f8' stroke-width='3'/><image href='card.png' x='67' y='12' width='36' height='44' preserveAspectRatio='xMidYMid meet'/>
 <text x='85' y='146' fill='#8ab4f8' font-size='10' text-anchor='middle' font-family='Arial'>tap this one</text></svg></div></div></div>
 
- <div class="st"><div class="n">5</div><div><b>Tap that picture.</b> After the delay you chose in Settings (the small dots count down one per second if you turned them on), the card lifts off the screen and grows to full size.</div></div>
+ <div class="st"><div class="n">5</div><div><b>Tap that picture.</b> After a short delay (5 seconds unless you change it in Settings), the card lifts off the screen and grows to full size. Small dots at the top edge of the screen count down one per second. In Settings you can move them just above the bottom bar or turn them off.<div class="tip" style="margin-top:10px">Prefer not to tap? Tick "Start the countdown by touching the trigger image and scrolling" in Settings. Then touching the picture and starting to scroll begins the countdown. Tapping still works too.</div></div></div>
 
- <div class="st"><div class="n">6</div><div><b>Move it around.</b> Drag it with your finger or flick it so it bounces around your screen. It automatically settles at a natural angle so you can slide it off the screen with your thumb or finger. If you choose "Card vanishes when you lift your finger" in Settings, it disappears the moment you let go.</div></div>
+ <div class="st"><div class="n">6</div><div><b>Move it around.</b> Drag it with your finger or flick it so it bounces around your screen. It automatically settles at a natural angle so you can slide it off the screen with your thumb or finger.<div class="tip" style="margin-top:10px">Prefer not to slide the card off? Tick "Card vanishes when you lift your finger" in Settings. Then the card disappears the moment you let go.</div></div></div>
 
- <div class="st"><div class="n">7</div><div><b>Phone Motions.</b> Turn on <span class="kbd">Enable motion</span> and <span class="kbd">Shake disconnect</span> in Settings, then shake the phone and the card falls away.</div></div>
+ <div class="st"><div class="n">7</div><div><b>Phone Motions (optional).</b> Turn on <span class="kbd">Enable motion</span> in Settings to allow the card to react to your phone's movement. Turn on <span class="kbd">Shake disconnect</span> and the card will pop out of its frame when you shake your phone.</div></div>
 
- <div class="st"><div class="n">8</div><div><b>Blow mode (optional).</b> Turn on <span class="kbd">Blow mode</span> in Settings. Tap the trigger image as usual. When the countdown ends, the card flutters and jitters like an old sticker coming unstuck in the wind. Between flutters the countdown dots run again. Settings lets you choose how many flutters there are (the last one comes loose) and how long the pause between them lasts. When it comes loose, it grows to full size and moves around the screen. From there it works as in steps 6 and 7.</div></div>
+ <div class="st"><div class="n">8</div><div><b>Blow mode (optional).</b> In Settings, under Performance Modes, turn on <span class="kbd">Blow mode</span> to give the illusion that you are causing the card to react to you blowing on your screen. Tap the trigger image as usual. When the countdown ends, the card flutters and jitters like an old sticker coming unstuck in the wind. Settings lets you choose up to 3 flutters (the last one always comes loose) and how long the pause between them lasts. Between flutters the countdown dots run again to help with your timing. When it comes loose, it grows to full size and moves around the screen. From there it works as in steps 6 and 7.</div></div>
 
- <div class="st"><div class="n">9</div><div><b>Card Name Mode (optional).</b> Turn on <span class="kbd">Card Name Mode</span> in Settings. Tap the search bar and type the name of the card, for example "queen of hearts". Spelling does not matter, and the app fixes it. The search bar only ever shows "what is my card?" as you type. The phrase keeps pace with your typing, so it is complete by the time you finish. Pressing search always completes it. Press search. When the photos appear, the caption under the trigger image shows the card you typed. A second switch in Settings adds the word "Signed" before the card name in that caption. Turn the mode off to search normally.</div></div>
+ <div class="st"><div class="n">9</div><div><b>Card Name Mode (optional).</b> In Settings, under Performance Modes, turn on <span class="kbd">Card Name Mode</span>. Tap the search bar and type the name of the card, for example "queen of hearts". Spelling does not matter, and the app fixes it. The search bar only ever shows "what is my card?" as you type. The phrase keeps pace with your typing, so it is complete by the time you finish. Pressing search always completes it. Press search. When the photos appear, the caption under the trigger image shows the card you typed. A second switch in Settings adds the word "Signed" before the card name in that caption. Turn the mode off to search normally.</div></div>
 
  <h3 style="margin-top:8px">Practice and reset</h3>
  <div class="st"><div class="n">&#8635;</div><div><b>Double tap anywhere</b> to put the folded card back on the page, ready to practice again, without starting the countdown.</div></div>
  <div class="st"><div class="n">&#8635;</div><div><b>Tap the Google logo</b> at the top to start over from the blank home page.</div></div>
 
- <div class="tip">Open Settings any time with the small gear in the top left corner of the home page. Use "Card size" if the card on screen does not match the real one.</div>
+ <div class="tip">Open Settings any time with the small gear in the top left corner of the home page. If the card on screen does not match the real one in size, use "Card size" under Advanced Settings at the bottom.</div>
 
  <hr>
  <h3>Part 2: Add it to your iPhone Home Screen</h3>
  <p class="sub">Do this once. The app then opens full screen, with no Safari bars, like a real app. Use Safari, not another browser.</p>
 
- <div class="st"><div class="n">1</div><div><b>Open the app's web address in Safari.</b> The address is the one you were given (it ends in .netlify.app).</div></div>
+ <div class="st"><div class="n">1</div><div><b>Open the app's web address in Safari.</b> The address is the one you were given.</div></div>
 
  <div class="st"><div class="n">2</div><div><b>Tap the Share button.</b> It is a square with an arrow pointing up, in Safari's bottom bar. If you do not see it, tap the three dots first.
  <div class="pic"><svg width='28' height='28' viewBox='0 0 24 24' fill='none' stroke='#8ab4f8' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M12 15V3M8 7l4-4 4 4'/><path d='M7 10H6a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2h-1'/></svg><span style="color:#9aa0a6">or</span><svg width='26' height='26' viewBox='0 0 24 24' fill='#e8eaed'><circle cx='5' cy='12' r='2'/><circle cx='12' cy='12' r='2'/><circle cx='19' cy='12' r='2'/></svg></div></div></div>
@@ -299,7 +295,7 @@ html.lt .l2,html.lt .l3{color:#0b57d0}
 
  <div class="st"><div class="n">6</div><div><b>Open it from your Home Screen.</b> Find the new <b>DG Card</b> icon and tap it. From now on always start the app from this icon.</div></div>
 
- <div class="tip">Tip: if the bottom of the screen looks cut off or the bar sits too high, open Settings and use "Lower the fake bottom bar" until it sits at the very bottom, and make sure "Scroll the whole page" is ticked.</div>
+ <div class="tip">Tip: if the bottom of the screen looks cut off or the bar sits too high, open Settings and scroll to Advanced Settings at the bottom. Use "Lower the fake bottom bar" until it sits at the very bottom, and make sure "Scroll the whole page" is ticked.</div>
  <div class="tip">Updated app? Delete the Home Screen icon and add it again so the phone loads the newest version.</div>
 </div>
 <script>
@@ -447,7 +443,8 @@ async function renderCard(art,fit,corner){const[pa,mm,li,ar]=await Promise.all([
  const cv=document.createElement('canvas');cv.width=TPL.w;cv.height=TPL.h;
  paint(cv.getContext('2d'),1,orient(ar,corner),fit||defFit(ar),pa,mm,li);
  try{return cv.toDataURL('image/png')}catch(e){return CARD}}
-async function buildCard(){CARDURL=S.art?await renderCard(S.art,S.fit,S.corner):CARD}
+function flipUrl(u){return new Promise(res=>{const im=new Image();im.onload=()=>{try{const cv=document.createElement('canvas');cv.width=im.naturalWidth;cv.height=im.naturalHeight;const x=cv.getContext('2d');x.translate(S.flipH?cv.width:0,S.flipV?cv.height:0);x.scale(S.flipH?-1:1,S.flipV?-1:1);x.drawImage(im,0,0);res(cv.toDataURL('image/png'))}catch(e){res(u)}};im.onerror=()=>res(u);im.src=u})}
+async function buildCard(){let u=S.art?await renderCard(S.art,S.fit,S.corner):CARD;if(S.flipH||S.flipV)u=await flipUrl(u);CARDURL=u}
 /* alignment editor */
 let ED=null;
 async function openEd(src,fit0,isNew,corner){
@@ -489,11 +486,16 @@ function edSnap(){const p=[...ED.ptr.values()].map(a=>({x:a.x,y:a.y}));ED.s0={fi
 async function refreshCard(){await buildCard();style();if(document.body.classList.contains('res')&&c.mode==='hidden')build3()}
 $('#ta').onchange=async e=>{const f=e.target.files[0];if(!f)return;if(S.cards.length>=6){alert('You already have 6 saved cards. Delete one first.');e.target.value='';return}
  const art=await shrink(f,900);e.target.value='';openEd(art,null,true,'tl')};
+function flipTf(){return 'scale('+(S.flipH?-1:1)+','+(S.flipV?-1:1)+')'}
+function flipUi(){document.querySelectorAll('#lib .lc.on img').forEach(i=>i.style.transform=flipTf());$('#tfh').classList.toggle('on',!!S.flipH);$('#tfv').classList.toggle('on',!!S.flipV)}
+$('#tfh').onclick=async()=>{S.flipH=!S.flipH;save();flipUi();await refreshCard()};
+$('#tfv').onclick=async()=>{S.flipV=!S.flipV;save();flipUi();await refreshCard()};
+flipUi();
 $('#tfit').onclick=()=>{const k=S.cards[S.sel];if(k)openEd(k.art,k.fit,false,k.corner)};
 $('#tdel').onclick=async()=>{if(S.sel<0||!confirm('Delete this saved card?'))return;S.cards.splice(S.sel,1);S.sel=-1;applySel();save();await refreshCard();refreshLib()};
 async function refreshLib(){const L=$('#lib');L.innerHTML='';
  const items=[{u:CARD,i:-1}].concat(await Promise.all(S.cards.map(async(k,i)=>({u:await renderCard(k.art,k.fit,k.corner),i}))));
- items.forEach(it=>{const b=document.createElement('button');b.className='lc'+(it.i===S.sel?' on':'');const im=document.createElement('img');im.src=it.u;b.appendChild(im);
+ items.forEach(it=>{const b=document.createElement('button');b.className='lc'+(it.i===S.sel?' on':'');const im=document.createElement('img');im.src=it.u;if(it.i===S.sel)im.style.transform=flipTf();b.appendChild(im);
   b.onclick=async()=>{S.sel=it.i;applySel();save();await refreshCard();refreshLib()};L.appendChild(b)});
  $('#libn').textContent=(S.sel<0?'Using the original red Bicycle card.':'Using saved card '+(S.sel+1)+' of '+S.cards.length+'.')+' ('+S.cards.length+' of 6 saved)';
  $('#tfit').disabled=S.sel<0;$('#tdel').disabled=S.sel<0}
