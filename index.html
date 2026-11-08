@@ -434,7 +434,7 @@ function style(){const[w,h]=dims();card.style.width=w+"px";card.style.height=h+"
  const ci=cimg();card.style.backgroundImage=ci?"url("+ci+")":"";card.classList.toggle("img",!!ci);card.classList.toggle("cut",ci===CARDURL)}
 function draw(){const[w,h]=dims();card.style.transform="translate("+(c.x-w/2)+"px,"+(c.y-h/2)+"px) rotate("+c.a+"rad) scale("+c.s+")"}
 async function perm(){if(!S.motion&&!S.shake&&!(S.mini&&S.mshake))return;const p=[];try{if(window.DeviceMotionEvent&&DeviceMotionEvent.requestPermission)p.push(DeviceMotionEvent.requestPermission());if(window.DeviceOrientationEvent&&DeviceOrientationEvent.requestPermission)p.push(DeviceOrientationEvent.requestPermission())}catch(e){}
- const r=await Promise.allSettled(p);permRes=r.length?r.map(x=>x.status==="fulfilled"?x.value:"error").join("/"):"no prompt needed";status();nshUp()}
+ const r=await Promise.allSettled(p);permRes=r.length?r.map(x=>x.status==="fulfilled"?x.value:"error").join("/"):"no prompt needed";status();nshUp();if(window.rsHome)rsHome()}
 function nshUp(){const w=$("#nsh");if(w)w.hidden=!(S.mini&&S.mshake&&/denied|error/.test(permRes))}
 function status(){const el=$("#ms");if(el)el.textContent=(!S.motion&&!S.shake)?"Motion: off (touch only)":"Motion: "+(mc>0?"working":"no data yet")+" (permission: "+permRes+")"}
 function lift(np){if(c.mode!=="hidden"||!thumb)return;if(!np)perm();const r=thumb.getBoundingClientRect();
@@ -773,8 +773,10 @@ style();refreshCard().then(refreshLib);
 </script>
 <script>
 (function(){function fix(){try{var d=document.documentElement,pr=document.createElement('div');pr.style.cssText='position:fixed;top:0;left:0;visibility:hidden;pointer-events:none;padding-top:env(safe-area-inset-top,0px)';document.body.appendChild(pr);var v=parseFloat(getComputedStyle(pr).paddingTop)||0;pr.remove();if(v<1&&navigator.standalone){d.style.setProperty('--sat',(Math.max(screen.width,screen.height)>=812?47:20)+'px')}else d.style.removeProperty('--sat')}catch(e){}}
-function all(){fix();[100,400,1200].forEach(function(t){setTimeout(fix,t)})}
-addEventListener('pageshow',all);addEventListener('resize',fix);addEventListener('orientationchange',all);document.addEventListener('visibilitychange',function(){if(!document.hidden)all()});
+function rs(){try{if(document.body.classList.contains('srch'))return;var a=typeof SC==='function'?SC():null;if(a&&a.scrollTop!==0)a.scrollTop=0;if(window.scrollY!==0)scrollTo(0,0)}catch(e){}}
+window.rsHome=function(){[0,150,500,1200,2500].forEach(function(t){setTimeout(rs,t)})};
+function all(){fix();rs();[100,400,1200,2500].forEach(function(t){setTimeout(function(){fix();rs()},t)})}
+addEventListener('pageshow',all);addEventListener('focus',window.rsHome);addEventListener('resize',fix);addEventListener('orientationchange',all);document.addEventListener('visibilitychange',function(){if(!document.hidden)all()});
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',all);else all()})();
 </script>
 </body></html>
