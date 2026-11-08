@@ -325,8 +325,8 @@ html.lt .l2,html.lt .l3{color:#0b57d0}
   <p class="hint">Use money instead of a card. Search for "money" or "coins" in place of "card".</p>
   <div id="mmw" hidden><label>What lifts off the screen?</label><div class="seg"><button type="button" id="mtb">$20 Bill</button><button type="button" id="mtc">Coin</button></div></div>
   <button class="btn tg opt" id="nm" type="button">Mini Card Mode</button>
-  <p class="hint">Search for "card" as usual. Shake the phone and every picture changes to the same card. Your trigger is a mini card.</p>
-  <div id="nmw" hidden><label class="row"><span>Change automatically after 10 seconds<small>Use this if you can't shake your phone. A shake still works too.</small></span><input type="checkbox" id="nma"></label><label for="nsz">Mini card size: <span id="nszv"></span>%</label><input type="range" id="nsz" min="60" max="110" step="1"><p class="hint">100% is the real size of a mini card. Make it smaller if it looks too big on your screen.</p></div>
+  <p class="hint">Search for "card" as usual. After a few seconds, every picture changes to the same card. Your trigger is a mini card.</p>
+  <div id="nmw" hidden><label class="row"><span>Timer Change<small>The pictures change by themselves after the search results appear.</small></span><input type="checkbox" id="nma"></label><div id="nsecw"><label for="nsec">Time before change: <span id="nsecv"></span> seconds</label><input type="range" id="nsec" min="3" max="30" step="1"></div><label class="row"><span>Shake Change<small>Shake your phone to change the pictures. Needs motion access.</small></span><input type="checkbox" id="nms"></label><label for="nsz">Mini card size: <span id="nszv"></span>%</label><input type="range" id="nsz" min="60" max="110" step="1"><p class="hint">100% is the real size of a mini card. Make it smaller if it looks too big on your screen.</p></div>
  </div>
 
  <div class="sec" id="advs">
@@ -415,9 +415,9 @@ const MBILL="money-bill.png",MASP=1796/1620,MH=1.595;
 const MINIU="mini-card.png",SPD=[[619, 323], [399, 501], [470, 640], [379, 527], [480, 640], [447, 447], [554, 554], [194, 259], [352, 528], [450, 640], [350, 350], [447, 447], [365, 547], [447, 447], [547, 365], [225, 225], [638, 480], [259, 194], [438, 456], [259, 194], [447, 447], [447, 447], [510, 340], [225, 225], [225, 225], [359, 640], [502, 610], [267, 400], [554, 554], [256, 256], [528, 378], [335, 597], [480, 640], [287, 400], [321, 640], [603, 331], [400, 400], [225, 225], [167, 303], [300, 300], [225, 225], [228, 221], [383, 522], [474, 640], [640, 427], [547, 365], [120, 179], [447, 447], [640, 452]];
 const MSEL=()=>S.mtype==="coin"?{u:"money-coin.png",asp:1,h:1.205}:{u:MBILL,asp:MASP,h:MH};
 const LST=()=>S.money?MPH:PH,PDIR=()=>S.money?"m/":"p/",TILEH=()=>S.money?1.15:1.49,RXF=()=>S.money?/\b(money|coins?)\b/i:/\bcards?\b/i,CAPT=()=>S.mini?S.ncap:S.money?(S.mtype==="coin"?S.ccap:S.mcap):S.cap,SRCT=()=>S.mini?S.nsrc:S.money?(S.mtype==="coin"?S.csrc:S.msrc):S.src;
-const S={useCut:true,ppi:160,swap:false,deck:"#b3202a",img:null,pos:0,pics:[],cap:"Folded Playing Card",src:"Pinterest",mcap:"Folded $20 Bill",msrc:"Pinterest",mtype:"bill",nsz:90,mauto:false,ncap:"Mini Playing Card",nsrc:"Pinterest",ccap:"Old Half Dollar",csrc:"Pinterest",motion:false,shake:false,delay:5};
+const S={useCut:true,ppi:160,swap:false,deck:"#b3202a",img:null,pos:0,pics:[],cap:"Folded Playing Card",src:"Pinterest",mcap:"Folded $20 Bill",msrc:"Pinterest",mtype:"bill",nsz:90,mauto:true,msec:10,mshake:false,ncap:"Mini Playing Card",nsrc:"Pinterest",ccap:"Old Half Dollar",csrc:"Pinterest",motion:false,shake:false,delay:5};
 try{const o=JSON.parse(localStorage.getItem("fc2")||"{}");if(o.cap===undefined)delete o.pos;Object.assign(S,o)}catch(e){}
-S.useCut=true;S.img=null;if(S.mcap==="Folded Dollar Bill")S.mcap="Folded $20 Bill";if(S.ccap==="1918 Walking Liberty Half Dollar")S.ccap="Old Half Dollar";if(S.cap==="Red Playing Card")S.cap="Folded Playing Card";if(S.src==="Folded Card")S.src="Pinterest";if(!S.mv2){S.mauto=false;S.mv2=1}
+S.useCut=true;S.img=null;if(S.mcap==="Folded Dollar Bill")S.mcap="Folded $20 Bill";if(S.ccap==="1918 Walking Liberty Half Dollar")S.ccap="Old Half Dollar";if(S.cap==="Red Playing Card")S.cap="Folded Playing Card";if(S.src==="Folded Card")S.src="Pinterest";if(!S.mv3){S.mauto=true;S.mshake=false;S.msec=10;S.mv3=1}if(S.mauto&&S.mshake)S.mauto=false;
 if(!Array.isArray(S.cards)){S.cards=[];S.sel=-1;if(S.art){S.cards.push({art:S.art,fit:S.fit||null,corner:S.corner||'tl'});S.sel=0}}
 if(typeof S.sel!=="number"||S.sel>=S.cards.length)S.sel=-1;
 const applySel=()=>{const k=S.cards[S.sel];S.art=k?k.art:null;S.fit=k?k.fit:null;S.corner=k?k.corner:'tl'};applySel();
@@ -433,7 +433,7 @@ function mk(w,h,col,r,img,bd){const e=document.createElement("div");e.className=
 function style(){const[w,h]=dims();card.style.width=w+"px";card.style.height=h+"px";card.style.setProperty("--c",S.deck);
  const ci=cimg();card.style.backgroundImage=ci?"url("+ci+")":"";card.classList.toggle("img",!!ci);card.classList.toggle("cut",ci===CARDURL)}
 function draw(){const[w,h]=dims();card.style.transform="translate("+(c.x-w/2)+"px,"+(c.y-h/2)+"px) rotate("+c.a+"rad) scale("+c.s+")"}
-async function perm(){if(!S.motion&&!S.shake&&!S.mini)return;const p=[];try{if(window.DeviceMotionEvent&&DeviceMotionEvent.requestPermission)p.push(DeviceMotionEvent.requestPermission());if(window.DeviceOrientationEvent&&DeviceOrientationEvent.requestPermission)p.push(DeviceOrientationEvent.requestPermission())}catch(e){}
+async function perm(){if(!S.motion&&!S.shake&&!(S.mini&&S.mshake))return;const p=[];try{if(window.DeviceMotionEvent&&DeviceMotionEvent.requestPermission)p.push(DeviceMotionEvent.requestPermission());if(window.DeviceOrientationEvent&&DeviceOrientationEvent.requestPermission)p.push(DeviceOrientationEvent.requestPermission())}catch(e){}
  const r=await Promise.allSettled(p);permRes=r.length?r.map(x=>x.status==="fulfilled"?x.value:"error").join("/"):"no prompt needed";status()}
 function status(){const el=$("#ms");if(el)el.textContent=(!S.motion&&!S.shake)?"Motion: off (touch only)":"Motion: "+(mc>0?"working":"no data yet")+" (permission: "+permRes+")"}
 function lift(np){if(c.mode!=="hidden"||!thumb)return;if(!np)perm();const r=thumb.getBoundingClientRect();
@@ -441,12 +441,12 @@ function lift(np){if(c.mode!=="hidden"||!thumb)return;if(!np)perm();const r=thum
  thumb.style.visibility="hidden";lockS(true);card.style.display="block";draw()}
 function release(){if(c.mode!=="docked"&&c.mode!=="hold")return;c.mode="loose";c.vy=-260;c.vx=(Math.random()-.5)*260;c.w=(Math.random()-.5)*5}
 addEventListener("deviceorientation",e=>{if(!S.motion||e.beta==null)return;beta=e.beta*Math.PI/180;if(mc===0){const ga=e.gamma*Math.PI/180;g.x=Math.cos(beta)*Math.sin(ga);g.y=Math.sin(beta)}});
-addEventListener("devicemotion",e=>{if(!S.motion&&!S.shake&&!S.mini)return;const a=e.accelerationIncludingGravity;if(!a||a.x==null)return;mc++;
+addEventListener("devicemotion",e=>{if(!S.motion&&!S.shake&&!(S.mini&&S.mshake))return;const a=e.accelerationIncludingGravity;if(!a||a.x==null)return;mc++;
  if(S.motion){if(Math.abs(a.y)>6&&Math.abs(Math.sin(beta))>.6)sgn=Math.sign(a.y)*Math.sign(Math.sin(beta));
  g.x+=((-a.x*sgn/9.81)-g.x)*.35;g.y+=((a.y*sgn/9.81)-g.y)*.35;
  const l=e.acceleration;if(l&&l.x!=null){lin.x=-l.x*sgn;lin.y=l.y*sgn}}
  if(S.shake){const m=Math.hypot(a.x,a.y,a.z),n=Date.now();if(Math.abs(m-9.81)>22-1.5*(+S.shake_s||7)&&n-lastShake>800){lastShake=n;release()}}
- if(S.mini&&!miniDone&&c.mode==='hidden'&&document.body.classList.contains('srch')){const m=Math.hypot(a.x,a.y,a.z),n=Date.now();if(Math.abs(m-9.81)>22-1.5*(+S.shake_s||7)&&n-lastShake>800){lastShake=n;miniSwap()}}});
+ if(S.mini&&S.mshake&&!miniDone&&c.mode==='hidden'&&document.body.classList.contains('srch')){const m=Math.hypot(a.x,a.y,a.z),n=Date.now();if(Math.abs(m-9.81)>22-1.5*(+S.shake_s||7)&&n-lastShake>800){lastShake=n;miniSwap()}}});
 
 document.addEventListener('beforeinput',e=>{
  if(!(S.motion||S.shake||S.mini)||S.cn||e.defaultPrevented||e.isComposing)return;
@@ -466,10 +466,10 @@ function miniPick(ar){if(!miniPool.length)miniPool=SPD.map((d,i)=>i);let bi=0,bd
 function miniApply(){document.querySelectorAll('#c0>div,#c1>div').forEach(t=>{if(t.onclick||t.dataset.s)return;const im=t.querySelector('.im'),g=im&&im.querySelector('img');if(!g)return;const ar=im.offsetHeight/Math.max(1,im.offsetWidth);t.dataset.s='1';const nu='s/'+String(miniPick(ar)).padStart(2,'0')+'.jpg';const o=new Image();o.onload=()=>{const x=g.cloneNode(false);x.removeAttribute('id');x.src=nu;x.style.transition='opacity .8s ease';x.style.opacity=0;x.style.position='absolute';x.style.left=g.offsetLeft+'px';x.style.top=g.offsetTop+'px';x.style.width=g.offsetWidth+'px';x.style.height=g.offsetHeight+'px';if(getComputedStyle(im).position==='static')im.style.position='relative';g.parentNode.insertBefore(x,g.nextSibling);void x.offsetWidth;setTimeout(()=>{x.style.opacity=1},Math.random()*250);setTimeout(()=>{g.src=nu;x.remove()},1250)};o.src=nu;const cb=t.querySelector('.cp b'),ci=t.querySelector('.cp i');if(cb){cb.style.transition=ci&&(ci.style.transition='opacity .35s');cb.style.transition='opacity .35s';cb.style.opacity=0;if(ci)ci.style.opacity=0;const tx=MCAP[miniK%MCAP.length],sx=MSRC[(miniK*3+1)%MSRC.length];miniK++;setTimeout(()=>{cb.textContent=tx;if(ci)ci.textContent=sx;cb.style.opacity=1;if(ci)ci.style.opacity=1},350)}})}
 function miniSwap(){if(miniDone)return;miniDone=true;miniPool=[];miniK=Math.floor(Math.random()*MCAP.length);miniApply();miniStop()}
 const _am=addMore;addMore=function(){_am();if(S.mini&&miniDone)miniApply()};
-document.addEventListener('click',()=>{if(S.mini&&!window._pa){window._pa=1;perm()}},true);
+document.addEventListener('click',()=>{if(S.mini&&S.mshake&&!window._pa){window._pa=1;perm()}},true);
 let miniTm=null;
 function miniStop(){if(miniTm){clearInterval(miniTm);miniTm=null;const cd=$('#cd');if(cd&&!cdIv&&!pend)cd.hidden=true}}
-function miniTimer(){miniStop();if(!S.mini||!S.mauto||miniDone)return;let el=0;flDots(true,10);miniTm=setInterval(()=>{if(!S.mini||miniDone||c.mode!=='hidden'||pend||cdIv){clearInterval(miniTm);miniTm=null;return}el++;[...$('#cd').children].forEach((d,i)=>{d.style.opacity=i<el?0:''});if(el>=10){clearInterval(miniTm);miniTm=null;$('#cd').hidden=true;miniSwap()}},1000)}
+function miniTimer(){miniStop();if(!S.mini||!S.mauto||miniDone)return;let el=0;const N=S.msec||10;flDots(true,N);miniTm=setInterval(()=>{if(!S.mini||miniDone||c.mode!=='hidden'||pend||cdIv){clearInterval(miniTm);miniTm=null;return}el++;[...$('#cd').children].forEach((d,i)=>{d.style.opacity=i<el?0:''});if(el>=N){clearInterval(miniTm);miniTm=null;$('#cd').hidden=true;miniSwap()}},1000)}
 const _b3=build3;build3=function(){miniStop();_b3();setTimeout(miniTimer,50)};
 let last=0,TA=-.17;
 function tick(t){const dt=Math.min(.033,(t-last)/1000||.016);last=t;
@@ -700,13 +700,13 @@ function cnUi(){$('#cn').classList.toggle('on',!!S.cn);$('#cns').checked=!!S.cns
 
 const CHE=[...document.querySelectorAll('.ch')].find(e=>e.textContent.includes('Card box')),CHC=CHE?CHE.innerHTML:'';
 const CHM=['Cash:00','Coins:35','Euro:10','Dollar bills:07','Old money:33'].map(x=>{const[n,i]=x.split(':');return "<span><i class='th' style='background:#333 url(m/"+i+".jpg) center/cover'></i>"+n+"</span>"}).join('');
-function mUi(){document.querySelectorAll('[data-t]').forEach(e=>{e.textContent=e.dataset.t.split('|')[S.money?1:0]});$('#trs').classList.toggle('off',!!(S.money||S.mini));$('#trs .ma').textContent=S.mini?' (Mini Card Mode Active)':' (Money Mode Active)';$('#nm').classList.toggle('on',!!S.mini);$('#nmw').hidden=!S.mini;$('#nma').checked=!!S.mauto;$('#nsz').value=S.nsz||90;$('#nszv').textContent=S.nsz||90;if(S.mini)miniPre();$('#mmw').hidden=!S.money;$('#mtb').classList.toggle('on',S.mtype!=='coin');$('#mtc').classList.toggle('on',S.mtype==='coin');if(CHE)CHE.innerHTML=S.money?CHM:CHC;$('#mm').classList.toggle('on',!!S.money);$('#cap').value=CAPT();$('#src').value=SRCT();
+function mUi(){document.querySelectorAll('[data-t]').forEach(e=>{e.textContent=e.dataset.t.split('|')[S.money?1:0]});$('#trs').classList.toggle('off',!!(S.money||S.mini));$('#trs .ma').textContent=S.mini?' (Mini Card Mode Active)':' (Money Mode Active)';$('#nm').classList.toggle('on',!!S.mini);$('#nmw').hidden=!S.mini;$('#nma').checked=!!S.mauto;$('#nms').checked=!!S.mshake;$('#nsec').value=S.msec||10;$('#nsecv').textContent=S.msec||10;$('#nsecw').hidden=!S.mauto;$('#nsz').value=S.nsz||90;$('#nszv').textContent=S.nsz||90;if(S.mini)miniPre();$('#mmw').hidden=!S.money;$('#mtb').classList.toggle('on',S.mtype!=='coin');$('#mtc').classList.toggle('on',S.mtype==='coin');if(CHE)CHE.innerHTML=S.money?CHM:CHC;$('#mm').classList.toggle('on',!!S.money);$('#cap').value=CAPT();$('#src').value=SRCT();
  ['#lib','#libn'].forEach(x=>$(x).hidden=!!(S.money||S.mini));const ac=document.querySelector('#panel .acts');if(ac)ac.hidden=!!(S.money||S.mini);
  }
 async function mRef(){save();mUi();cnUi();$('#c0').innerHTML='';$('#c1').innerHTML='';thumb=null;await buildCard();style();if(document.body.classList.contains('srch'))go()}
 $('#mm').onclick=()=>{S.money=!S.money;if(S.money&&S.cn){S.cn=false;CN.secret='';CN.d=0;CN.cap='';cnUi()}if(S.money)S.mini=false;mRef()};
 $('#nsz').oninput=e=>{S.nsz=+e.target.value;$('#nszv').textContent=S.nsz;style();save()};
-$('#nma').onchange=e=>{S.mauto=e.target.checked;save()};
+$('#nma').onchange=e=>{S.mauto=e.target.checked;if(S.mauto){S.mshake=false;$('#nms').checked=false}$('#nsecw').hidden=!S.mauto;save();miniTimer()};$('#nms').onchange=e=>{S.mshake=e.target.checked;if(S.mshake){S.mauto=false;$('#nma').checked=false;$('#nsecw').hidden=true}save();miniTimer();if(S.mshake)perm()};$('#nsec').oninput=e=>{S.msec=+e.target.value;$('#nsecv').textContent=S.msec;save()};$('#nsec').onchange=()=>miniTimer();
 $('#nm').onclick=()=>{S.mini=!S.mini;if(S.mini){S.money=false;if(S.cn){S.cn=false;CN.secret='';CN.d=0;CN.cap='';cnUi()}window._pa=1;perm()}mRef()};
 $('#mtb').onclick=()=>{S.mtype='bill';mRef()};$('#mtc').onclick=()=>{S.mtype='coin';mRef()};
 mUi();
