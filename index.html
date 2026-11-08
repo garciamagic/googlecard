@@ -343,7 +343,7 @@ html.lt .l2,html.lt .l3{color:#0b57d0}
   </div>
  </div>
 
- <div style="text-align:center;margin:30px 0 24px"><button class="btn" id="rst" style="margin:0">Restart routine</button></div>
+ <div style="text-align:center;margin:30px 0 24px"><button class="btn" id="rst" style="margin:0">Restart routine</button><p class="hint" style="margin:14px 0 0;opacity:.6">Version 8</p></div>
  </div>
 <div id="ins" hidden>
  <div class="ph"><h2>Instructions</h2><button class="btn" id="insx" type="button">Back</button></div>
@@ -779,4 +779,4 @@ function all(){fix();rs();[100,400,1200,2500].forEach(function(t){setTimeout(fun
 addEventListener('pageshow',all);addEventListener('focus',window.rsHome);addEventListener('resize',fix);addEventListener('orientationchange',all);document.addEventListener('visibilitychange',function(){if(!document.hidden)all()});
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',all);else all()})();
 </script>
-</body></html>
+<script>if('serviceWorker' in navigator&&location.protocol==='https:'||location.hostname==='localhost'){addEventListener('load',function(){try{navigator.serviceWorker.register('sw.js').catch(function(){})}catch(e){}})}</script></body></html>
