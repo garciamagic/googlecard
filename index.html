@@ -208,6 +208,11 @@ html.lt .l2,html.lt .l3{color:#0b57d0}
 #advh .chev{font-size:26px;color:#9aa0a6;transition:transform .2s;margin-right:2px}
 #advh[aria-expanded=true] .chev{transform:rotate(90deg)}
 #advs:has(#advb[hidden]){padding-bottom:2px}
+#panel [hidden]{display:none!important}
+
+.seg{display:flex;gap:8px}#panel .seg button{flex:1;padding:12px;border-radius:10px;border:2px solid #3c4043;background:#3a3b3f;color:#fff;font-size:16px;font-weight:600}#panel .seg button.on{border-color:#8ab4f8;background:#2f4a7a}
+#trs.off>h3{opacity:.35;margin:14px 0}#trs.off>*:not(h3){display:none!important}#trs.off{padding-bottom:4px}
+#trs .ma{display:none;font-size:13px;font-weight:600;margin-left:8px;white-space:nowrap}#trs.off .ma{display:inline}
 </style><script>try{if(JSON.parse(localStorage.getItem('fc2')||'{}').docscroll!==false)document.documentElement.classList.add('ds')}catch(e){}try{if(JSON.parse(localStorage.getItem('fc2')||'{}').light)document.documentElement.classList.add('lt')}catch(e){}try{if(navigator.standalone||matchMedia('(display-mode: standalone)').matches)document.documentElement.classList.add('sa')}catch(e){}</script></head>
 <body>
 <div id="app">
@@ -252,8 +257,8 @@ html.lt .l2,html.lt .l3{color:#0b57d0}
  <div class="ph"><h2>Settings</h2><button class="btn" id="cls2" type="button">Done</button></div>
  <button id="insb" type="button"><span><b>Instructions</b><small>Step by step, with pictures</small></span><span style="font-size:24px;color:#9aa0a6">&#8250;</span></button>
 
- <div class="sec">
-  <h3>Your Trigger Card</h3>
+ <div class="sec" id="trs">
+  <h3>Your Trigger Card<span class="ma"> (Money Mode Active)</span></h3>
   <p class="d">This is the card that lifts off the screen when you tap it. Select a card below to use it.</p>
   <div id="lib"></div>
   <p id="libn" class="hint"></p>
@@ -264,8 +269,8 @@ html.lt .l2,html.lt .l3{color:#0b57d0}
  </div>
 
  <div class="sec">
-  <h3>Trigger Card Location</h3>
-  <p class="d">This is the location of your trigger card in your photo grid.</p>
+  <h3 data-t="Trigger Card Location|Trigger Image Location">Trigger Card Location</h3>
+  <p class="d" data-t="This is the location of your trigger card in your photo grid.|This is the location of your trigger image in your photo grid.">This is the location of your trigger card in your photo grid.</p>
   <label for="pos">Which picture is it?</label>
   <input type='number' id='pos' min='1' max='52' style='width:90px'>
   <p class="hint">1 is the first picture at the top. The highest is 52.</p>
@@ -279,22 +284,22 @@ html.lt .l2,html.lt .l3{color:#0b57d0}
  <div class="sec">
   <h3>Timing</h3>
   <p class="d">What happens after you tap the trigger picture.</p>
-  <label for="dl">Wait before the card lifts off: <span id="dv"></span> sec</label>
+  <label for="dl"><span data-t="Wait before the card lifts off|Wait before the money lifts off">Wait before the card lifts off</span>: <span id="dv"></span> sec</label>
   <input type="range" id="dl" min="0" max="30" step="1">
   <label for="dt">Countdown dots</label>
   <select id="dt" style="font-size:16px;padding:10px;border-radius:8px;background:#303134;color:#e8eaed;border:1px solid #3c4043;width:100%"><option value="top">Top edge of screen</option><option value="bottom">Just above the bottom bar</option><option value="off">Off</option></select>
   <p class="hint">Small dots that count down. One disappears each second.</p>
   <label class="row"><span>Start by touching and scrolling<small>Touch the picture and start scrolling to begin. Tapping it still works too.</small></span><input type="checkbox" id="sg"></label>
-  <label class="row"><span>Card vanishes when you let go<small>The card disappears when you lift your finger, instead of moving around.</small></span><input type="checkbox" id="vn"></label>
+  <label class="row"><span><span data-t="Card vanishes when you let go|Money vanishes when you let go">Card vanishes when you let go</span><small><span data-t="The card disappears when you lift your finger, instead of moving around.|The money disappears when you lift your finger, instead of moving around.">The card disappears when you lift your finger, instead of moving around.</span></small></span><input type="checkbox" id="vn"></label>
  </div>
 
  <div class="sec">
   <h3>Phone Movement</h3>
-  <p class="d">Let the card react when you move or shake your phone.</p>
+  <p class="d" data-t="Let the card react when you move or shake your phone.|Let the money react when you move or shake your phone.">Let the card react when you move or shake your phone.</p>
   <p id="ms" class="hint"></p>
-  <button class="btn tg opt" id="en" type="button">Card reacts to phone tilt</button>
+  <button class="btn tg opt" id="en" type="button" data-t="Card reacts to phone tilt|Money reacts to phone tilt">Card reacts to phone tilt</button>
   <div id="tw"><label for="tl">Tilt strength: <span id="tv"></span></label><input type="range" id="tl" min="1" max="10" step="1"><p class="hint">1 is gentle. 10 is strong.</p></div>
-  <button class="btn tg opt" id="tst" type="button">Shake to let the card fall</button>
+  <button class="btn tg opt" id="tst" type="button" data-t="Shake to let the card fall|Shake to let the money fall">Shake to let the card fall</button>
   <div id="sw2"><label for="sl">Shake strength: <span id="sv"></span></label><input type="range" id="sl" min="1" max="10" step="1"><p class="hint">1 needs a hard shake. 10 needs only a light one.</p></div>
  </div>
 
@@ -316,15 +321,18 @@ html.lt .l2,html.lt .l3{color:#0b57d0}
    <p class="d">Spelling does not matter, for example "queen of hartz". When you press search, the caption under the trigger picture shows the corrected name.</p>
    <label class="row"><span>Add "Signed" before the name</span><input type="checkbox" id="cns"></label>
   </div>
+  <button class="btn tg opt" id="mm" type="button">Money Mode</button>
+  <p class="hint">Use money instead of a card. Search for "money" or "coins" in place of "card".</p>
+  <div id="mmw" hidden><label>What lifts off the screen?</label><div class="seg"><button type="button" id="mtb">$20 Bill</button><button type="button" id="mtc">Coin</button></div></div>
  </div>
 
  <div class="sec" id="advs">
   <button type="button" id="advh" aria-expanded="false"><h3>Advanced Settings</h3><span class="chev">&#8250;</span></button>
   <div id="advb" hidden>
   <p class="d">Only change these if something looks wrong on your phone.</p>
-  <label for="pp">Card size: <span id="pv"></span></label>
+  <label for="pp"><span data-t="Card size|Money size">Card size</span>: <span id="pv"></span></label>
   <input type="range" id="pp" min="100" max="260" step="1">
-  <p class="hint">Make the card bigger or smaller so it matches the real one.</p>
+  <p class="hint"><span data-t="Make the card bigger or smaller so it matches the real one.|Make the money bigger or smaller so it matches the real one.">Make the card bigger or smaller so it matches the real one.</span></p>
   <label class="row"><span>Scroll the whole page<small>Keeps the bottom of the screen filled. Turn off only if something looks wrong.</small></span><input type="checkbox" id="ds"></label>
   <label for="bl">Lower the bottom bar: <span id="blv"></span> px</label>
   <input type="range" id="bl" min="0" max="120" step="1">
@@ -365,6 +373,7 @@ html.lt .l2,html.lt .l3{color:#0b57d0}
  <div class="st"><div class="n">8</div><div><b>Blow mode (optional).</b> In Settings, under Performance Modes, turn on <span class="kbd">Blow mode</span> to give the illusion that you are causing the card to react to you blowing on your screen. Tap the trigger image as usual. When the countdown ends, the card flutters and jitters like an old sticker coming unstuck in the wind. Settings lets you choose up to 3 flutters (the last one always comes loose) and how long the pause between them lasts. Between flutters the countdown dots run again to help with your timing. When it comes loose, it grows to full size and moves around the screen. From there it works as in steps 6 and 7.</div></div>
 
  <div class="st"><div class="n">9</div><div><b>Card Name Mode (optional).</b> In Settings, under Performance Modes, turn on <span class="kbd">Card Name Mode</span>. Tap the search bar and type the name of the card, for example "queen of hearts". Spelling does not matter, and the app fixes it. The search bar only ever shows "what is my card?" as you type. The phrase keeps pace with your typing, so it is complete by the time you finish. Pressing search always completes it. Press search. When the photos appear, the caption under the trigger image shows the card you typed. A second switch in Settings adds the word "Signed" before the card name in that caption. Turn the mode off to search normally.</div></div>
+<div class="st"><div class="n">10</div><div><b>Money Mode (optional).</b> In Settings, under Performance Modes, turn on <span class="kbd">Money Mode</span>. Now search for <span class="kbd">money</span> or <span class="kbd">coins</span> instead of "card". The grid fills with money pictures, and your trigger picture is a folded $20 bill or a coin, whichever you pick in Settings. Everything else works the same way. Turn Money Mode off to go back to cards. Money Mode and Card Name Mode can't be on at the same time.</div></div>
 
  <h3 style="margin-top:8px">Practice and reset</h3>
  <div class="st"><div class="n">&#8635;</div><div><b>Double tap anywhere</b> to put the folded card back on the page, ready to practice again, without starting the countdown.</div></div>
@@ -397,9 +406,13 @@ html.lt .l2,html.lt .l3{color:#0b57d0}
 <script>
 const $=s=>document.querySelector(s);
 const CARD="card.png",ASP=474/640;let CARDURL=CARD;
-const S={useCut:true,ppi:160,swap:false,deck:"#b3202a",img:null,pos:0,pics:[],cap:"Folded Playing Card",src:"Pinterest",motion:false,shake:false,delay:5};
+const MPH=[[0, "Close up of 100 dollar bills spread out", "Shutterstock", 554, 554], [1, "Stacks of cash bundled in bank bands", "Alamy", 663, 461], [2, "Euro banknotes and coins on a table", "iStock", 275, 183], [3, "Money definition: a system of value", "Investopedia", 678, 452], [4, "Piggy bank with a stack of coins", "Pinterest", 554, 554], [5, "Close up of an eye on a 100 dollar bill", "Dreamstime", 738, 297], [6, "Australian 20 cent coin in a hand", "Flickr", 546, 366], [7, "US dollar bills 1, 5, 10 and 20 side by side", "Pinterest", 176, 287], [8, "Money bag with dollar sign on beige", "Shutterstock", 738, 312], [9, "Illustration of gold dollar coins", "Behance", 678, 452], [10, "Euro banknotes 20, 50, 100, 200 and 500", "Wikipedia", 389, 349], [11, "Calculator on top of hundred dollar bills", "iStock", 678, 452], [12, "Hands holding a jar full of coins", "Alamy", 547, 365], [13, "Dollar bills floating in golden light", "Adobe Stock", 384, 688], [14, "Illustration of man climbing coin stacks", "Freepik", 672, 456], [15, "Treasure chest full of gold coins", "Pinterest", 320, 213], [16, "One dollar bill burning", "Getty Images", 597, 335], [17, "Old pennies and coins on dark surface", "Reddit", 550, 367], [18, "Dollar, euro and pound currency symbols", "Shutterstock", 678, 452], [19, "Rolled hundred dollar bills with red bands", "Pinterest", 597, 335], [20, "Hourglass and growing stacks of coins", "iStock", 674, 296], [21, "Money tree plant in a blue pot", "Etsy", 504, 607], [22, "Plant growing from a jar of coins", "Forbes", 738, 387], [23, "Stack of Brazilian real banknotes", "Alamy", 479, 640], [24, "Money", "Money.com", 400, 400], [25, "Colorful world banknotes collage", "Pinterest", 547, 365], [26, "Pile of money bundles background", "Dreamstime", 408, 490], [27, "Money: A Story of Humanity by David McWilliams", "Amazon.com", 357, 560], [28, "Close up of 50 euro banknotes", "Shutterstock", 678, 452], [29, "US dollar bills fanned out on white", "Pinterest", 554, 554], [30, "Bitcoin coins on top of dollar bills", "Forbes", 638, 480], [31, "Scattered hundred dollar bills", "Alamy", 547, 365], [32, "Cash money raining from the sky", "Pinterest", 576, 347], [33, "Old Canadian 25 cent bills", "eBay", 447, 447], [34, "Gold coins and foreign banknotes", "Alamy", 678, 452], [35, "Collection of old US silver coins", "eBay", 678, 452], [36, "Antique US coins collection on white", "Wikipedia", 447, 447], [37, "Ancient Roman gold coins, front and back", "Wikimedia Commons", 347, 576], [38, "Pile of ancient silver and gold coins", "Pinterest", 691, 444], [39, "Table of coins at a coin show", "Flickr", 480, 640], [40, "Ancient bronze coin close up", "Reddit", 678, 452], [41, "Mixed old world coins on a table", "Pinterest", 554, 554], [42, "1909 Lincoln wheat cent penny", "Reddit", 738, 387], [43, "Holding an old coin between fingers", "Flickr", 415, 737], [44, "Philippine silver coins on dark background", "Etsy", 335, 597], [45, "Victorian silver coin close up", "eBay", 548, 559], [46, "Standing Liberty quarter dated 1927", "Reddit", 480, 640], [47, "Old US paper money, 100, 5 and 2 dollar bills", "eBay", 480, 640], [48, "Faded dollar bills background texture", "Pinterest", 380, 526], [49, "Presidents faces on dollar bills", "Pinterest", 225, 225], [50, "1935 silver certificate one dollar bill", "eBay", 387, 516], [51, "Coin collection with a magnifying glass", "Pinterest", 700, 438], [52, "Old Irish one pound note", "Wikipedia", 656, 304]];
+const MBILL="money-bill.png",MASP=1796/1620,MH=1.595;
+const MSEL=()=>S.mtype==="coin"?{u:"money-coin.png",asp:1,h:1.205}:{u:MBILL,asp:MASP,h:MH};
+const LST=()=>S.money?MPH:PH,PDIR=()=>S.money?"m/":"p/",TILEH=()=>S.money?1.15:1.49,RXF=()=>S.money?/\b(money|coins?)\b/i:/\bcards?\b/i,CAPT=()=>S.money?(S.mtype==="coin"?S.ccap:S.mcap):S.cap,SRCT=()=>S.money?(S.mtype==="coin"?S.csrc:S.msrc):S.src;
+const S={useCut:true,ppi:160,swap:false,deck:"#b3202a",img:null,pos:0,pics:[],cap:"Folded Playing Card",src:"Pinterest",mcap:"Folded $20 Bill",msrc:"Pinterest",mtype:"bill",ccap:"Old Half Dollar",csrc:"Pinterest",motion:false,shake:false,delay:5};
 try{const o=JSON.parse(localStorage.getItem("fc2")||"{}");if(o.cap===undefined)delete o.pos;Object.assign(S,o)}catch(e){}
-S.useCut=true;S.img=null;if(S.cap==="Red Playing Card")S.cap="Folded Playing Card";if(S.src==="Folded Card")S.src="Pinterest";
+S.useCut=true;S.img=null;if(S.mcap==="Folded Dollar Bill")S.mcap="Folded $20 Bill";if(S.ccap==="1918 Walking Liberty Half Dollar")S.ccap="Old Half Dollar";if(S.cap==="Red Playing Card")S.cap="Folded Playing Card";if(S.src==="Folded Card")S.src="Pinterest";
 if(!Array.isArray(S.cards)){S.cards=[];S.sel=-1;if(S.art){S.cards.push({art:S.art,fit:S.fit||null,corner:S.corner||'tl'});S.sel=0}}
 if(typeof S.sel!=="number"||S.sel>=S.cards.length)S.sel=-1;
 const applySel=()=>{const k=S.cards[S.sel];S.art=k?k.art:null;S.fit=k?k.fit:null;S.corner=k?k.corner:'tl'};applySel();
@@ -408,7 +421,7 @@ const card=$("#card");let W=innerWidth,H=innerHeight,thumb=null,thumbSc=1,thumbR
 const c={x:0,y:0,vx:0,vy:0,a:0,w:0,s:1,mode:"hidden"};
 const g={x:0,y:0},lin={x:0,y:0};let sgn=-1,beta=90,lastShake=0,mc=0,permRes="not asked";
 const cimg=()=>S.useCut?CARDURL:S.img;
-const dims=()=>{const b=1.75*S.ppi,a=S.useCut?b*ASP:1.25*S.ppi;return S.swap?[b,a]:[a,b]};
+const dims=()=>{const b=(S.money?MSEL().h:1.75)*S.ppi,a=S.money?b*MSEL().asp:S.useCut?b*ASP:1.25*S.ppi;if(S.money)return S.swap?[b,a]:[a,b];return S.swap?[b,a]:[a,b]};
 const BG=["#e9e4da","#2b2b2e","#dfe8e1","#c9a77c","#f4f4f4","#1f4d36","#d8dde6","#efe3d0"],COLS=["#b3202a","#1f3f9b","#15171c","#1d6b3a","#b3202a","#1f3f9b","#6b2a8a","#c9a227"];
 function mk(w,h,col,r,img,bd){const e=document.createElement("div");e.className="fc"+(img?" img":"")+(img===CARDURL?" cut":"");
  e.style.cssText="--c:"+col+";--bd:"+bd+"px;width:"+w+"px;height:"+h+"px;transform:translate(-50%,-50%) rotate("+r+"deg)"+(img?";background-image:url("+img+")":"");return e}
@@ -470,15 +483,15 @@ $("#pp").value=S.ppi;$("#pv").textContent=S.ppi;S.swap=false;
 $("#pp").oninput=e=>{S.ppi=+e.target.value;$("#pv").textContent=S.ppi;style();save()};
 
 
-$('#pos').value=S.pos+1;$('#cap').value=S.cap;$('#src').value=S.src;
+$('#pos').value=S.pos+1;$('#cap').value=CAPT();$('#src').value=SRCT();
 $('#pos').onchange=e=>{S.pos=Math.min(51,Math.max(0,(+e.target.value||1)-1));save()};
-$('#cap').oninput=e=>{S.cap=e.target.value;save()};$('#src').oninput=e=>{S.src=e.target.value;save()};
+$('#cap').oninput=e=>{const v=e.target.value;if(S.money){if(S.mtype==='coin')S.ccap=v;else S.mcap=v}else S.cap=v;save()};$('#src').oninput=e=>{const v=e.target.value;if(S.money){if(S.mtype==='coin')S.csrc=v;else S.msrc=v}else S.src=v;save()};
 $("#tst").onclick=()=>{S.shake=!S.shake;save();tgs();if(S.shake)perm();status()};
 $("#rst").onclick=()=>location.reload();
 $("#en").onclick=()=>{S.motion=!S.motion;if(!S.motion){g.x=g.y=0;lin.x=lin.y=0}save();tgs();if(S.motion)perm();status()};setInterval(status,1000);
 function rel(col){const qs=new Set($('#q').value.toLowerCase().match(/[a-z]+/g)||[]);
  const d=document.createElement('div');d.className='rl';const h=document.createElement('div');h.className='rh';h.textContent='Related searches';d.appendChild(h);
-  [['Art playing card sculptures','url(p/29.jpg) center/cover'],['Folded playing card with black background',''],['Cool things to make out of playing cards','url(p/28.jpg) center/cover'],['Origami playing card sculptures','url(p/26.jpg) center/cover']].forEach(r=>{
+  (S.money?[['Money aesthetic wallpaper','url(m/26.jpg) center/cover'],['Folded dollar bill origami',''],['Foreign currency banknotes','url(m/25.jpg) center/cover'],['Old coins worth money','url(m/35.jpg) center/cover']]:[['Art playing card sculptures','url(p/29.jpg) center/cover'],['Folded playing card with black background',''],['Cool things to make out of playing cards','url(p/28.jpg) center/cover'],['Origami playing card sculptures','url(p/26.jpg) center/cover']]).forEach(r=>{
   const a=document.createElement('div'),th=document.createElement('div'),tx=document.createElement('div');a.className='ri';th.className='rt';tx.className='rx';
   if(r[1])th.style.background=r[1];else th.innerHTML="<svg width='26' height='26' viewBox='0 0 24 24' fill='none' stroke='#bdc1c6' stroke-width='2.2' stroke-linecap='round'><circle cx='10' cy='10' r='6.5'/><path d='M15 15l6 6'/></svg>";
   r[0].split(' ').forEach(w=>{const s=document.createElement(qs.has(w.toLowerCase())?'span':'b');s.textContent=w+' ';tx.appendChild(s)});
@@ -489,35 +502,35 @@ function build3(){flReset();const cols=[$('#c0'),$('#c1')];cols.forEach(x=>x.inn
  const cw=(innerWidth-12)/2,[w0,h0]=dims();
  const fit=th=>Math.min(1,cw*.82/w0,th*.82/h0);
  const rat=a=>cw*Math.min(1.6,Math.max(.5,a[4]/a[3]));
- const sim=list=>{const l=list.slice();l.splice(Math.min(Math.max(0,S.pos),l.length),0,null);const h=[0,0],n=[0,0];l.forEach(it=>{const th=it?rat(it):1.49*cw,ci=h[0]<=h[1]?0:1;h[ci]+=th+49;n[ci]++;if(ci===1&&n[1]===5)h[1]+=330});return Math.abs(h[0]-h[1])};
- let best=PH.slice(),bd=sim(best),seed=7;const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
- for(let t=0;t<500&&bd>40;t++){const hd=PH.slice(0,PH.length-12),tl=PH.slice(-12);for(let i=tl.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));const x=tl[i];tl[i]=tl[j];tl[j]=x}const cand=hd.concat(tl),d=sim(cand);if(d<bd){bd=d;best=cand}}
+ const sim=list=>{const l=list.slice();l.splice(Math.min(Math.max(0,S.pos),l.length),0,null);const h=[0,0],n=[0,0];l.forEach(it=>{const th=it?rat(it):TILEH()*cw,ci=h[0]<=h[1]?0:1;h[ci]+=th+49;n[ci]++;if(ci===1&&n[1]===5)h[1]+=330});return Math.abs(h[0]-h[1])};
+ let best=LST().slice(),bd=sim(best),seed=7;const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
+ for(let t=0;t<500&&bd>40;t++){const hd=LST().slice(0,LST().length-12),tl=LST().slice(-12);for(let i=tl.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));const x=tl[i];tl[i]=tl[j];tl[j]=x}const cand=hd.concat(tl),d=sim(cand);if(d<bd){bd=d;best=cand}}
  const items=best.slice();items.splice(Math.min(Math.max(0,S.pos),items.length),0,null);
  const hh=[0,0],cnt=[0,0];
  items.forEach(it=>{const t=document.createElement('div'),im=document.createElement('div'),cp=document.createElement('div');let th,tx;
   im.className='im';cp.className='cp';
-  if(!it){th=1.49*cw;im.style.height=th+'px';im.style.background='#000';const sc=fit(th),rt=-6;thumbSc=sc;thumbRot=rt;thumb=mk(w0*sc,h0*sc,S.deck,rt,cimg(),9*sc);im.appendChild(thumb);t.onclick=trigger;{let sx=0,sy=0,on=false;t.addEventListener('touchstart',e=>{const q=e.touches[0];sx=q.clientX;sy=q.clientY;on=!!S.scrollgo},{passive:true});t.addEventListener('touchmove',e=>{if(!on)return;const q=e.touches[0];if(Math.hypot(q.clientX-sx,q.clientY-sy)>14){on=false;trigger()}},{passive:true})};tx=[(S.cn&&CN.cap)?(S.cns?'Signed ':'')+CN.cap:S.cap,S.src]}
+  if(!it){th=TILEH()*cw;im.style.height=th+'px';im.style.background='#000';const sc=fit(th),rt=S.money?0:-6;thumbSc=sc;thumbRot=rt;thumb=mk(w0*sc,h0*sc,S.deck,rt,cimg(),9*sc);im.appendChild(thumb);t.onclick=trigger;{let sx=0,sy=0,on=false;t.addEventListener('touchstart',e=>{const q=e.touches[0];sx=q.clientX;sy=q.clientY;on=!!S.scrollgo},{passive:true});t.addEventListener('touchmove',e=>{if(!on)return;const q=e.touches[0];if(Math.hypot(q.clientX-sx,q.clientY-sy)>14){on=false;trigger()}},{passive:true})};tx=[(S.cn&&CN.cap)?(S.cns?'Signed ':'')+CN.cap:CAPT(),SRCT()]}
   else{th=cw*Math.min(1.6,Math.max(.5,it[4]/it[3]));im.style.height=th+'px';im.style.background='#222';
-   const g=document.createElement('img');g.src='p/'+String(it[0]).padStart(2,'0')+'.jpg';g.alt='';g.draggable=false;g.style.cssText='width:100%;height:100%;object-fit:cover;display:block;pointer-events:none';im.appendChild(g);tx=[it[1],it[2]]}
+   const g=document.createElement('img');g.src=PDIR()+String(it[0]).padStart(2,'0')+'.jpg';g.alt='';g.draggable=false;g.style.cssText='width:100%;height:100%;object-fit:cover;display:block;pointer-events:none';im.appendChild(g);tx=[it[1],it[2]]}
   const b=document.createElement('b'),n=document.createElement('i');b.textContent=tx[0];n.textContent=tx[1];cp.append(b,n);
   t.appendChild(im);t.appendChild(cp);const ci=hh[0]<=hh[1]?0:1;hh[ci]+=th+49;cols[ci].appendChild(t);cnt[ci]++;if(ci===1&&cnt[1]===5)hh[1]+=330});
  rel(cols[1])}
 let moreN=0;
 function addMore(){moreN++;const cols=[$('#c0'),$('#c1')],cw=(innerWidth-12)/2;let seed=101+moreN*37;const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
- const l=PH.slice();for(let i=l.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));const x=l[i];l[i]=l[j];l[j]=x}
+ const l=LST().slice();for(let i=l.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));const x=l[i];l[i]=l[j];l[j]=x}
  const hh=cols.map(x=>x.offsetHeight);
  l.forEach(it=>{const t=document.createElement('div'),im=document.createElement('div'),cp=document.createElement('div'),th=cw*Math.min(1.6,Math.max(.5,it[4]/it[3]));
   im.className='im';cp.className='cp';im.style.height=th+'px';im.style.background='#222';
-  const g=document.createElement('img');g.src='p/'+String(it[0]).padStart(2,'0')+'.jpg';g.alt='';g.draggable=false;g.style.cssText='width:100%;height:100%;object-fit:cover;display:block;pointer-events:none';im.appendChild(g);
+  const g=document.createElement('img');g.src=PDIR()+String(it[0]).padStart(2,'0')+'.jpg';g.alt='';g.draggable=false;g.style.cssText='width:100%;height:100%;object-fit:cover;display:block;pointer-events:none';im.appendChild(g);
   const b=document.createElement('b'),n=document.createElement('i');b.textContent=it[1];n.textContent=it[2];cp.append(b,n);t.append(im,cp);
   const ci=hh[0]<=hh[1]?0:1;hh[ci]+=th+49;cols[ci].appendChild(t)})}
 $('#more button').addEventListener('click',addMore);
-const q=$('#q'),RX=/\bcards?\b/i;
+const q=$('#q');
 function go(){q.value=fixText(q.value);const v=q.value.trim();q.blur();SC().scrollTop=0;if(!v)return;document.body.classList.add('srch');$('#q0').blur();$('#bq').textContent=v;
- if(RX.test(v)){setTab(true);$('#nr').hidden=true;document.body.classList.add('res');if(!$('#c0').children.length||CN.fresh){CN.fresh=false;build3()}}
+ if(RXF().test(v)){setTab(true);$('#nr').hidden=true;document.body.classList.add('res');if(!$('#c0').children.length||CN.fresh){CN.fresh=false;build3()}}
  else{document.body.classList.remove('res');$('#c0').innerHTML='';$('#c1').innerHTML='';thumb=null;$('#nr').textContent='Your search - '+v+' - did not match any images.';$('#nr').hidden=false}}
 q.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();go()}});
-const DICT=['playing','card','cards','folded','fold','deck','poker','bicycle','origami','image','images'];
+const DICT=['money','coin','coins','playing','card','cards','folded','fold','deck','poker','bicycle','origami','image','images'];
 function lev(a,b){const d=[];for(let i=0;i<=a.length;i++){d[i]=[i];for(let j=1;j<=b.length;j++)d[i][j]=i?0:j}
  for(let i=1;i<=a.length;i++)for(let j=1;j<=b.length;j++)d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));return d[a.length][b.length]}
 function fixWord(w){const l=w.toLowerCase();if(l.length<4||DICT.includes(l))return w;let best=null,bd=9;
@@ -541,7 +554,7 @@ async function renderCard(art,fit,corner){const[pa,mm,li,ar]=await Promise.all([
  paint(cv.getContext('2d'),1,orient(ar,corner),fit||defFit(ar),pa,mm,li);
  try{return cv.toDataURL('image/png')}catch(e){return CARD}}
 function flipUrl(u){return new Promise(res=>{const im=new Image();im.onload=()=>{try{const cv=document.createElement('canvas');cv.width=im.naturalWidth;cv.height=im.naturalHeight;const x=cv.getContext('2d');x.translate(S.flipH?cv.width:0,S.flipV?cv.height:0);x.scale(S.flipH?-1:1,S.flipV?-1:1);x.drawImage(im,0,0);res(cv.toDataURL('image/png'))}catch(e){res(u)}};im.onerror=()=>res(u);im.src=u})}
-async function buildCard(){let u=S.art?await renderCard(S.art,S.fit,S.corner):CARD;if(S.flipH||S.flipV)u=await flipUrl(u);CARDURL=u}
+async function buildCard(){let u=S.money?MSEL().u:S.art?await renderCard(S.art,S.fit,S.corner):CARD;if(!S.money&&(S.flipH||S.flipV))u=await flipUrl(u);CARDURL=u}
 /* alignment editor */
 let ED=null;
 async function openEd(src,fit0,isNew,corner){
@@ -654,7 +667,17 @@ function cnStep(up){const L=PHRASE.length,len=CN.secret.length;let nd=Math.round
   const prev=CN.last||'',v=el.value;if(v.length>prev.length&&v.indexOf(prev)===0){CN.secret+=v.slice(prev.length);cnStep(true)}else if(v.length<prev.length){CN.secret=CN.secret.slice(0,-1);cnStep(false)}else if(v!==prev&&v.length){CN.secret+=v.slice(-1);cnStep(true)}cnSync(el)});
  el.addEventListener('keydown',e=>{if(e.key==='Enter'&&S.cn&&CN.secret.trim()){clearTimeout(CN.tm);CN.cap=parseCard(CN.secret);CN.fresh=true;CN.secret='';CN.d=0;el.value=PHRASE;CN.last=PHRASE}},true)});
 function cnUi(){$('#cn').classList.toggle('on',!!S.cn);$('#cns').checked=!!S.cns;$('#cnw').hidden=!S.cn;['#q0','#q'].forEach(sel=>{const el=$(sel);el.setAttribute('autocorrect',S.cn?'off':'on');el.setAttribute('spellcheck',S.cn?'false':'true')})}
-$('#cn').onclick=()=>{S.cn=!S.cn;CN.secret='';CN.d=0;clearTimeout(CN.tm);CN.cap=S.cn?CN.cap:'';save();cnUi()};
+
+const CHE=[...document.querySelectorAll('.ch')].find(e=>e.textContent.includes('Card box')),CHC=CHE?CHE.innerHTML:'';
+const CHM=['Cash:00','Coins:35','Euro:10','Dollar bills:07','Old money:33'].map(x=>{const[n,i]=x.split(':');return "<span><i class='th' style='background:#333 url(m/"+i+".jpg) center/cover'></i>"+n+"</span>"}).join('');
+function mUi(){document.querySelectorAll('[data-t]').forEach(e=>{e.textContent=e.dataset.t.split('|')[S.money?1:0]});$('#trs').classList.toggle('off',!!S.money);$('#mmw').hidden=!S.money;$('#mtb').classList.toggle('on',S.mtype!=='coin');$('#mtc').classList.toggle('on',S.mtype==='coin');if(CHE)CHE.innerHTML=S.money?CHM:CHC;$('#mm').classList.toggle('on',!!S.money);$('#cap').value=CAPT();$('#src').value=SRCT();
+ ['#lib','#libn'].forEach(x=>$(x).hidden=!!S.money);const ac=document.querySelector('#panel .acts');if(ac)ac.hidden=!!S.money;
+ }
+async function mRef(){save();mUi();$('#c0').innerHTML='';$('#c1').innerHTML='';thumb=null;await buildCard();style();if(document.body.classList.contains('srch'))go()}
+$('#mm').onclick=()=>{S.money=!S.money;if(S.money&&S.cn){S.cn=false;CN.secret='';CN.d=0;CN.cap='';cnUi()}mRef()};
+$('#mtb').onclick=()=>{S.mtype='bill';mRef()};$('#mtc').onclick=()=>{S.mtype='coin';mRef()};
+mUi();
+$('#cn').onclick=()=>{if(!S.cn&&S.money){$('#mm').click()}S.cn=!S.cn;CN.secret='';CN.d=0;clearTimeout(CN.tm);CN.cap=S.cn?CN.cap:'';save();cnUi()};
 $('#cns').onchange=e=>{S.cns=e.target.checked;save()};
 cnUi();
 
