@@ -343,7 +343,7 @@ html.lt .l2,html.lt .l3{color:#0b57d0}
   </div>
  </div>
 
- <div style="text-align:center;margin:30px 0 24px"><button class="btn" id="rst" style="margin:0">Restart routine</button><p class="hint" style="margin:14px 0 0;opacity:.6">Version 8</p></div>
+ <div style="text-align:center;margin:30px 0 24px"><button class="btn" id="rst" style="margin:0">Restart routine</button><p class="hint" style="margin:14px 0 0;opacity:.6">Version 9</p></div>
  </div>
 <div id="ins" hidden>
  <div class="ph"><h2>Instructions</h2><button class="btn" id="insx" type="button">Back</button></div>
@@ -417,7 +417,7 @@ const MSEL=()=>S.mtype==="coin"?{u:"money-coin.png",asp:1,h:1.205}:{u:MBILL,asp:
 const LST=()=>S.money?MPH:PH,PDIR=()=>S.money?"m/":"p/",TILEH=()=>S.money?1.15:1.49,RXF=()=>S.money?/\b(money|coins?)\b/i:/\bcards?\b/i,CAPT=()=>S.mini?S.ncap:S.money?(S.mtype==="coin"?S.ccap:S.mcap):S.cap,SRCT=()=>S.mini?S.nsrc:S.money?(S.mtype==="coin"?S.csrc:S.msrc):S.src;
 const S={useCut:true,ppi:160,swap:false,deck:"#b3202a",img:null,pos:0,pics:[],cap:"Folded Playing Card",src:"Pinterest",mcap:"Folded $20 Bill",msrc:"Pinterest",mtype:"bill",nsz:100,mauto:true,msec:10,mshake:false,ncap:"Mini Playing Card",nsrc:"Pinterest",ccap:"Old Half Dollar",csrc:"Pinterest",motion:false,shake:false,delay:5};
 try{const o=JSON.parse(localStorage.getItem("fc2")||"{}");if(o.cap===undefined)delete o.pos;Object.assign(S,o)}catch(e){}
-S.useCut=true;S.img=null;if(S.mcap==="Folded Dollar Bill")S.mcap="Folded $20 Bill";if(S.ccap==="1918 Walking Liberty Half Dollar")S.ccap="Old Half Dollar";if(S.cap==="Red Playing Card")S.cap="Folded Playing Card";if(S.src==="Folded Card")S.src="Pinterest";if(!S.mv4){let sv={};try{sv=JSON.parse(localStorage.getItem('fc2')||'{}')}catch(e){}if(sv.nsz&&!sv.mv4)S.nsz=Math.min(110,Math.round(sv.nsz/0.97));S.mv4=1}if(!S.mv3){S.mauto=true;S.mshake=false;S.msec=10;S.mv3=1}if(S.mauto&&S.mshake)S.mauto=false;
+S.useCut=true;S.img=null;if(S.mcap==="Folded Dollar Bill")S.mcap="Folded $20 Bill";if(S.ccap==="1918 Walking Liberty Half Dollar")S.ccap="Old Half Dollar";if(S.cap==="Red Playing Card")S.cap="Folded Playing Card";if(S.src==="Folded Card")S.src="Pinterest";if(!S.mv4){let sv={};try{sv=JSON.parse(localStorage.getItem('fc2')||'{}')}catch(e){}if(sv.nsz&&!sv.mv4)S.nsz=Math.min(110,Math.round(sv.nsz/0.97));S.mv4=1}if(typeof DeviceMotionEvent!=="undefined"&&typeof DeviceMotionEvent.requestPermission==="function"){S.motion=false;S.shake=false;if(S.mshake){S.mshake=false;S.mauto=true}}if(!S.mv3){S.mauto=true;S.mshake=false;S.msec=10;S.mv3=1}if(S.mauto&&S.mshake)S.mauto=false;
 if(!Array.isArray(S.cards)){S.cards=[];S.sel=-1;if(S.art){S.cards.push({art:S.art,fit:S.fit||null,corner:S.corner||'tl'});S.sel=0}}
 if(typeof S.sel!=="number"||S.sel>=S.cards.length)S.sel=-1;
 const applySel=()=>{const k=S.cards[S.sel];S.art=k?k.art:null;S.fit=k?k.fit:null;S.corner=k?k.corner:'tl'};applySel();
@@ -436,7 +436,7 @@ function draw(){const[w,h]=dims();card.style.transform="translate("+(c.x-w/2)+"p
 async function perm(){if(!S.motion&&!S.shake&&!(S.mini&&S.mshake))return;const p=[];try{if(window.DeviceMotionEvent&&DeviceMotionEvent.requestPermission)p.push(DeviceMotionEvent.requestPermission());if(window.DeviceOrientationEvent&&DeviceOrientationEvent.requestPermission)p.push(DeviceOrientationEvent.requestPermission())}catch(e){}
  const r=await Promise.allSettled(p);permRes=r.length?r.map(x=>x.status==="fulfilled"?x.value:"error").join("/"):"no prompt needed";status();nshUp();if(window.rsHome)rsHome()}
 function nshUp(){const w=$("#nsh");if(w)w.hidden=!(S.mini&&S.mshake&&/denied|error/.test(permRes))}
-function status(){const el=$("#ms");if(el)el.textContent=(!S.motion&&!S.shake)?"Motion: off (touch only)":"Motion: "+(mc>0?"working":"no data yet")+" (permission: "+permRes+")"}
+function status(){const el=$("#ms");if(!el)return;if(!S.motion&&!S.shake){el.textContent="";el.hidden=true;return}el.hidden=false;const bad=/denied|error/.test(permRes),ok=mc>0||(/granted|no prompt/.test(permRes)&&!bad);if(bad){el.textContent="Motion access was denied. Fully close this app (swipe it up from the app switcher), open it again, and allow motion access and orientation.";el.style.color="#f28b82"}else if(ok){el.textContent="\u2713 Motion is on. Ready to use.";el.style.color="#34c759"}else{el.textContent="Tap Allow if your phone asks about motion.";el.style.color=""}}
 function lift(np){if(c.mode!=="hidden"||!thumb)return;if(!np)perm();const r=thumb.getBoundingClientRect();
  c.x=r.left+r.width/2;c.y=r.top+r.height/2;c.a=thumbRot*Math.PI/180;c.s=thumbSc;{const[w,h]=dims();c.tx=Math.min(Math.max(c.x,w/2+10),W-w/2-10);c.ty=Math.min(Math.max(c.y,h/2+10),H-h/2-10)}c.mode="grow";TA=-.17+(Math.random()-.5)*.1;
  thumb.style.visibility="hidden";lockS(true);card.style.display="block";draw()}
