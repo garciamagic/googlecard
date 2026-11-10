@@ -1,6 +1,6 @@
 {
- "name": "DG Card",
- "short_name": "DG Card",
+ "name": "Googler",
+ "short_name": "Googler",
  "start_url": "./",
  "scope": "./",
  "display": "standalone",
